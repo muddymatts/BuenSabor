@@ -17,6 +17,8 @@ public class CategoriaArticulo extends EntityApp {
     private List<ArticuloInsumo> articulos;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_padre_id")
+    @JoinColumn(name = "categoria_padre_id", nullable = true)
     private CategoriaArticulo categoriaPadre;
+
 }
+

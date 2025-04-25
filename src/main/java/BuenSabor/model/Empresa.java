@@ -12,9 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Empresa {
+public class Empresa extends EntityApp {
 
-    @Id
     private int cuil;
     private String nombre;
     private String razonSocial;

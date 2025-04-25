@@ -7,10 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Empleado {
+public class Empleado extends EntityBean {
 
-    @Id
-    private int id;
     private String nombre;
     private String apellido;
     private String telefono;

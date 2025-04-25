@@ -16,7 +16,7 @@ public class ArticuloInsumo extends EntityApp {
 
     // Relación N-1 con CategoriaArticulo
     @ManyToOne
-    @JoinColumn(name = "categoria_articulo_insumo_id", nullable = false)
+    @JoinColumn(name = "categoria_articulo_insumo_id")
     private CategoriaArticulo categoriaArticulo;
 
     // Relación 1-1 con ImagenInsumo
@@ -25,7 +25,7 @@ public class ArticuloInsumo extends EntityApp {
     private ImagenInsumo imagenInsumo;
 
     @ManyToOne
-    @JoinColumn(name = "unidad_medida_id", nullable = false)
+    @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
 
 }
