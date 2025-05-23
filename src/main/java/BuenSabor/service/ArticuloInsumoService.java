@@ -2,8 +2,8 @@ package BuenSabor.service;
 
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ArticuloInsumoService {
@@ -14,6 +14,7 @@ public class ArticuloInsumoService {
         this.repository = repository;
     }
 
+    @Transactional
     public ArticuloInsumo crear(ArticuloInsumo insumo) {
         return repository.save(insumo);
     }

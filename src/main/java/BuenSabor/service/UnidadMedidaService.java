@@ -14,8 +14,8 @@ public class UnidadMedidaService {
     }
 
     @Transactional
-    public UnidadMedida crear(UnidadMedida unidad) {
-        return repository.save(unidad);
+    public UnidadMedida crear(UnidadMedida unidadMedida) {
+        return repository.save(unidadMedida);
     }
 
     public UnidadMedida buscarPorId(Long id) {

@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 public class ImagenInsumo extends EntityApp {
 
-    private String denominacion;
+    private String descripcion;
 
     @OneToOne(mappedBy = "imagenInsumo")
     private ArticuloInsumo articulo;

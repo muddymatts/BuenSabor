@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -27,5 +29,8 @@ public class ArticuloInsumo extends EntityApp {
     @ManyToOne
     @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
+
+    @OneToMany(mappedBy = "insumo",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticuloManufacturadoDetalle> detalles;
 
 }

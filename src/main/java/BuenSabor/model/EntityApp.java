@@ -13,7 +13,5 @@ public abstract class EntityApp extends EntityBean {
 
     private Date fechaAlta;
     private Date fechaBaja;
-    private boolean estaActivo;
-
 
 }

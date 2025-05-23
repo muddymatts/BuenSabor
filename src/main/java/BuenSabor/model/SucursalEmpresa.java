@@ -9,15 +9,12 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class SucursalEmpresa {
+public class SucursalEmpresa extends EntityApp {
 
-    @Id
-    private int id;;
+
     private String nombre;
     private String horarioApertura;
     private String horarioCierre;
-
-
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")

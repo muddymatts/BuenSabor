@@ -15,13 +15,16 @@ public class ArticuloManufacturado extends EntityApp {
     private String descripcion;
     private double precioVenta;
     private Integer tiempoEstimado;
+    //El precio de costo se calcula en funcion del costo de los materiales
+    @Transient
     private double precioCosto;
 
     @ManyToOne
     @JoinColumn(name = "categoria_articulo_manufacturado_id")
     private CategoriaArticuloManufacturado categoria;
 
-    @OneToMany(mappedBy = "manufacturado",cascade = CascadeType.ALL, orphanRemoval = true)
+    //la lista de ingredientes que componen al articulo manufacturado/ plato
+    @OneToMany(mappedBy = "manufacturado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticuloManufacturadoDetalle> detalles;
 
 }
