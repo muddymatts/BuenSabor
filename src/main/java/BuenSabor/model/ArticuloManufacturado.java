@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class ArticuloManufacturado extends EntityApp {
 
     @ManyToOne
     @JoinColumn(name = "categoria_articulo_manufacturado_id")
+    @JsonBackReference
     private CategoriaArticuloManufacturado categoria;
 
     //la lista de ingredientes que componen al articulo manufacturado/ plato

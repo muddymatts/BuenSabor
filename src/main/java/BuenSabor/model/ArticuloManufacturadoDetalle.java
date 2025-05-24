@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -19,6 +20,7 @@ public class ArticuloManufacturadoDetalle extends EntityApp {
 
     @ManyToOne
     @JoinColumn(name = "articulo_manufacturado_id")
+    @JsonManagedReference
     private ArticuloManufacturado manufacturado;
 
 }

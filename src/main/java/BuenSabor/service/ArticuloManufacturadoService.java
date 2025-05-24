@@ -22,7 +22,10 @@ public class ArticuloManufacturadoService {
             detalle.setManufacturado(articulo);
         }
 
-
         return repository.save(articulo);
+    }
+
+    public ArticuloManufacturado buscarPorId(Long id) {
+        return repository.getReferenceById(id);
     }
 }

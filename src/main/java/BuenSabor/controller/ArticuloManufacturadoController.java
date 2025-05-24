@@ -18,4 +18,9 @@ public class ArticuloManufacturadoController {
     public ArticuloManufacturado crear(@RequestBody ArticuloManufacturado articulo) {
         return service.crear(articulo);
     }
+
+    @GetMapping("/{id}")
+    public ArticuloManufacturado buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
 }
