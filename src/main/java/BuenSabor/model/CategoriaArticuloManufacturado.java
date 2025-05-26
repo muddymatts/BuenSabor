@@ -14,6 +14,8 @@ public class CategoriaArticuloManufacturado extends EntityApp {
 
     private String denominacion;
 
+    private Boolean estaActivo;
+
     @OneToMany(mappedBy ="categoria")
     private List<ArticuloManufacturado> articulos;
 

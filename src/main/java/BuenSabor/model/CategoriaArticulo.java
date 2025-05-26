@@ -13,6 +13,8 @@ public class CategoriaArticulo extends EntityApp {
 //categorias para los articulos manufacturados: platos
 
     private String denominacion;
+
+    private Boolean estaActivo;
 /*
     @OneToMany(mappedBy = "categoriaArticulo", cascade = CascadeType.ALL)
     private List<ArticuloInsumo> articulos;
