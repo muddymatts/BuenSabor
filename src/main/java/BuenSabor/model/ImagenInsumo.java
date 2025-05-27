@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,4 @@ public class ImagenInsumo extends EntityApp {
 
     private String descripcion;
 
-    @OneToOne(mappedBy = "imagenInsumo")
-    private ArticuloInsumo articulo;
 }
