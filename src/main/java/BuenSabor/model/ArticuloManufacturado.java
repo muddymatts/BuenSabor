@@ -15,6 +15,7 @@ public class ArticuloManufacturado extends EntityApp {
     private String descripcion;
     private double precioVenta;
     private Integer tiempoEstimado;
+    private Boolean estaActivo = Boolean.TRUE;
     //El precio de costo se calcula en funcion del costo de los materiales
     @Transient
     private double precioCosto;

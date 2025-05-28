@@ -11,7 +11,8 @@ import java.util.Date;
 @Setter
 public abstract class EntityApp extends EntityBean {
 
-    private Date fechaAlta;
-    private Date fechaBaja;
+    private Date fechaAlta = null;
+    private Date fechaBaja = null;
+    private Boolean estaActivo = Boolean.TRUE;
 
 }

@@ -1,8 +1,12 @@
 package BuenSabor.controller;
 
 import BuenSabor.model.ArticuloInsumo;
+import BuenSabor.model.ArticuloManufacturado;
+import BuenSabor.model.UnidadMedida;
 import BuenSabor.service.ArticuloInsumoService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/articulos-insumo")
@@ -19,5 +23,8 @@ public class ArticuloInsumoController {
         return service.crear(insumo);
     }
 
-
+    @GetMapping
+    public List<ArticuloInsumo> listarTodas() {
+        return service.listarTodas();
+    }
 }

@@ -1,9 +1,12 @@
 package BuenSabor.service;
 
 import BuenSabor.model.ArticuloInsumo;
+import BuenSabor.model.UnidadMedida;
 import BuenSabor.repository.ArticuloInsumoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ArticuloInsumoService {
@@ -19,4 +22,7 @@ public class ArticuloInsumoService {
         return repository.save(insumo);
     }
 
+    public List<ArticuloInsumo> listarTodas() {
+        return repository.findAll();
+    }
 }
