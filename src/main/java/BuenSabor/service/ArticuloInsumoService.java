@@ -19,4 +19,8 @@ public class ArticuloInsumoService {
         return repository.save(insumo);
     }
 
+    public ArticuloInsumo findById (Long id) {
+        return repository.findByIdAndFechaBajaIsNull(id);
+    }
+
 }
