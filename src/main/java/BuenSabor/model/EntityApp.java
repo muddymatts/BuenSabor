@@ -11,9 +11,15 @@ import java.time.LocalDate;
 @Setter
 public abstract class EntityApp extends EntityBean {
 
-    private boolean estaActivo = Boolean.TRUE;
-
     private LocalDate fechaAlta = LocalDate.now();
     private LocalDate fechaBaja;
+
+    public void darDeBaja() {
+        this.fechaBaja = LocalDate.now();
+    }
+
+    public boolean estaActivo() {
+        return this.fechaBaja == null;
+    }
 
 }

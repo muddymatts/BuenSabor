@@ -45,4 +45,6 @@ public class ArticuloManufacturadoService {
     public List<ArticuloManufacturado> findByFechaBajaIsNull() {
         return repository.findByFechaBajaIsNull();
     }
+
+    public List<ArticuloManufacturado> findAll() { return repository.findAll();    }
 }
