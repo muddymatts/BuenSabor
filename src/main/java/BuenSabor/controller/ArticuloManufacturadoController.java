@@ -4,6 +4,8 @@ import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.service.ArticuloManufacturadoService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/articulos-manufacturados")
 public class ArticuloManufacturadoController {
@@ -17,5 +19,15 @@ public class ArticuloManufacturadoController {
     @PostMapping
     public ArticuloManufacturado crear(@RequestBody ArticuloManufacturado articulo) {
         return service.crear(articulo);
+    }
+
+    @GetMapping("/{id}")
+    public ArticuloManufacturado buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
+
+    @GetMapping("/listar")
+    public List<ArticuloManufacturado> listar() {
+        return service.findByFechaBajaIsNull();
     }
 }

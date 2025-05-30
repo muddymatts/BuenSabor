@@ -5,6 +5,8 @@ import BuenSabor.repository.ArticuloInsumoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ArticuloInsumoService {
 
@@ -17,6 +19,14 @@ public class ArticuloInsumoService {
     @Transactional
     public ArticuloInsumo crear(ArticuloInsumo insumo) {
         return repository.save(insumo);
+    }
+
+    public ArticuloInsumo findById(Long id) {
+        return repository.findByIdAndFechaBajaIsNull(id);
+    }
+
+    public List<ArticuloInsumo> listarTodas() {
+        return repository.findAll();
     }
 
 }

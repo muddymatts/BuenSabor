@@ -1,7 +1,8 @@
 package BuenSabor.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -10,6 +11,4 @@ public class ImagenInsumo extends EntityApp {
 
     private String descripcion;
 
-    @OneToOne(mappedBy = "imagenInsumo")
-    private ArticuloInsumo articulo;
 }

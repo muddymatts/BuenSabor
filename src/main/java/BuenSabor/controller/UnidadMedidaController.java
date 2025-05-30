@@ -1,7 +1,10 @@
 package BuenSabor.controller;
+
 import BuenSabor.model.UnidadMedida;
 import BuenSabor.service.UnidadMedidaService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/unidades-medida")
@@ -22,5 +25,10 @@ public class UnidadMedidaController {
         UnidadMedida unidad = service.buscarPorId(id);
         unidad.setDenominacion(nuevaData.getDenominacion());
         return service.actualizar(unidad);
+    }
+
+    @GetMapping
+    public List<UnidadMedida> listarTodas() {
+        return service.listarTodas();
     }
 }

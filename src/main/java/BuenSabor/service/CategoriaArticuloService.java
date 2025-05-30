@@ -3,6 +3,7 @@ package BuenSabor.service;
 import BuenSabor.model.CategoriaArticulo;
 import BuenSabor.repository.CategoriaArticuloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class CategoriaArticuloService {
         return categoriaArticuloRepository.save(categoriaArticulo);
     }
 
+    @Query()
     public List<CategoriaArticulo> obtenerTodas() {
         return categoriaArticuloRepository.findAll();
     }

@@ -16,6 +16,6 @@ public class CategoriaArticuloManufacturadoService {
 
     @Transactional
     public CategoriaArticuloManufacturado crear(CategoriaArticuloManufacturado cat) {
-       return Repository.save(cat);
+        return Repository.save(cat);
     }
 }

@@ -1,5 +1,7 @@
 package BuenSabor.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ArticuloInsumo extends EntityApp {
 
     private String denominacion;
@@ -30,7 +33,8 @@ public class ArticuloInsumo extends EntityApp {
     @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
 
-    @OneToMany(mappedBy = "insumo",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<ArticuloManufacturadoDetalle> detalles;
 
 }

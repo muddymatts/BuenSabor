@@ -1,9 +1,11 @@
 package BuenSabor.service;
 
 import BuenSabor.model.UnidadMedida;
+import BuenSabor.repository.UnidadMedidaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import BuenSabor.repository.UnidadMedidaRepository;
+
+import java.util.List;
 
 @Service
 public class UnidadMedidaService {
@@ -24,5 +26,9 @@ public class UnidadMedidaService {
 
     public UnidadMedida actualizar(UnidadMedida unidad) {
         return repository.save(unidad);
+    }
+
+    public List<UnidadMedida> listarTodas() {
+        return repository.findAll();
     }
 }

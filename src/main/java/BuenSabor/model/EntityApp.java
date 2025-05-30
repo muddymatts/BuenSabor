@@ -4,14 +4,16 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @MappedSuperclass
 @Getter
 @Setter
 public abstract class EntityApp extends EntityBean {
 
-    private Date fechaAlta;
-    private Date fechaBaja;
+    private boolean estaActivo = Boolean.TRUE;
+
+    private LocalDate fechaAlta = LocalDate.now();
+    private LocalDate fechaBaja;
 
 }
