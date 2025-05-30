@@ -1,7 +1,6 @@
 package BuenSabor.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,7 +33,7 @@ public class ArticuloInsumo extends EntityApp {
     @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
 
-    @OneToMany(mappedBy = "insumo",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<ArticuloManufacturadoDetalle> detalles;
 

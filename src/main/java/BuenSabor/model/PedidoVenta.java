@@ -27,7 +27,7 @@ public class PedidoVenta extends EntityApp {
 
     private LocalDate fechaPedido;
 
-    @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoVentaDetalle> detalles;
 
     @ManyToOne

@@ -1,6 +1,8 @@
 package BuenSabor.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 

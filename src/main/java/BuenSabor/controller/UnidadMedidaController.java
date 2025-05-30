@@ -1,4 +1,5 @@
 package BuenSabor.controller;
+
 import BuenSabor.model.UnidadMedida;
 import BuenSabor.service.UnidadMedidaService;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class UnidadMedidaController {
         unidad.setDenominacion(nuevaData.getDenominacion());
         return service.actualizar(unidad);
     }
+
     @GetMapping
     public List<UnidadMedida> listarTodas() {
         return service.listarTodas();
