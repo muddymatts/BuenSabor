@@ -5,17 +5,23 @@ import BuenSabor.repository.CategoriaArticuloManufacturadoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CategoriaArticuloManufacturadoService {
 
-    private final CategoriaArticuloManufacturadoRepository Repository;
+    private final CategoriaArticuloManufacturadoRepository repository;
 
-    public CategoriaArticuloManufacturadoService(CategoriaArticuloManufacturadoRepository Repository) {
-        this.Repository = Repository;
+    public CategoriaArticuloManufacturadoService(CategoriaArticuloManufacturadoRepository repository) {
+        this.repository = repository;
+    }
+
+    public List<CategoriaArticuloManufacturado> obtenerTodas() {
+        return repository.findAll();
     }
 
     @Transactional
     public CategoriaArticuloManufacturado crear(CategoriaArticuloManufacturado cat) {
-        return Repository.save(cat);
+        return repository.save(cat);
     }
 }
