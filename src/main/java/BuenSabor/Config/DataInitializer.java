@@ -1,17 +1,76 @@
 package BuenSabor.config;
 
+import BuenSabor.enums.Rol;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.CategoriaArticuloManufacturado;
+import BuenSabor.model.Empleado;
+import BuenSabor.model.Usuario;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
 import BuenSabor.repository.CategoriaArticuloManufacturadoRepository;
+import BuenSabor.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import BuenSabor.repository.EmpleadoRepository;
+
 @Configuration
 public class DataInitializer {
+
+    @Bean
+    CommandLineRunner crearUsuarios(UsuarioRepository userRepo, EmpleadoRepository empleadoRepo, PasswordEncoder encoder) {
+        return args -> {
+            if (userRepo.findByUsername("admin").isEmpty()) {
+                // Admin
+                Empleado adminEmpleado = new Empleado();
+                adminEmpleado.setNombre("Admin");
+                adminEmpleado.setApellido("Admin");
+                adminEmpleado.setTelefono("123456789");
+                adminEmpleado.setEmail("admin@example.com");
+                adminEmpleado.setRol(Rol.admin);
+                empleadoRepo.save(adminEmpleado);
+
+                Usuario adminUser = new Usuario();
+                adminUser.setUsername("admin");
+                adminUser.setPassword(encoder.encode("admin123"));
+                adminUser.setEmpleado(adminEmpleado);
+                adminUser.setEstaActivo(true);
+
+                userRepo.save(adminUser);
+            }
+
+            if (userRepo.findByUsername("empleado").isEmpty()) {
+                // Empleado
+                Empleado empleadoEmpleado = new Empleado();
+                empleadoEmpleado.setNombre("Empleado");
+                empleadoEmpleado.setApellido("Empleado");
+                empleadoEmpleado.setTelefono("987654321");
+                empleadoEmpleado.setEmail("empleado@example.com");
+                empleadoEmpleado.setRol(Rol.empleado);
+                empleadoRepo.save(empleadoEmpleado);
+
+                Usuario empleadoUser = new Usuario();
+                empleadoUser.setUsername("empleado");
+                empleadoUser.setPassword(encoder.encode("empleado123"));
+                empleadoUser.setEmpleado(empleadoEmpleado);
+                empleadoUser.setEstaActivo(true);
+
+                userRepo.save(empleadoUser);
+            }
+
+            if (userRepo.findByUsername("cliente").isEmpty()) {
+                Usuario clienteUser = new Usuario();
+                clienteUser.setUsername("cliente");
+                clienteUser.setPassword(encoder.encode("cliente123"));
+                clienteUser.setEstaActivo(true);
+
+                userRepo.save(clienteUser);
+            }
+        };
+    }
 
     @Bean
     CommandLineRunner initCategoriasManufacturados(CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository) {
