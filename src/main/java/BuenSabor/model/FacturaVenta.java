@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import BuenSabor.enums.FormaPago;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

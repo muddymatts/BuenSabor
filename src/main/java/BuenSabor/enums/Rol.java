@@ -1,4 +1,4 @@
-package BuenSabor.model;
+package BuenSabor.enums;
 
 public enum Rol {
     admin,
