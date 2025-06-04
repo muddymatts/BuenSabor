@@ -1,18 +1,24 @@
 package BuenSabor.controller;
 
 import BuenSabor.dto.auth.AuthRequest;
-import BuenSabor.dto.auth.AuthResponse;
+import BuenSabor.dto.auth.LoginResponse;
+import BuenSabor.dto.usuario.UsuarioDTO;
+import BuenSabor.mapper.UsuarioMapper;
+import BuenSabor.model.Usuario;
 import BuenSabor.service.auth.CustomUserDetailsService;
 import BuenSabor.service.auth.JwtService;
+import BuenSabor.service.usuario.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -22,31 +28,61 @@ public class AuthController {
     private final AuthenticationManager authManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final UsuarioService usuarioService;
+    private final UsuarioMapper usuarioMapper;
 
-    public AuthController(AuthenticationManager authManager, CustomUserDetailsService userDetailsService, JwtService jwtService) {
+    public AuthController(AuthenticationManager authManager,
+                          CustomUserDetailsService userDetailsService,
+                          JwtService jwtService,
+                          UsuarioService usuarioService,
+                          UsuarioMapper usuarioMapper) {
         this.authManager = authManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.usuarioService = usuarioService;
+        this.usuarioMapper = usuarioMapper;
     }
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
         try {
-            Authentication authentication = authManager.authenticate(
+            authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
-            UserDetails user = userDetailsService.loadUserByUsername(request.username());
-            String jwt = jwtService.generateToken(user);
-            return ResponseEntity.ok(new AuthResponse(jwt));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
+            String jwt = jwtService.generateToken(userDetails);
+
+            Optional<Usuario> optionalUsuario = usuarioService.findByUsername(request.username());
+            if (optionalUsuario.isEmpty()) {
+                return ResponseEntity.status(404).body("Usuario no encontrado");
+            }
+
+            Usuario usuario = optionalUsuario.get();
+
+            UsuarioDTO usuarioDTO = usuarioMapper.toUsuarioDTO(usuario);
+
+            return ResponseEntity.ok(new LoginResponse(jwt, usuarioDTO));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Usuario o contraseña incorrectos.");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("An unexpected error occurred");
+            return ResponseEntity.status(500).body("Ha ocurrido un error inesperado.");
         }
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<?> profile() {
-        return ResponseEntity.ok("Protected user profile");
+    @GetMapping("/perfil")
+    public ResponseEntity<UsuarioDTO> profile() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Optional<Usuario> optionalUsuario = usuarioService.findByUsername(username);
+
+        if (optionalUsuario.isEmpty()) {
+            return ResponseEntity.status(404).body(null);
+        }
+
+        Usuario usuario = optionalUsuario.get();
+
+        UsuarioDTO usuarioDTO = usuarioMapper.toUsuarioDTO(usuario);
+
+        return ResponseEntity.ok(usuarioDTO);
     }
 }
