@@ -29,7 +29,7 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
         try {
             Authentication authentication = authManager.authenticate(
@@ -39,7 +39,7 @@ public class AuthController {
             String jwt = jwtService.generateToken(user);
             return ResponseEntity.ok(new AuthResponse(jwt));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Invalid username or password");
+            return ResponseEntity.status(401).body("Usuario o contraseña incorrectos.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An unexpected error occurred");
         }
