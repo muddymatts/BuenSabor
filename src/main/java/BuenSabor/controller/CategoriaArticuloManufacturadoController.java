@@ -1,5 +1,6 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.CategoriaArticuloManufacturadoDTO;
 import BuenSabor.model.CategoriaArticuloManufacturado;
 import BuenSabor.service.CategoriaArticuloManufacturadoService;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class CategoriaArticuloManufacturadoController {
     }
 
     @GetMapping
-    public List<CategoriaArticuloManufacturado> obtenerCategorias() {
+    public List<CategoriaArticuloManufacturadoDTO> obtenerCategorias() {
         return service.obtenerTodas();
     }
 }
