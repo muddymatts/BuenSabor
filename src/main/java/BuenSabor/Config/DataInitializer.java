@@ -1,21 +1,14 @@
 package BuenSabor.config;
 
 import BuenSabor.enums.Rol;
-import BuenSabor.model.ArticuloManufacturado;
-import BuenSabor.model.CategoriaArticuloManufacturado;
-import BuenSabor.model.Empleado;
-import BuenSabor.model.Usuario;
-import BuenSabor.repository.ArticuloManufacturadoRepository;
-import BuenSabor.repository.CategoriaArticuloManufacturadoRepository;
-import BuenSabor.repository.UsuarioRepository;
+import BuenSabor.model.*;
+import BuenSabor.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-
-import BuenSabor.repository.EmpleadoRepository;
 
 @Configuration
 public class DataInitializer {
@@ -123,6 +116,35 @@ public class DataInitializer {
 
                     articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
                 }
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initUnidadesMedida(UnidadMedidaRepository unidadMedidaRepository) {
+        return args -> {
+            if (unidadMedidaRepository.count() == 0) {
+                UnidadMedida miligramos = new UnidadMedida();
+                miligramos.setDenominacion("Miligramos");
+
+                UnidadMedida gramos = new UnidadMedida();
+                gramos.setDenominacion("Gramos");
+
+                UnidadMedida kilogramos = new UnidadMedida();
+                kilogramos.setDenominacion("Kilogramos");
+
+                UnidadMedida mililitros = new UnidadMedida();
+                mililitros.setDenominacion("Mililitros");
+
+                UnidadMedida litros = new UnidadMedida();
+                litros.setDenominacion("Litros");
+
+                UnidadMedida unidades = new UnidadMedida();
+                unidades.setDenominacion("Unidades");
+
+                unidadMedidaRepository.saveAll(
+                        List.of(miligramos, gramos, kilogramos, mililitros, litros, unidades)
+                );
             }
         };
     }
