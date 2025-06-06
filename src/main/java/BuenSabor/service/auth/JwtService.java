@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -20,15 +22,6 @@ public class JwtService {
                       @Value("${jwt.expiration}") int expiration) {
         this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
         this.EXPIRATION_TIME = expiration;
-    }
-
-    public String generateToken(UserDetails user) {
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
-                .compact();
     }
 
     public String extractUsername(String token) {
@@ -53,5 +46,19 @@ public class JwtService {
                 .getBody()
                 .getExpiration();
         return expiration.before(new Date());
+    }
+    public Map<String, Object> generateTokenWithExpiration(UserDetails user) {
+        Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION_TIME);
+        String token = Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(expirationDate)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .compact();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("expiration", expirationDate);
+        return response;
     }
 }

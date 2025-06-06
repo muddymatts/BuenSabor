@@ -1,7 +1,6 @@
 package BuenSabor.controller;
 
 import BuenSabor.dto.auth.AuthRequest;
-import BuenSabor.dto.auth.LoginResponse;
 import BuenSabor.dto.usuario.UsuarioDTO;
 import BuenSabor.mapper.UsuarioMapper;
 import BuenSabor.model.Usuario;
@@ -18,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -50,18 +51,25 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
-            String jwt = jwtService.generateToken(userDetails);
+            Map<String, Object> tokenData = jwtService.generateTokenWithExpiration(userDetails);
 
             Optional<Usuario> optionalUsuario = usuarioService.findByUsername(request.username());
+
             if (optionalUsuario.isEmpty()) {
                 return ResponseEntity.status(404).body("Usuario no encontrado");
             }
 
             Usuario usuario = optionalUsuario.get();
-
             UsuarioDTO usuarioDTO = usuarioMapper.toUsuarioDTO(usuario);
 
-            return ResponseEntity.ok(new LoginResponse(jwt, usuarioDTO));
+            Map<String, Object> response = new HashMap<>();
+            Map<String, Object> jwtObject = new HashMap<>();
+            jwtObject.put("token", tokenData.get("token"));
+            jwtObject.put("expirationDate", tokenData.get("expiration"));
+            response.put("jwt", jwtObject);
+            response.put("user", usuarioDTO);
+
+            return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Usuario o contraseña incorrectos.");
         } catch (Exception e) {
