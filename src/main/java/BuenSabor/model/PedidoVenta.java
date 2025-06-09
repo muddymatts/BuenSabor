@@ -1,5 +1,7 @@
 package BuenSabor.model;
 
+import BuenSabor.enums.Estado;
+import BuenSabor.enums.TipoEnvio;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import BuenSabor.enums.Rol;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
