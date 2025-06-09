@@ -3,6 +3,7 @@ package BuenSabor.controller;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.service.ArticuloManufacturadoService;
 import BuenSabor.service.BajaLogicaService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,15 +37,22 @@ public class ArticuloManufacturadoController {
         return service.findByFechaBajaIsNull();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> bajaLogica(@PathVariable Long id) {
-        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping
     public List<ArticuloManufacturado> mostrarTodos() {
         return service.findAll();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarArticuloManufacturado(@PathVariable Long id) {
+        try {
+            String nombreArticulo = service.eliminarArticuloManufacturado(id);
+            String mensaje = "El artículo manufacturado \"" + nombreArticulo + "\" fue eliminado correctamente.";
+
+            return ResponseEntity.ok(mensaje);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(404).body("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body("Ocurrió un error al intentar eliminar el artículo manufacturado.");
+        }
+    }
 }
