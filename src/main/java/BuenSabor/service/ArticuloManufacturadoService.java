@@ -5,6 +5,7 @@ import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,12 @@ public class ArticuloManufacturadoService {
     private EntityManager entityManager;
 
     private final ArticuloManufacturadoRepository repository;
+    private final BajaLogicaService bajaLogicaService;
 
-    public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository) {
+    public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository,
+                                        BajaLogicaService bajaLogicaService) {
         this.repository = repository;
+        this.bajaLogicaService = bajaLogicaService;
     }
 
     @Transactional
@@ -46,5 +50,19 @@ public class ArticuloManufacturadoService {
         return repository.findByFechaBajaIsNull();
     }
 
-    public List<ArticuloManufacturado> findAll() { return repository.findAll();    }
+    public List<ArticuloManufacturado> findAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
+    public String eliminarArticuloManufacturado(Long id) {
+        ArticuloManufacturado articulo = repository.getReferenceByIdAndFechaBajaIsNull(id);
+
+        if (articulo == null) {
+            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
+        }
+
+        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
+        return articulo.getDenominacion();
+    }
 }
