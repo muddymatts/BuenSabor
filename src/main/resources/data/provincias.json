@@ -1,0 +1,497 @@
+[
+  {
+    "id": 1,
+    "nombre": "Buenos Aires",
+    "pais_id": 1
+  },
+  {
+    "id": 2,
+    "nombre": "Catamarca",
+    "pais_id": 1
+  },
+  {
+    "id": 3,
+    "nombre": "Chaco",
+    "pais_id": 1
+  },
+  {
+    "id": 4,
+    "nombre": "Chubut",
+    "pais_id": 1
+  },
+  {
+    "id": 5,
+    "nombre": "Ciudad Autónoma de Buenos Aires",
+    "pais_id": 1
+  },
+  {
+    "id": 6,
+    "nombre": "Córdoba",
+    "pais_id": 1
+  },
+  {
+    "id": 7,
+    "nombre": "Corrientes",
+    "pais_id": 1
+  },
+  {
+    "id": 8,
+    "nombre": "Entre Ríos",
+    "pais_id": 1
+  },
+  {
+    "id": 9,
+    "nombre": "Formosa",
+    "pais_id": 1
+  },
+  {
+    "id": 10,
+    "nombre": "Jujuy",
+    "pais_id": 1
+  },
+  {
+    "id": 11,
+    "nombre": "La Pampa",
+    "pais_id": 1
+  },
+  {
+    "id": 12,
+    "nombre": "La Rioja",
+    "pais_id": 1
+  },
+  {
+    "id": 13,
+    "nombre": "Mendoza",
+    "pais_id": 1
+  },
+  {
+    "id": 14,
+    "nombre": "Misiones",
+    "pais_id": 1
+  },
+  {
+    "id": 15,
+    "nombre": "Neuquén",
+    "pais_id": 1
+  },
+  {
+    "id": 16,
+    "nombre": "Río Negro",
+    "pais_id": 1
+  },
+  {
+    "id": 17,
+    "nombre": "Salta",
+    "pais_id": 1
+  },
+  {
+    "id": 18,
+    "nombre": "San Juan",
+    "pais_id": 1
+  },
+  {
+    "id": 19,
+    "nombre": "San Luis",
+    "pais_id": 1
+  },
+  {
+    "id": 20,
+    "nombre": "Santa Cruz",
+    "pais_id": 1
+  },
+  {
+    "id": 21,
+    "nombre": "Santa Fe",
+    "pais_id": 1
+  },
+  {
+    "id": 22,
+    "nombre": "Santiago del Estero",
+    "pais_id": 1
+  },
+  {
+    "id": 23,
+    "nombre": "Tierra del Fuego",
+    "pais_id": 1
+  },
+  {
+    "id": 24,
+    "nombre": "Tucumán",
+    "pais_id": 1
+  },
+  {
+    "id": 25,
+    "nombre": "Antártica Chilena",
+    "pais_id": 2
+  },
+  {
+    "id": 26,
+    "nombre": "Antofagasta",
+    "pais_id": 2
+  },
+  {
+    "id": 27,
+    "nombre": "Arauco",
+    "pais_id": 2
+  },
+  {
+    "id": 28,
+    "nombre": "Arica",
+    "pais_id": 2
+  },
+  {
+    "id": 29,
+    "nombre": "Cardenal Caro",
+    "pais_id": 2
+  },
+  {
+    "id": 30,
+    "nombre": "Cautín",
+    "pais_id": 2
+  },
+  {
+    "id": 31,
+    "nombre": "Chacabuco",
+    "pais_id": 2
+  },
+  {
+    "id": 32,
+    "nombre": "Chañaral",
+    "pais_id": 2
+  },
+  {
+    "id": 33,
+    "nombre": "Choapa",
+    "pais_id": 2
+  },
+  {
+    "id": 34,
+    "nombre": "Colchagua",
+    "pais_id": 2
+  },
+  {
+    "id": 35,
+    "nombre": "Concepción",
+    "pais_id": 2
+  },
+  {
+    "id": 36,
+    "nombre": "Copiapó",
+    "pais_id": 2
+  },
+  {
+    "id": 37,
+    "nombre": "Córdoba",
+    "pais_id": 2
+  },
+  {
+    "id": 38,
+    "nombre": "Cachapoal",
+    "pais_id": 2
+  },
+  {
+    "id": 39,
+    "nombre": "Cauquenes",
+    "pais_id": 2
+  },
+  {
+    "id": 40,
+    "nombre": "Curicó",
+    "pais_id": 2
+  },
+  {
+    "id": 41,
+    "nombre": "Diguillín",
+    "pais_id": 2
+  },
+  {
+    "id": 42,
+    "nombre": "El Loa",
+    "pais_id": 2
+  },
+  {
+    "id": 43,
+    "nombre": "Elqui",
+    "pais_id": 2
+  },
+  {
+    "id": 44,
+    "nombre": "Huasco",
+    "pais_id": 2
+  },
+  {
+    "id": 45,
+    "nombre": "Iquique",
+    "pais_id": 2
+  },
+  {
+    "id": 46,
+    "nombre": "Isla de Pascua",
+    "pais_id": 2
+  },
+  {
+    "id": 47,
+    "nombre": "Itata",
+    "pais_id": 2
+  },
+  {
+    "id": 48,
+    "nombre": "Limarí",
+    "pais_id": 2
+  },
+  {
+    "id": 49,
+    "nombre": "Linares",
+    "pais_id": 2
+  },
+  {
+    "id": 50,
+    "nombre": "Llaita",
+    "pais_id": 2
+  },
+  {
+    "id": 51,
+    "nombre": "Llanquihue",
+    "pais_id": 2
+  },
+  {
+    "id": 52,
+    "nombre": "Loa",
+    "pais_id": 2
+  },
+  {
+    "id": 53,
+    "nombre": "Los Andes",
+    "pais_id": 2
+  },
+  {
+    "id": 54,
+    "nombre": "Magallanes",
+    "pais_id": 2
+  },
+  {
+    "id": 55,
+    "nombre": "Maipo",
+    "pais_id": 2
+  },
+  {
+    "id": 56,
+    "nombre": "Malleco",
+    "pais_id": 2
+  },
+  {
+    "id": 57,
+    "nombre": "Marga Marga",
+    "pais_id": 2
+  },
+  {
+    "id": 58,
+    "nombre": "Melipilla",
+    "pais_id": 2
+  },
+  {
+    "id": 59,
+    "nombre": "Osorno",
+    "pais_id": 2
+  },
+  {
+    "id": 60,
+    "nombre": "Palena",
+    "pais_id": 2
+  },
+  {
+    "id": 61,
+    "nombre": "Parinacota",
+    "pais_id": 2
+  },
+  {
+    "id": 62,
+    "nombre": "Petorca",
+    "pais_id": 2
+  },
+  {
+    "id": 63,
+    "nombre": "Quillota",
+    "pais_id": 2
+  },
+  {
+    "id": 64,
+    "nombre": "Ranco",
+    "pais_id": 2
+  },
+  {
+    "id": 65,
+    "nombre": "San Antonio",
+    "pais_id": 2
+  },
+  {
+    "id": 66,
+    "nombre": "San Felipe de Aconcagua",
+    "pais_id": 2
+  },
+  {
+    "id": 67,
+    "nombre": "Santiago",
+    "pais_id": 2
+  },
+  {
+    "id": 68,
+    "nombre": "Talagante",
+    "pais_id": 2
+  },
+  {
+    "id": 69,
+    "nombre": "Talca",
+    "pais_id": 2
+  },
+  {
+    "id": 70,
+    "nombre": "Tamarugal",
+    "pais_id": 2
+  },
+  {
+    "id": 71,
+    "nombre": "Tierra del Fuego",
+    "pais_id": 2
+  },
+  {
+    "id": 72,
+    "nombre": "Tocopilla",
+    "pais_id": 2
+  },
+  {
+    "id": 73,
+    "nombre": "Valdivia",
+    "pais_id": 2
+  },
+  {
+    "id": 74,
+    "nombre": "Valparaíso",
+    "pais_id": 2
+  },
+  {
+    "id": 75,
+    "nombre": "Maule",
+    "pais_id": 2
+  },
+  {
+    "id": 76,
+    "nombre": "Ñuble",
+    "pais_id": 2
+  },
+  {
+    "id": 77,
+    "nombre": "Punilla",
+    "pais_id": 2
+  },
+  {
+    "id": 78,
+    "nombre": "Rapa Nui",
+    "pais_id": 2
+  },
+  {
+    "id": 79,
+    "nombre": "Reloncaví",
+    "pais_id": 2
+  },
+  {
+    "id": 80,
+    "nombre": "Ultima Esperanza",
+    "pais_id": 2
+  },
+  {
+    "id": 81,
+    "nombre": "Artigas",
+    "pais_id": 3
+  },
+  {
+    "id": 82,
+    "nombre": "Canelones",
+    "pais_id": 3
+  },
+  {
+    "id": 83,
+    "nombre": "Cerro Largo",
+    "pais_id": 3
+  },
+  {
+    "id": 84,
+    "nombre": "Colonia",
+    "pais_id": 3
+  },
+  {
+    "id": 85,
+    "nombre": "Durazno",
+    "pais_id": 3
+  },
+  {
+    "id": 86,
+    "nombre": "Flores",
+    "pais_id": 3
+  },
+  {
+    "id": 87,
+    "nombre": "Florida",
+    "pais_id": 3
+  },
+  {
+    "id": 88,
+    "nombre": "Lavalleja",
+    "pais_id": 3
+  },
+  {
+    "id": 89,
+    "nombre": "Maldonado",
+    "pais_id": 3
+  },
+  {
+    "id": 90,
+    "nombre": "Montevideo",
+    "pais_id": 3
+  },
+  {
+    "id": 91,
+    "nombre": "Paysandú",
+    "pais_id": 3
+  },
+  {
+    "id": 92,
+    "nombre": "Río Negro",
+    "pais_id": 3
+  },
+  {
+    "id": 93,
+    "nombre": "Rivera",
+    "pais_id": 3
+  },
+  {
+    "id": 94,
+    "nombre": "Rocha",
+    "pais_id": 3
+  },
+  {
+    "id": 95,
+    "nombre": "Salto",
+    "pais_id": 3
+  },
+  {
+    "id": 96,
+    "nombre": "San José",
+    "pais_id": 3
+  },
+  {
+    "id": 97,
+    "nombre": "Soriano",
+    "pais_id": 3
+  },
+  {
+    "id": 98,
+    "nombre": "Tacuarembó",
+    "pais_id": 3
+  },
+  {
+    "id": 99,
+    "nombre": "Treinta y Tres",
+    "pais_id": 3
+  }
+]
