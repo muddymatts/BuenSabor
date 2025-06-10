@@ -148,4 +148,22 @@ public class DataInitializer {
             }
         };
     }
+
+    @Bean
+    CommandLineRunner initPaises(PaisRepository paisRepository) {
+        return args -> {
+            if (paisRepository.count() == 0) {
+                Pais argentina = new Pais();
+                argentina.setNombre("Argentina");
+
+                Pais chile = new Pais();
+                chile.setNombre("Chile");
+
+                Pais uruguay = new Pais();
+                uruguay.setNombre("Uruguay");
+
+                paisRepository.saveAll(List.of(argentina, chile, uruguay));
+            }
+        };
+    }
 }
