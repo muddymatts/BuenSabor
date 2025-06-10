@@ -3,12 +3,20 @@ package BuenSabor.config;
 import BuenSabor.enums.Rol;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class DataInitializer {
@@ -150,6 +158,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(1)
     CommandLineRunner initPaises(PaisRepository paisRepository) {
         return args -> {
             if (paisRepository.count() == 0) {
@@ -163,6 +172,40 @@ public class DataInitializer {
                 uruguay.setNombre("Uruguay");
 
                 paisRepository.saveAll(List.of(argentina, chile, uruguay));
+            }
+        };
+    }
+
+    @Bean
+    @Order(2)
+    CommandLineRunner initProvincias(ProvinciaRepository provinciaRepository, PaisRepository paisRepository, ResourceLoader resourceLoader) {
+        return args -> {
+            if (provinciaRepository.count() == 0) {
+                Resource resource = resourceLoader.getResource("classpath:data/provincias.json");
+                ObjectMapper objectMapper = new ObjectMapper();
+                TypeReference<List<Map<String, Object>>> typeReference = new TypeReference<>() {
+                };
+
+                try (InputStream inputStream = resource.getInputStream()) {
+                    List<Map<String, Object>> provinciasList = objectMapper.readValue(inputStream, typeReference);
+                    List<Provincia> provincias = new ArrayList<>();
+
+                    for (Map<String, Object> provinciaJson : provinciasList) {
+                        Provincia provincia = new Provincia();
+                        provincia.setNombre((String) provinciaJson.get("nombre"));
+
+                        int paisId = (Integer) provinciaJson.get("pais_id");
+                        Pais pais = paisRepository.findById(paisId)
+                                .orElseThrow(() -> new IllegalArgumentException("No se encontró el país con ID: " + paisId));
+
+                        provincia.setPais(pais);
+                        provincias.add(provincia);
+                    }
+
+                    provinciaRepository.saveAll(provincias);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
     }
