@@ -1,8 +1,12 @@
 package BuenSabor.service;
 
+import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +15,16 @@ import java.util.List;
 @Service
 public class ArticuloManufacturadoService {
 
-    private final ArticuloManufacturadoRepository repository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository) {
+    private final ArticuloManufacturadoRepository repository;
+    private final BajaLogicaService bajaLogicaService;
+
+    public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository,
+                                        BajaLogicaService bajaLogicaService) {
         this.repository = repository;
+        this.bajaLogicaService = bajaLogicaService;
     }
 
     @Transactional
@@ -22,6 +32,11 @@ public class ArticuloManufacturadoService {
         //recorrer la lista para asignar el objeto padre.
         for (ArticuloManufacturadoDetalle detalle : articulo.getDetalles()) {
             detalle.setManufacturado(articulo);
+            ArticuloInsumo insumo = entityManager.getReference(
+                    ArticuloInsumo.class,
+                    detalle.getInsumo().getId()
+            );
+            detalle.setInsumo(insumo);
         }
 
         return repository.save(articulo);
@@ -35,5 +50,19 @@ public class ArticuloManufacturadoService {
         return repository.findByFechaBajaIsNull();
     }
 
-    public List<ArticuloManufacturado> findAll() { return repository.findAll();    }
+    public List<ArticuloManufacturado> findAll() {
+        return repository.findAll();
+    }
+
+    @Transactional
+    public String eliminarArticuloManufacturado(Long id) {
+        ArticuloManufacturado articulo = repository.getReferenceByIdAndFechaBajaIsNull(id);
+
+        if (articulo == null) {
+            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
+        }
+
+        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
+        return articulo.getDenominacion();
+    }
 }
