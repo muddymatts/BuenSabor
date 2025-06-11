@@ -19,7 +19,7 @@ public class PedidoVenta extends EntityApp {
     private BigDecimal subtotal;
     private BigDecimal gastosEnvio;
     private BigDecimal total;
-    private BigDecimal toalCosto;
+    private BigDecimal costoTotal;
 
     @Enumerated(EnumType.STRING)
     private Estado estado;

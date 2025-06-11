@@ -49,8 +49,7 @@ public class PedidoVentaService {
 
         pedido.setHoraEstimadaFinalizacion(CalcularDemoraTotal(pedido));
 
-        pedido.setToalCosto(CalcularCostoTotal(pedido));
-
+        pedido.setCostoTotal(CalcularCostoTotal(pedido));
 
         return repository.save(pedido);
     }
