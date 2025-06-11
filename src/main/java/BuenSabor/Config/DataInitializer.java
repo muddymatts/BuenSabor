@@ -257,4 +257,61 @@ public class DataInitializer {
             }
         };
     }
+
+    @Bean
+    @Order(4)
+    CommandLineRunner initLocalidadesChile(LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository) {
+        return args -> {
+            try {
+                boolean localidadesChileCargadas = provinciaRepository.findByPaisId(2).stream()
+                        .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
+
+                if (!localidadesChileCargadas) {
+                    InputStream is = getClass().getResourceAsStream("/data/localidades_chile.json");
+
+                    if (is == null) {
+                        throw new RuntimeException("Archivo 'localidades_chile.json' no encontrado");
+                    }
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode rootNode = objectMapper.readTree(is);
+                    JsonNode regionesNode = rootNode.get("regiones");
+
+                    int chilePaisId = 2;
+
+                    if (regionesNode.isArray()) {
+                        for (JsonNode regionNode : regionesNode) {
+                            String nombreRegion = regionNode.get("region").asText();
+                            JsonNode comunasNode = regionNode.get("comunas");
+
+                            if (comunasNode.isArray()) {
+                                for (JsonNode comunaNode : comunasNode) {
+                                    String nombreComuna = comunaNode.asText();
+
+                                    Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreRegion, chilePaisId);
+
+                                    if (provinciaOpt.isPresent()) {
+                                        Provincia provincia = provinciaOpt.get();
+
+                                        Localidad localidad = new Localidad();
+                                        localidad.setNombre(nombreComuna);
+                                        localidad.setProvincia(provincia);
+
+                                        localidadRepository.save(localidad);
+                                    } else {
+                                        System.err.println("Provincia no encontrada en Chile (pais_id=" + chilePaisId + ") con nombre: " + nombreRegion);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("Las localidades de Chile ya están cargadas en la base de datos.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error al inicializar los datos de localidades de Chile.");
+            }
+        };
+    }
 }
