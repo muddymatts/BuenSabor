@@ -1,9 +1,9 @@
 package BuenSabor.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,17 +17,18 @@ public class PedidoVentaDetalle extends EntityApp {
 
     @ManyToOne
     @JoinColumn(name = "pedido_venta_id")
+    @JsonBackReference
     private PedidoVenta pedido;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "articulo_manufacturado_id")
     private ArticuloManufacturado articuloManufacturado;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "articulo_insumo_id")
     private ArticuloInsumo articuloInsumo;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "promocion_id")
     private Promocion promocion;
 }
