@@ -4,6 +4,7 @@ import BuenSabor.enums.Rol;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Configuration
 public class DataInitializer {
@@ -206,6 +208,52 @@ public class DataInitializer {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        };
+    }
+
+    @Bean
+    @Order(3)
+    CommandLineRunner initLocalidadesArgentina(LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository) {
+        return args -> {
+            try {
+                if (localidadRepository.count() == 0) {
+                    InputStream is = getClass().getResourceAsStream("/data/departamentos_argentina.json");
+
+                    if (is == null) {
+                        throw new RuntimeException("Archivo 'departamentos_argentina.json' no encontrado");
+                    }
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode rootNode = objectMapper.readTree(is);
+                    JsonNode departamentosNode = rootNode.get("departamentos");
+
+                    if (departamentosNode.isArray()) {
+                        for (JsonNode departamentoNode : departamentosNode) {
+                            String nombreDepartamento = departamentoNode.get("nombre").asText();
+                            String nombreProvincia = departamentoNode.get("provincia").get("nombre").asText();
+
+                            Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreProvincia, 1);
+
+                            if (provinciaOpt.isPresent()) {
+                                Provincia provincia = provinciaOpt.get();
+
+                                Localidad localidad = new Localidad();
+                                localidad.setNombre(nombreDepartamento);
+                                localidad.setProvincia(provincia);
+
+                                localidadRepository.save(localidad);
+                            } else {
+                                System.out.println("Provincia no encontrada para pais_id = 1, nombre: " + nombreProvincia);
+                            }
+                        }
+                    }
+                } else {
+                    System.out.println("La tabla 'localidad' ya contiene datos, no se realizaron inserciones.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error al inicializar los datos de localidades.");
             }
         };
     }
