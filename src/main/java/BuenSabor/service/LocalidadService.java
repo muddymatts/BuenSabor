@@ -1,20 +1,22 @@
 package BuenSabor.service;
 
-import BuenSabor.dto.LocalidadDTO;
+import BuenSabor.dto.localidad.LocalidadDTO;
+import BuenSabor.mapper.LocalidadDTOMapper;
 import BuenSabor.model.Localidad;
 import BuenSabor.repository.LocalidadRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LocalidadService {
 
     private final LocalidadRepository localidadRepository;
+    private final LocalidadDTOMapper localidadDTOMapper;
 
-    public LocalidadService(LocalidadRepository localidadRepository) {
+    public LocalidadService(LocalidadRepository localidadRepository, LocalidadDTOMapper localidadDTOMapper) {
         this.localidadRepository = localidadRepository;
+        this.localidadDTOMapper = localidadDTOMapper;
     }
 
     public List<Localidad> findAll() {
@@ -26,13 +28,6 @@ public class LocalidadService {
     }
 
     public List<LocalidadDTO> mapToDTOList(List<Localidad> localidades) {
-        return localidades.stream()
-                .map(localidad -> {
-                    LocalidadDTO dto = new LocalidadDTO();
-                    dto.setId(localidad.getId());
-                    dto.setNombre(localidad.getNombre());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return localidadDTOMapper.toDTOList(localidades);
     }
 }

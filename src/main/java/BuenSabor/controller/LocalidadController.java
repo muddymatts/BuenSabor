@@ -1,6 +1,6 @@
 package BuenSabor.controller;
 
-import BuenSabor.dto.LocalidadDTO;
+import BuenSabor.dto.localidad.LocalidadDTO;
 import BuenSabor.model.Localidad;
 import BuenSabor.service.LocalidadService;
 import org.springframework.web.bind.annotation.GetMapping;
