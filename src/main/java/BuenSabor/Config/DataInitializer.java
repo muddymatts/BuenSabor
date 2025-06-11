@@ -20,8 +20,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 @Configuration
 public class DataInitializer {
+
+    private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
+
+    private final int idArgentina = 1;
+    private final int idChile = 2;
+    private final int idUruguay = 3;
 
     @Bean
     CommandLineRunner crearUsuarios(UsuarioRepository userRepo, EmpleadoRepository empleadoRepo, PasswordEncoder encoder) {
@@ -206,7 +215,7 @@ public class DataInitializer {
 
                     provinciaRepository.saveAll(provincias);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, "Error al inicializar provincias.", e);
                 }
             }
         };
@@ -217,7 +226,10 @@ public class DataInitializer {
     CommandLineRunner initLocalidadesArgentina(LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository) {
         return args -> {
             try {
-                if (localidadRepository.count() == 0) {
+                boolean localidadesArgentinaCargadas = provinciaRepository.findByPaisId(idArgentina).stream()
+                        .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
+
+                if (!localidadesArgentinaCargadas) {
                     InputStream is = getClass().getResourceAsStream("/data/localidades_argentina.json");
 
                     if (is == null) {
@@ -233,7 +245,7 @@ public class DataInitializer {
                             String nombreDepartamento = departamentoNode.get("nombre").asText();
                             String nombreProvincia = departamentoNode.get("provincia").get("nombre").asText();
 
-                            Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreProvincia, 1);
+                            Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreProvincia, idArgentina);
 
                             if (provinciaOpt.isPresent()) {
                                 Provincia provincia = provinciaOpt.get();
@@ -249,11 +261,10 @@ public class DataInitializer {
                         }
                     }
                 } else {
-                    System.out.println("La tabla 'localidad' ya contiene datos, no se realizaron inserciones.");
+                    logger.info("Las localidades de Argentina ya están cargadas en la base de datos.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("Error al inicializar los datos de localidades.");
+                logger.log(Level.SEVERE, "Error al inicializar los datos de localidades de Argentina.", e);
             }
         };
     }
@@ -263,7 +274,7 @@ public class DataInitializer {
     CommandLineRunner initLocalidadesChile(LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository) {
         return args -> {
             try {
-                boolean localidadesChileCargadas = provinciaRepository.findByPaisId(2).stream()
+                boolean localidadesChileCargadas = provinciaRepository.findByPaisId(idChile).stream()
                         .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
 
                 if (!localidadesChileCargadas) {
@@ -277,8 +288,6 @@ public class DataInitializer {
                     JsonNode rootNode = objectMapper.readTree(is);
                     JsonNode regionesNode = rootNode.get("regiones");
 
-                    int chilePaisId = 2;
-
                     if (regionesNode.isArray()) {
                         for (JsonNode regionNode : regionesNode) {
                             String nombreRegion = regionNode.get("region").asText();
@@ -288,7 +297,7 @@ public class DataInitializer {
                                 for (JsonNode comunaNode : comunasNode) {
                                     String nombreComuna = comunaNode.asText();
 
-                                    Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreRegion, chilePaisId);
+                                    Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreRegion, idChile);
 
                                     if (provinciaOpt.isPresent()) {
                                         Provincia provincia = provinciaOpt.get();
@@ -299,18 +308,70 @@ public class DataInitializer {
 
                                         localidadRepository.save(localidad);
                                     } else {
-                                        System.err.println("Provincia no encontrada en Chile (pais_id=" + chilePaisId + ") con nombre: " + nombreRegion);
+                                        System.err.println("Provincia no encontrada en Chile (pais_id=" + idChile + ") con nombre: " + nombreRegion);
                                     }
                                 }
                             }
                         }
                     }
                 } else {
-                    System.out.println("Las localidades de Chile ya están cargadas en la base de datos.");
+                    logger.info("Las localidades de Chile ya están cargadas en la base de datos.");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("Error al inicializar los datos de localidades de Chile.");
+                logger.log(Level.SEVERE, "Error al inicializar los datos de localidades de Chile.", e);
+            }
+        };
+    }
+
+    @Bean
+    @Order(5)
+    CommandLineRunner initLocalidadesUruguay(LocalidadRepository localidadRepository, ProvinciaRepository provinciaRepository) {
+        return args -> {
+            try {
+                boolean localidadesUruguayCargadas = provinciaRepository.findByPaisId(idUruguay).stream()
+                        .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
+
+                if (!localidadesUruguayCargadas) {
+                    InputStream is = getClass().getResourceAsStream("/data/localidades_uruguay.json");
+
+                    if (is == null) {
+                        throw new RuntimeException("Archivo 'localidades_uruguay.json' no encontrado");
+                    }
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    JsonNode rootNode = objectMapper.readTree(is);
+
+                    if (rootNode.isArray()) {
+                        for (JsonNode regionNode : rootNode) {
+                            String nombreRegion = regionNode.get("name").asText();
+                            JsonNode townsNode = regionNode.get("towns");
+
+                            if (townsNode.isArray()) {
+                                for (JsonNode townNode : townsNode) {
+                                    String nombreLocalidad = townNode.get("name").asText();
+
+                                    Optional<Provincia> provinciaOpt = provinciaRepository.findByNombreAndPaisId(nombreRegion, idUruguay);
+
+                                    if (provinciaOpt.isPresent()) {
+                                        Provincia provincia = provinciaOpt.get();
+
+                                        Localidad localidad = new Localidad();
+                                        localidad.setNombre(nombreLocalidad);
+                                        localidad.setProvincia(provincia);
+
+                                        localidadRepository.save(localidad);
+                                    } else {
+                                        System.err.println("Provincia no encontrada en Uruguay (pais_id=" + idUruguay + ") con nombre: " + nombreRegion);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    logger.info("Las localidades de Uruguay ya están cargadas en la base de datos.");
+                }
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Error al inicializar los datos de localidades de Uruguay.", e);
             }
         };
     }
