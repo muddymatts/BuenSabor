@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,7 +27,7 @@ public class PedidoVenta extends EntityApp {
     @Enumerated(EnumType.STRING)
     private TipoEnvio tipoEnvio;
 
-    private LocalDate fechaPedido;
+    private LocalDateTime fechaHoraPedido;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoVentaDetalle> detalles;
