@@ -28,11 +28,6 @@ public class ArticuloManufacturadoService {
         //recorrer la lista para asignar el objeto padre.
         for (ArticuloManufacturadoDetalle detalle : articulo.getDetalles()) {
             detalle.setManufacturado(articulo);
-            ArticuloInsumo insumo = entityManager.getReference(
-                    ArticuloInsumo.class,
-                    detalle.getInsumo().getId()
-            );
-            detalle.setInsumo(insumo);
         }
 
         return repository.save(articulo);
