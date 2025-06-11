@@ -1,6 +1,5 @@
 package BuenSabor.service;
 
-import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
@@ -13,9 +12,6 @@ import java.util.List;
 
 @Service
 public class ArticuloManufacturadoService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private final ArticuloManufacturadoRepository repository;
 
