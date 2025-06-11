@@ -121,282 +121,82 @@
   },
   {
     "id": 25,
-    "nombre": "Antártica Chilena",
-    "pais_id": 2
-  },
-  {
-    "id": 26,
     "nombre": "Antofagasta",
     "pais_id": 2
   },
   {
+    "id": 26,
+    "nombre": "Arica y Parinacota",
+    "pais_id": 2
+  },
+  {
     "id": 27,
-    "nombre": "Arauco",
+    "nombre": "Atacama",
     "pais_id": 2
   },
   {
     "id": 28,
-    "nombre": "Arica",
+    "nombre": "Coquimbo",
     "pais_id": 2
   },
   {
     "id": 29,
-    "nombre": "Cardenal Caro",
+    "nombre": "Región Aisén del Gral. Carlos Ibáñez del Campo",
     "pais_id": 2
   },
   {
     "id": 30,
-    "nombre": "Cautín",
+    "nombre": "Región de la Araucanía",
     "pais_id": 2
   },
   {
     "id": 31,
-    "nombre": "Chacabuco",
+    "nombre": "Región de Los Lagos",
     "pais_id": 2
   },
   {
     "id": 32,
-    "nombre": "Chañaral",
+    "nombre": "Región de Los Ríos",
     "pais_id": 2
   },
   {
     "id": 33,
-    "nombre": "Choapa",
+    "nombre": "Región de Magallanes y de la Antártica Chilena",
     "pais_id": 2
   },
   {
     "id": 34,
-    "nombre": "Colchagua",
+    "nombre": "Región del Biobío",
     "pais_id": 2
   },
   {
     "id": 35,
-    "nombre": "Concepción",
+    "nombre": "Región del Libertador Gral. Bernardo O’Higgins",
     "pais_id": 2
   },
   {
     "id": 36,
-    "nombre": "Copiapó",
+    "nombre": "Región del Maule",
     "pais_id": 2
   },
   {
     "id": 37,
-    "nombre": "Córdoba",
+    "nombre": "Región de Ñuble",
     "pais_id": 2
   },
   {
     "id": 38,
-    "nombre": "Cachapoal",
+    "nombre": "Región Metropolitana de Santiago",
     "pais_id": 2
   },
   {
     "id": 39,
-    "nombre": "Cauquenes",
+    "nombre": "Tarapacá",
     "pais_id": 2
   },
   {
     "id": 40,
-    "nombre": "Curicó",
-    "pais_id": 2
-  },
-  {
-    "id": 41,
-    "nombre": "Diguillín",
-    "pais_id": 2
-  },
-  {
-    "id": 42,
-    "nombre": "El Loa",
-    "pais_id": 2
-  },
-  {
-    "id": 43,
-    "nombre": "Elqui",
-    "pais_id": 2
-  },
-  {
-    "id": 44,
-    "nombre": "Huasco",
-    "pais_id": 2
-  },
-  {
-    "id": 45,
-    "nombre": "Iquique",
-    "pais_id": 2
-  },
-  {
-    "id": 46,
-    "nombre": "Isla de Pascua",
-    "pais_id": 2
-  },
-  {
-    "id": 47,
-    "nombre": "Itata",
-    "pais_id": 2
-  },
-  {
-    "id": 48,
-    "nombre": "Limarí",
-    "pais_id": 2
-  },
-  {
-    "id": 49,
-    "nombre": "Linares",
-    "pais_id": 2
-  },
-  {
-    "id": 50,
-    "nombre": "Llaita",
-    "pais_id": 2
-  },
-  {
-    "id": 51,
-    "nombre": "Llanquihue",
-    "pais_id": 2
-  },
-  {
-    "id": 52,
-    "nombre": "Loa",
-    "pais_id": 2
-  },
-  {
-    "id": 53,
-    "nombre": "Los Andes",
-    "pais_id": 2
-  },
-  {
-    "id": 54,
-    "nombre": "Magallanes",
-    "pais_id": 2
-  },
-  {
-    "id": 55,
-    "nombre": "Maipo",
-    "pais_id": 2
-  },
-  {
-    "id": 56,
-    "nombre": "Malleco",
-    "pais_id": 2
-  },
-  {
-    "id": 57,
-    "nombre": "Marga Marga",
-    "pais_id": 2
-  },
-  {
-    "id": 58,
-    "nombre": "Melipilla",
-    "pais_id": 2
-  },
-  {
-    "id": 59,
-    "nombre": "Osorno",
-    "pais_id": 2
-  },
-  {
-    "id": 60,
-    "nombre": "Palena",
-    "pais_id": 2
-  },
-  {
-    "id": 61,
-    "nombre": "Parinacota",
-    "pais_id": 2
-  },
-  {
-    "id": 62,
-    "nombre": "Petorca",
-    "pais_id": 2
-  },
-  {
-    "id": 63,
-    "nombre": "Quillota",
-    "pais_id": 2
-  },
-  {
-    "id": 64,
-    "nombre": "Ranco",
-    "pais_id": 2
-  },
-  {
-    "id": 65,
-    "nombre": "San Antonio",
-    "pais_id": 2
-  },
-  {
-    "id": 66,
-    "nombre": "San Felipe de Aconcagua",
-    "pais_id": 2
-  },
-  {
-    "id": 67,
-    "nombre": "Santiago",
-    "pais_id": 2
-  },
-  {
-    "id": 68,
-    "nombre": "Talagante",
-    "pais_id": 2
-  },
-  {
-    "id": 69,
-    "nombre": "Talca",
-    "pais_id": 2
-  },
-  {
-    "id": 70,
-    "nombre": "Tamarugal",
-    "pais_id": 2
-  },
-  {
-    "id": 71,
-    "nombre": "Tierra del Fuego",
-    "pais_id": 2
-  },
-  {
-    "id": 72,
-    "nombre": "Tocopilla",
-    "pais_id": 2
-  },
-  {
-    "id": 73,
-    "nombre": "Valdivia",
-    "pais_id": 2
-  },
-  {
-    "id": 74,
     "nombre": "Valparaíso",
-    "pais_id": 2
-  },
-  {
-    "id": 75,
-    "nombre": "Maule",
-    "pais_id": 2
-  },
-  {
-    "id": 76,
-    "nombre": "Ñuble",
-    "pais_id": 2
-  },
-  {
-    "id": 77,
-    "nombre": "Punilla",
-    "pais_id": 2
-  },
-  {
-    "id": 78,
-    "nombre": "Rapa Nui",
-    "pais_id": 2
-  },
-  {
-    "id": 79,
-    "nombre": "Reloncaví",
-    "pais_id": 2
-  },
-  {
-    "id": 80,
-    "nombre": "Ultima Esperanza",
     "pais_id": 2
   },
   {
