@@ -218,10 +218,10 @@ public class DataInitializer {
         return args -> {
             try {
                 if (localidadRepository.count() == 0) {
-                    InputStream is = getClass().getResourceAsStream("/data/departamentos_argentina.json");
+                    InputStream is = getClass().getResourceAsStream("/data/localidades_argentina.json");
 
                     if (is == null) {
-                        throw new RuntimeException("Archivo 'departamentos_argentina.json' no encontrado");
+                        throw new RuntimeException("Archivo 'localidades_argentina.json' no encontrado");
                     }
 
                     ObjectMapper objectMapper = new ObjectMapper();
