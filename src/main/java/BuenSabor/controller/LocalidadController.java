@@ -1,8 +1,12 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.LocalidadDTO;
 import BuenSabor.model.Localidad;
 import BuenSabor.service.LocalidadService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,12 +21,14 @@ public class LocalidadController {
     }
 
     @GetMapping
-    public List<Localidad> listarLocalidades() {
-        return localidadService.findAll();
+    public List<LocalidadDTO> listarLocalidades() {
+        List<Localidad> localidades = localidadService.findAll();
+        return localidadService.mapToDTOList(localidades);
     }
 
     @GetMapping("/{provinciaId}")
-    public List<Localidad> listarLocalidadesPorProvincia(@PathVariable("provinciaId") int provinciaId) {
-        return localidadService.findByProvinciaId(provinciaId);
+    public List<LocalidadDTO> listarLocalidadesPorProvincia(@PathVariable("provinciaId") int provinciaId) {
+        List<Localidad> localidades = localidadService.findByProvinciaId(provinciaId);
+        return localidadService.mapToDTOList(localidades);
     }
 }
