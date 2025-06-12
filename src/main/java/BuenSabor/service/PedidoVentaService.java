@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 public class PedidoVentaService {
@@ -28,6 +29,10 @@ public class PedidoVentaService {
         this.bajaLogicaService = bajaLogicaService;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.articuloInsumoService = articuloInsumoService;
+    }
+
+    public List<PedidoVenta> listarTodas() {
+        return repository.findAll();
     }
 
     @Transactional
