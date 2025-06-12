@@ -121,6 +121,45 @@ public class DataInitializer {
     }
 
     @Bean
+    CommandLineRunner initCategoriaInsumos (CategoriaArticuloRepository categoriaArticuloInsumoRepository) {
+        return args -> {
+            if (categoriaArticuloInsumoRepository.count() == 0) {
+                CategoriaArticulo alimentos = new CategoriaArticulo();
+                alimentos.setDenominacion("Alimentos");
+                alimentos.setCategoriaPadre(null);
+
+                CategoriaArticulo bebidas = new CategoriaArticulo();
+                bebidas.setDenominacion("Bebidas");
+                bebidas.setCategoriaPadre(null);
+
+                CategoriaArticulo gaseosas = new CategoriaArticulo();
+                gaseosas.setDenominacion("Gaseosas");
+                gaseosas.setCategoriaPadre(bebidas);
+
+                CategoriaArticulo agua = new CategoriaArticulo();
+                agua.setDenominacion("Agua");
+                agua.setCategoriaPadre(bebidas);
+
+                CategoriaArticulo vegetales = new CategoriaArticulo();
+                vegetales.setDenominacion("Vegetales");
+                vegetales.setCategoriaPadre(alimentos);
+
+                CategoriaArticulo lacteos = new CategoriaArticulo();
+                lacteos.setDenominacion("Lacteos");
+                lacteos.setCategoriaPadre(alimentos);
+
+                CategoriaArticulo quesos = new CategoriaArticulo();
+                quesos.setDenominacion("Quesos");
+                quesos.setCategoriaPadre(lacteos);
+
+                categoriaArticuloInsumoRepository.saveAll(
+                        List.of(alimentos,bebidas,gaseosas, agua, vegetales, lacteos, quesos)
+                );
+            }
+        };
+    }
+
+    @Bean
     CommandLineRunner initUnidadesMedida(UnidadMedidaRepository unidadMedidaRepository) {
         return args -> {
             if (unidadMedidaRepository.count() == 0) {
@@ -144,6 +183,44 @@ public class DataInitializer {
 
                 unidadMedidaRepository.saveAll(
                         List.of(miligramos, gramos, kilogramos, mililitros, litros, unidades)
+                );
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initArticuloInsumo(ArticuloInsumoRepository articuloInsumoRepository, CategoriaArticuloRepository categoriaArticuloInsumoRepository, UnidadMedidaRepository unidadMedidaRepository) {
+        return args -> {
+            if (articuloInsumoRepository.count() == 0) {
+                List<CategoriaArticulo> categorias = categoriaArticuloInsumoRepository.findAll();
+                List<UnidadMedida> unidades = unidadMedidaRepository.findAll();
+
+                ArticuloInsumo quesoMuzzarella = new ArticuloInsumo();
+                quesoMuzzarella.setPrecioCompra(1.5);
+                quesoMuzzarella.setUnidadMedida(unidades.get(1));
+                quesoMuzzarella.setCategoriaArticulo(categorias.get(6));
+                quesoMuzzarella.setDenominacion("Queso Muzzarella");
+                quesoMuzzarella.setEsParaElaborar(true);
+                quesoMuzzarella.setPrecioVenta(1.75);
+
+                ArticuloInsumo salsaTomate = new ArticuloInsumo();
+                salsaTomate.setPrecioCompra(0.5);
+                salsaTomate.setUnidadMedida(unidades.get(3));
+                salsaTomate.setCategoriaArticulo(categorias.get(4));
+                salsaTomate.setDenominacion("Salsa de Tomate");
+                salsaTomate.setEsParaElaborar(true);
+                salsaTomate.setPrecioVenta(0.75);
+
+                ArticuloInsumo cocaCola = new ArticuloInsumo();
+                cocaCola.setPrecioCompra(1000.0);
+                cocaCola.setUnidadMedida(unidades.get(4));
+                cocaCola.setCategoriaArticulo(categorias.get(2));
+                cocaCola.setDenominacion("Coca Cola");
+                cocaCola.setEsParaElaborar(false);
+                cocaCola.setPrecioVenta(1500.0);
+
+                articuloInsumoRepository.saveAll(
+                        List.of(quesoMuzzarella, salsaTomate, cocaCola)
                 );
             }
         };
