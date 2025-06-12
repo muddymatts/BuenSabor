@@ -33,4 +33,12 @@ public class PedidoVentaController {
         return ResponseEntity.ok(pedidos);
     }
 
+    @DeleteMapping("/{id}")
+    public String bajaLogica(@PathVariable Long id) {
+        String idPedido = pedidoVentaService.darDeBaja(id);
+        String mensaje = "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
+        System.out.println(mensaje);
+        return mensaje;
+    }
+
 }

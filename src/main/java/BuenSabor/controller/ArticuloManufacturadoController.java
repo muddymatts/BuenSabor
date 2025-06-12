@@ -16,10 +16,12 @@ public class ArticuloManufacturadoController {
     private final BajaLogicaService bajaLogicaService;
 
     private final ArticuloManufacturadoService service;
+    private final ArticuloManufacturadoService articuloManufacturadoService;
 
-    public ArticuloManufacturadoController(ArticuloManufacturadoService service, BajaLogicaService bajaLogicaService) {
+    public ArticuloManufacturadoController(ArticuloManufacturadoService service, BajaLogicaService bajaLogicaService, ArticuloManufacturadoService articuloManufacturadoService) {
         this.service = service;
         this.bajaLogicaService = bajaLogicaService;
+        this.articuloManufacturadoService = articuloManufacturadoService;
     }
 
     @PostMapping
@@ -44,9 +46,9 @@ public class ArticuloManufacturadoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> bajaLogica(@PathVariable Long id) {
-        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> bajaLogica(@PathVariable Long id) {
+        String message = articuloManufacturadoService.eliminarArticuloManufacturado(id) + ", baja lógica realizada correctamente.";
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/mostrarTodos")

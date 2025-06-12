@@ -4,6 +4,7 @@ import BuenSabor.enums.Estado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.PedidoVentaDetalle;
 import BuenSabor.repository.PedidoVentaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,4 +88,15 @@ public class PedidoVentaService {
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
     }
 
+    public String darDeBaja(Long id) {
+        PedidoVenta pedido = repository.getReferenceById(id);
+
+        if (pedido == null) {
+            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
+        }
+
+        bajaLogicaService.darDeBaja(PedidoVenta.class, id);
+
+        return pedido.getId().toString();
+    }
 }
