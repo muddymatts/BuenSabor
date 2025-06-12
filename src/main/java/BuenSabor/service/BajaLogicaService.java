@@ -1,5 +1,6 @@
 package BuenSabor.service;
 
+import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.EntityApp;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,6 +19,10 @@ public class BajaLogicaService {
         T entidad = entityManager.find(clazz, id);
         if (entidad == null) {
             throw new EntityNotFoundException("No se encontró el recurso con ID: " + id);
+        }
+        if(clazz.equals(ArticuloManufacturado.class)){
+            ArticuloManufacturado articulo = (ArticuloManufacturado) entidad;
+            articulo.getDetalles().forEach(EntityApp::darDeBaja);
         }
 
         entidad.darDeBaja();

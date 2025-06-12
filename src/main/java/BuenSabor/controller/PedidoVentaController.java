@@ -28,9 +28,9 @@ public class PedidoVentaController {
     }
 
     @GetMapping
-    public ResponseEntity<PedidoVenta[]> listar() {
+    public ResponseEntity<List<PedidoVenta>> listar() {
         List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
-        return ResponseEntity.ok(pedidos.toArray(new PedidoVenta[pedidos.size()]));
+        return ResponseEntity.ok(pedidos);
     }
 
 }
