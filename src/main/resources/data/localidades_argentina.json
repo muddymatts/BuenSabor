@@ -2202,7 +2202,7 @@
       "nombre_completo": "Departamento Ushuaia",
       "provincia": {
         "id": "94",
-        "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+        "nombre": "Tierra del Fuego",
         "interseccion": 0.00189501966492348
       },
       "fuente": "IGN",
@@ -2826,7 +2826,7 @@
       "nombre_completo": "Departamento Antártida Argentina",
       "provincia": {
         "id": "94",
-        "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+        "nombre": "Tierra del Fuego",
         "interseccion": 0.991219629079016
       },
       "fuente": "IGN",
@@ -4010,7 +4010,7 @@
       "nombre_completo": "Departamento Río Grande",
       "provincia": {
         "id": "94",
-        "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+        "nombre": "Tierra del Fuego",
         "interseccion": 0.00157954813734915
       },
       "fuente": "IGN",
@@ -4858,7 +4858,7 @@
       "nombre_completo": "Departamento Islas del Atlántico Sur",
       "provincia": {
         "id": "94",
-        "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+        "nombre": "Tierra del Fuego",
         "interseccion": 0.00373105357744606
       },
       "fuente": "IGN",
@@ -7130,7 +7130,7 @@
       "nombre_completo": "Departamento Tolhuin",
       "provincia": {
         "id": "94",
-        "nombre": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+        "nombre": "Tierra del Fuego",
         "interseccion": 0.00157464841634478
       },
       "fuente": "IGN",
