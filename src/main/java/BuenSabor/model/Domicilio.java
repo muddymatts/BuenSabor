@@ -15,12 +15,10 @@ public class Domicilio {
     @Id
     private int id;
 
-
     private String calle;
     private int numero;
     private int cp;
 
-    // Relación N-1 con Localidad
     @ManyToOne
     @JoinColumn(name = "localidad_id")
     private Localidad localidad;
