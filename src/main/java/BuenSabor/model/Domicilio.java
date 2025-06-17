@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -16,7 +17,10 @@ public class Domicilio {
     private int id;
 
     private String calle;
+
+    @ColumnDefault("0")
     private int numero;
+
     private int cp;
 
     @ManyToOne

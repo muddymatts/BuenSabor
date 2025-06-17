@@ -17,7 +17,6 @@ public class Cliente extends EntityApp {
     private String telefono;
     private String email;
 
-    // Relación 1-1 con Domicilio
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "domicilio_id")
     private Domicilio domicilio;
