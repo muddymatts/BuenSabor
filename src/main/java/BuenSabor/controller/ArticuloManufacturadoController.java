@@ -30,7 +30,7 @@ public class ArticuloManufacturadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("detalle/{id}")
     public ResponseEntity<ArticuloManufacturado> buscarPorId(@PathVariable Long id) {
         ArticuloManufacturado busqueda = service.buscarPorId(id);
         if (busqueda != null) {
