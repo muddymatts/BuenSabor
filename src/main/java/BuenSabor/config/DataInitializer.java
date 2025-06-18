@@ -109,32 +109,40 @@ public class DataInitializer {
     }
 
     @Bean
-    CommandLineRunner initArticuloManufacturado(
-            ArticuloManufacturadoRepository articuloManufacturadoRepository,
-            CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository
-    ) {
+    CommandLineRunner initCategoriaInsumos (CategoriaArticuloRepository categoriaArticuloInsumoRepository) {
         return args -> {
-            if (articuloManufacturadoRepository.count() == 0) {
-                List<CategoriaArticuloManufacturado> categorias = categoriaArticuloManufacturadoRepository.findAll();
+            if (categoriaArticuloInsumoRepository.count() == 0) {
+                CategoriaArticulo alimentos = new CategoriaArticulo();
+                alimentos.setDenominacion("Alimentos");
+                alimentos.setCategoriaPadre(null);
 
-                if (!categorias.isEmpty()) {
-                    ArticuloManufacturado pizzaMuzzarella = new ArticuloManufacturado();
-                    pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
-                    pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
-                    pizzaMuzzarella.setCategoria(categorias.get(0));
+                CategoriaArticulo bebidas = new CategoriaArticulo();
+                bebidas.setDenominacion("Bebidas");
+                bebidas.setCategoriaPadre(null);
 
-                    ArticuloManufacturado hamburguesaClasica = new ArticuloManufacturado();
-                    hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
-                    hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
-                    hamburguesaClasica.setCategoria(categorias.get(1));
+                CategoriaArticulo gaseosas = new CategoriaArticulo();
+                gaseosas.setDenominacion("Gaseosas");
+                gaseosas.setCategoriaPadre(bebidas);
 
-                    ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
-                    lomitoSimple.setDenominacion("Lomito Simple");
-                    lomitoSimple.setDescripcion("Lomito con jamón y queso");
-                    lomitoSimple.setCategoria(categorias.get(3));
+                CategoriaArticulo agua = new CategoriaArticulo();
+                agua.setDenominacion("Agua");
+                agua.setCategoriaPadre(bebidas);
 
-                    articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
-                }
+                CategoriaArticulo vegetales = new CategoriaArticulo();
+                vegetales.setDenominacion("Vegetales");
+                vegetales.setCategoriaPadre(alimentos);
+
+                CategoriaArticulo lacteos = new CategoriaArticulo();
+                lacteos.setDenominacion("Lacteos");
+                lacteos.setCategoriaPadre(alimentos);
+
+                CategoriaArticulo quesos = new CategoriaArticulo();
+                quesos.setDenominacion("Quesos");
+                quesos.setCategoriaPadre(lacteos);
+
+                categoriaArticuloInsumoRepository.saveAll(
+                        List.of(alimentos,bebidas,gaseosas, agua, vegetales, lacteos, quesos)
+                );
             }
         };
     }
@@ -164,6 +172,112 @@ public class DataInitializer {
                 unidadMedidaRepository.saveAll(
                         List.of(miligramos, gramos, kilogramos, mililitros, litros, unidades)
                 );
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initArticuloInsumo(
+            ArticuloInsumoRepository articuloInsumoRepository,
+            CategoriaArticuloRepository categoriaArticuloInsumoRepository,
+            UnidadMedidaRepository unidadMedidaRepository) {
+        return args -> {
+            if (articuloInsumoRepository.count() == 0) {
+                List<CategoriaArticulo> categorias = categoriaArticuloInsumoRepository.findAll();
+                List<UnidadMedida> unidades = unidadMedidaRepository.findAll();
+
+                ArticuloInsumo quesoMuzzarella = new ArticuloInsumo();
+                quesoMuzzarella.setPrecioCompra(1.5);
+                quesoMuzzarella.setUnidadMedida(unidades.get(1));
+                quesoMuzzarella.setCategoriaArticulo(categorias.get(6));
+                quesoMuzzarella.setDenominacion("Queso Muzzarella");
+                quesoMuzzarella.setEsParaElaborar(true);
+                quesoMuzzarella.setPrecioVenta(1.75);
+
+                ArticuloInsumo salsaTomate = new ArticuloInsumo();
+                salsaTomate.setPrecioCompra(0.5);
+                salsaTomate.setUnidadMedida(unidades.get(3));
+                salsaTomate.setCategoriaArticulo(categorias.get(4));
+                salsaTomate.setDenominacion("Salsa de Tomate");
+                salsaTomate.setEsParaElaborar(true);
+                salsaTomate.setPrecioVenta(0.75);
+
+                ArticuloInsumo cocaCola = new ArticuloInsumo();
+                cocaCola.setPrecioCompra(1000.0);
+                cocaCola.setUnidadMedida(unidades.get(4));
+                cocaCola.setCategoriaArticulo(categorias.get(2));
+                cocaCola.setDenominacion("Coca Cola");
+                cocaCola.setEsParaElaborar(false);
+                cocaCola.setPrecioVenta(1500.0);
+
+                articuloInsumoRepository.saveAll(
+                        List.of(quesoMuzzarella, salsaTomate, cocaCola)
+                );
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initArticuloManufacturado(
+            ArticuloManufacturadoRepository articuloManufacturadoRepository,
+            CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository,
+            ArticuloInsumoRepository articuloInsumoRepository
+    ) {
+        return args -> {
+            if (articuloManufacturadoRepository.count() == 0) {
+                List<CategoriaArticuloManufacturado> categorias = categoriaArticuloManufacturadoRepository.findAll();
+
+                if (!categorias.isEmpty()) {
+                    ArticuloManufacturado pizzaMuzzarella = new ArticuloManufacturado();
+                    pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
+                    pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
+                    pizzaMuzzarella.setCategoria(categorias.get(0));
+                    pizzaMuzzarella.setPrecioVenta(2500.0);
+                    pizzaMuzzarella.setTiempoEstimado(30);
+
+
+                    ArticuloManufacturado hamburguesaClasica = new ArticuloManufacturado();
+                    hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
+                    hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
+                    hamburguesaClasica.setCategoria(categorias.get(1));
+                    hamburguesaClasica.setPrecioVenta(1500.0);
+                    hamburguesaClasica.setTiempoEstimado(20);
+
+                    ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
+                    lomitoSimple.setDenominacion("Lomito Simple");
+                    lomitoSimple.setDescripcion("Lomito con jamón y queso");
+                    lomitoSimple.setCategoria(categorias.get(3));
+                    lomitoSimple.setPrecioVenta(1000.0);
+                    lomitoSimple.setTiempoEstimado(25);
+
+                    articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
+                }
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initArticuloManufacturadoDetalles(
+            ArticuloManufacturadoDetalleRepository articuloManufacturadoDetalleRepository,
+            ArticuloManufacturadoRepository articuloManufacturadoRepository,
+            ArticuloInsumoRepository articuloInsumoRepository
+    ) {
+        return args -> {
+            if (articuloManufacturadoDetalleRepository.count() == 0) {
+                List<ArticuloManufacturado> articulos = articuloManufacturadoRepository.findAll();
+                List<ArticuloInsumo> insumos = articuloInsumoRepository.findAll();
+
+                ArticuloManufacturadoDetalle pizzaMuzzarellaDetalles = new ArticuloManufacturadoDetalle();
+                pizzaMuzzarellaDetalles.setCantidad(500);
+                pizzaMuzzarellaDetalles.setManufacturado(articulos.get(0));
+                pizzaMuzzarellaDetalles.setInsumo(insumos.get(0));
+
+                ArticuloManufacturadoDetalle pizzaMuzzarellaDetalles1 = new ArticuloManufacturadoDetalle();
+                pizzaMuzzarellaDetalles1.setCantidad(250);
+                pizzaMuzzarellaDetalles1.setManufacturado(articulos.get(0));
+                pizzaMuzzarellaDetalles1.setInsumo(insumos.get(1));
+
+                articuloManufacturadoDetalleRepository.saveAll(List.of(pizzaMuzzarellaDetalles, pizzaMuzzarellaDetalles1));
             }
         };
     }
