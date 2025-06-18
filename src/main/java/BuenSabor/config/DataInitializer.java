@@ -6,6 +6,7 @@ import BuenSabor.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class DataInitializer {
 
     @Bean
+    @Order(1)
     CommandLineRunner crearUsuarios(UsuarioRepository userRepo, EmpleadoRepository empleadoRepo, PasswordEncoder encoder) {
         return args -> {
             if (userRepo.findByUsername("admin").isEmpty()) {
@@ -66,6 +68,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(2)
     CommandLineRunner initCategoriasManufacturados(CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository) {
         return args -> {
             if (categoriaArticuloManufacturadoRepository.count() == 0) {
@@ -90,6 +93,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(3)
     CommandLineRunner initCategoriaInsumos (CategoriaArticuloRepository categoriaArticuloInsumoRepository) {
         return args -> {
             if (categoriaArticuloInsumoRepository.count() == 0) {
@@ -129,6 +133,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(4)
     CommandLineRunner initUnidadesMedida(UnidadMedidaRepository unidadMedidaRepository) {
         return args -> {
             if (unidadMedidaRepository.count() == 0) {
@@ -158,6 +163,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(5)
     CommandLineRunner initArticuloInsumo(
             ArticuloInsumoRepository articuloInsumoRepository,
             CategoriaArticuloRepository categoriaArticuloInsumoRepository,
@@ -200,6 +206,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(6)
     CommandLineRunner initArticuloManufacturado(
             ArticuloManufacturadoRepository articuloManufacturadoRepository,
             CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository,
@@ -239,6 +246,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(7)
     CommandLineRunner initArticuloManufacturadoDetalles(
             ArticuloManufacturadoDetalleRepository articuloManufacturadoDetalleRepository,
             ArticuloManufacturadoRepository articuloManufacturadoRepository,
