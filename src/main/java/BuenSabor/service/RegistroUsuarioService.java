@@ -88,6 +88,6 @@ public class RegistroUsuarioService {
 
         usuarioRepository.save(usuario);
 
-        return new RegistroResponse("Usuario registrado con éxito", usuario.getId());
+        return new RegistroResponse("Usuario registrado con éxito.", usuario.getId());
     }
 }
