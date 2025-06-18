@@ -18,10 +18,13 @@ import java.nio.file.Paths;
 @RequestMapping("/uploads/images")
 public class ImagenController {
 
-    @Autowired
-    ImagenService service;
+    final ImagenService service;
 
     private final Path root = Paths.get("uploads/images");
+
+    public ImagenController(ImagenService service) {
+        this.service = service;
+    }
 
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
