@@ -4,6 +4,7 @@ import BuenSabor.enums.Estado;
 import BuenSabor.enums.TipoEnvio;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class PedidoVenta extends EntityApp {
 
     private String horaEstimadaFinalizacion;

@@ -1,5 +1,6 @@
 package BuenSabor.controller;
 
+import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.PedidoVentaService;
@@ -13,11 +14,9 @@ import java.util.List;
 @RequestMapping("/api/pedidos")
 public class PedidoVentaController {
 
-    private final BajaLogicaService bajaLogicaService;
     private final PedidoVentaService pedidoVentaService;
 
-    public PedidoVentaController(BajaLogicaService bajaLogicaService, PedidoVentaService pedidoVentaService) {
-        this.bajaLogicaService = bajaLogicaService;
+    public PedidoVentaController(PedidoVentaService pedidoVentaService) {
         this.pedidoVentaService = pedidoVentaService;
     }
 
@@ -39,6 +38,17 @@ public class PedidoVentaController {
         String mensaje = "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
         System.out.println(mensaje);
         return mensaje;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoVenta> buscarPorId(@PathVariable Long id) {
+        PedidoVenta busqueda = pedidoVentaService.buscarPorId(id);
+
+        if (busqueda != null) {
+            return ResponseEntity.ok(busqueda);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

@@ -99,4 +99,9 @@ public class PedidoVentaService {
 
         return pedido.getId().toString();
     }
+
+    public PedidoVenta buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
+    }
 }
