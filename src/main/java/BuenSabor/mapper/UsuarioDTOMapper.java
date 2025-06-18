@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-public class UsuarioMapper {
+public class UsuarioDTOMapper {
 
     public UsuarioDTO toUsuarioDTO(Usuario usuario) {
         UsuarioDTO.EmpleadoDTO empleadoDTO = usuario.getEmpleado() != null
