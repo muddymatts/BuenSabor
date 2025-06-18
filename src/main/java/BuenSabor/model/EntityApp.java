@@ -14,7 +14,7 @@ public abstract class EntityApp extends EntityBean {
     private LocalDate fechaAlta = LocalDate.now();
     private LocalDate fechaBaja;
 
-    public void darDeBaja() {
+    public void setFechaBaja() {
         this.fechaBaja = LocalDate.now();
     }
 

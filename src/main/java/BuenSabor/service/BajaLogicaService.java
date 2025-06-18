@@ -22,11 +22,11 @@ public class BajaLogicaService {
             throw new EntityNotFoundException("No se encontró el recurso con ID: " + id);
         }
         if(entidad instanceof ArticuloManufacturado articulo){
-            articulo.getDetalles().forEach(EntityApp::darDeBaja);
+            articulo.getDetalles().forEach(EntityApp::setFechaBaja);
         } else if (entidad instanceof PedidoVenta pedido){
-            pedido.getDetalles().forEach(EntityApp::darDeBaja);
+            pedido.getDetalles().forEach(EntityApp::setFechaBaja);
         }
-        entidad.darDeBaja();
+        entidad.setFechaBaja();
         entityManager.merge(entidad);
     }
 

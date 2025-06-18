@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class ImagenInsumo extends EntityApp {
 
-    private String descripcion;
+    private String denominacion;
 
 }
