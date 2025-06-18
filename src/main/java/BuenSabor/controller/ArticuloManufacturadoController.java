@@ -39,7 +39,7 @@ public class ArticuloManufacturadoController {
     public List<ArticuloManufacturado> listar() {
         return articuloManufacturadoService.findByFechaBajaIsNull();
     }
-
+  
     @GetMapping("/mostrarTodos")
     public List<ArticuloManufacturado> mostrarTodos() {
         return articuloManufacturadoService.findAll();
