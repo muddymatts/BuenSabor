@@ -1,8 +1,9 @@
 package BuenSabor.enums;
 
 public enum Rol {
-    admin,
-    empleado,
-    cliente
+    CLIENTE,
+    ADMIN,
+    COCINERO,
+    DELIVERY,
+    OPERADOR
 }
-
