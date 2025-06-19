@@ -4,6 +4,7 @@ import BuenSabor.enums.Rol;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
 import BuenSabor.service.initDB.InitArticulosService;
+import BuenSabor.service.initDB.InitClientesService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import java.util.logging.Logger;
 public class DataInitializer {
 
     private final InitArticulosService initArticulosService;
+    private final InitClientesService initClientesService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
@@ -34,8 +36,10 @@ public class DataInitializer {
     private final int idChile = 2;
     private final int idUruguay = 3;
 
-    public DataInitializer(InitArticulosService initArticulosService) {
+    public DataInitializer(InitArticulosService initArticulosService,
+                           InitClientesService initClientesService) {
         this.initArticulosService = initArticulosService;
+        this.initClientesService = initClientesService;
     }
 
     @Bean
@@ -48,7 +52,7 @@ public class DataInitializer {
                 adminEmpleado.setApellido("Admin");
                 adminEmpleado.setTelefono("123456789");
                 adminEmpleado.setEmail("admin@example.com");
-                adminEmpleado.setRol(Rol.admin);
+                adminEmpleado.setRol(Rol.ADMIN);
                 empleadoRepo.save(adminEmpleado);
 
                 Usuario adminUser = new Usuario();
@@ -67,7 +71,7 @@ public class DataInitializer {
                 empleadoEmpleado.setApellido("Empleado");
                 empleadoEmpleado.setTelefono("987654321");
                 empleadoEmpleado.setEmail("empleado@example.com");
-                empleadoEmpleado.setRol(Rol.empleado);
+                empleadoEmpleado.setRol(Rol.OPERADOR);
                 empleadoRepo.save(empleadoEmpleado);
 
                 Usuario empleadoUser = new Usuario();
@@ -78,15 +82,13 @@ public class DataInitializer {
 
                 userRepo.save(empleadoUser);
             }
+        };
+    }
 
-            if (userRepo.findByUsername("cliente").isEmpty()) {
-                Usuario clienteUser = new Usuario();
-                clienteUser.setUsername("cliente");
-                clienteUser.setPassword(encoder.encode("cliente123"));
-                clienteUser.setEstaActivo(true);
-
-                userRepo.save(clienteUser);
-            }
+    @Bean
+    CommandLineRunner initClientes() {
+        return args -> {
+            this.initClientesService.setupClientes();
         };
     }
 
