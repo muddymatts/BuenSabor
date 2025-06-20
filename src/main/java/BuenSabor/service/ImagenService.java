@@ -21,9 +21,9 @@ public class ImagenService {
         }
 
         String contentType = file.getContentType();
-        if (contentType == null || !(contentType.equals("image/jpeg") || contentType.equals("image/pjpeg"))) {
+        if (contentType == null || !(contentType.equals("image/jpeg") || contentType.equals("image/pjpeg") || contentType.equals("image/webp"))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Formato de archivo no soportado. Solo se permiten .jpg o .pjpeg");
+                    .body("Formato de archivo no soportado. Solo se permiten .jpg, .pjpeg o .webp");
         }
 
         try {
