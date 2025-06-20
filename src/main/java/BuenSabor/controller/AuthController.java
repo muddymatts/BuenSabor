@@ -2,7 +2,7 @@ package BuenSabor.controller;
 
 import BuenSabor.dto.auth.AuthRequest;
 import BuenSabor.dto.usuario.UsuarioDTO;
-import BuenSabor.mapper.UsuarioMapper;
+import BuenSabor.mapper.UsuarioDTOMapper;
 import BuenSabor.model.Usuario;
 import BuenSabor.service.auth.CustomUserDetailsService;
 import BuenSabor.service.auth.JwtService;
@@ -30,13 +30,13 @@ public class AuthController {
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
     private final UsuarioService usuarioService;
-    private final UsuarioMapper usuarioMapper;
+    private final UsuarioDTOMapper usuarioMapper;
 
     public AuthController(AuthenticationManager authManager,
                           CustomUserDetailsService userDetailsService,
                           JwtService jwtService,
                           UsuarioService usuarioService,
-                          UsuarioMapper usuarioMapper) {
+                          UsuarioDTOMapper usuarioMapper) {
         this.authManager = authManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
