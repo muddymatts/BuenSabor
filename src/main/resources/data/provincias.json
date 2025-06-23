@@ -1,0 +1,297 @@
+[
+  {
+    "id": 1,
+    "nombre": "Buenos Aires",
+    "pais_id": 1
+  },
+  {
+    "id": 2,
+    "nombre": "Catamarca",
+    "pais_id": 1
+  },
+  {
+    "id": 3,
+    "nombre": "Chaco",
+    "pais_id": 1
+  },
+  {
+    "id": 4,
+    "nombre": "Chubut",
+    "pais_id": 1
+  },
+  {
+    "id": 5,
+    "nombre": "Ciudad Autónoma de Buenos Aires",
+    "pais_id": 1
+  },
+  {
+    "id": 6,
+    "nombre": "Córdoba",
+    "pais_id": 1
+  },
+  {
+    "id": 7,
+    "nombre": "Corrientes",
+    "pais_id": 1
+  },
+  {
+    "id": 8,
+    "nombre": "Entre Ríos",
+    "pais_id": 1
+  },
+  {
+    "id": 9,
+    "nombre": "Formosa",
+    "pais_id": 1
+  },
+  {
+    "id": 10,
+    "nombre": "Jujuy",
+    "pais_id": 1
+  },
+  {
+    "id": 11,
+    "nombre": "La Pampa",
+    "pais_id": 1
+  },
+  {
+    "id": 12,
+    "nombre": "La Rioja",
+    "pais_id": 1
+  },
+  {
+    "id": 13,
+    "nombre": "Mendoza",
+    "pais_id": 1
+  },
+  {
+    "id": 14,
+    "nombre": "Misiones",
+    "pais_id": 1
+  },
+  {
+    "id": 15,
+    "nombre": "Neuquén",
+    "pais_id": 1
+  },
+  {
+    "id": 16,
+    "nombre": "Río Negro",
+    "pais_id": 1
+  },
+  {
+    "id": 17,
+    "nombre": "Salta",
+    "pais_id": 1
+  },
+  {
+    "id": 18,
+    "nombre": "San Juan",
+    "pais_id": 1
+  },
+  {
+    "id": 19,
+    "nombre": "San Luis",
+    "pais_id": 1
+  },
+  {
+    "id": 20,
+    "nombre": "Santa Cruz",
+    "pais_id": 1
+  },
+  {
+    "id": 21,
+    "nombre": "Santa Fe",
+    "pais_id": 1
+  },
+  {
+    "id": 22,
+    "nombre": "Santiago del Estero",
+    "pais_id": 1
+  },
+  {
+    "id": 23,
+    "nombre": "Tierra del Fuego",
+    "pais_id": 1
+  },
+  {
+    "id": 24,
+    "nombre": "Tucumán",
+    "pais_id": 1
+  },
+  {
+    "id": 25,
+    "nombre": "Antofagasta",
+    "pais_id": 2
+  },
+  {
+    "id": 26,
+    "nombre": "Arica y Parinacota",
+    "pais_id": 2
+  },
+  {
+    "id": 27,
+    "nombre": "Atacama",
+    "pais_id": 2
+  },
+  {
+    "id": 28,
+    "nombre": "Coquimbo",
+    "pais_id": 2
+  },
+  {
+    "id": 29,
+    "nombre": "Región Aisén del Gral. Carlos Ibáñez del Campo",
+    "pais_id": 2
+  },
+  {
+    "id": 30,
+    "nombre": "Región de la Araucanía",
+    "pais_id": 2
+  },
+  {
+    "id": 31,
+    "nombre": "Región de Los Lagos",
+    "pais_id": 2
+  },
+  {
+    "id": 32,
+    "nombre": "Región de Los Ríos",
+    "pais_id": 2
+  },
+  {
+    "id": 33,
+    "nombre": "Región de Magallanes y de la Antártica Chilena",
+    "pais_id": 2
+  },
+  {
+    "id": 34,
+    "nombre": "Región del Biobío",
+    "pais_id": 2
+  },
+  {
+    "id": 35,
+    "nombre": "Región del Libertador Gral. Bernardo O’Higgins",
+    "pais_id": 2
+  },
+  {
+    "id": 36,
+    "nombre": "Región del Maule",
+    "pais_id": 2
+  },
+  {
+    "id": 37,
+    "nombre": "Región de Ñuble",
+    "pais_id": 2
+  },
+  {
+    "id": 38,
+    "nombre": "Región Metropolitana de Santiago",
+    "pais_id": 2
+  },
+  {
+    "id": 39,
+    "nombre": "Tarapacá",
+    "pais_id": 2
+  },
+  {
+    "id": 40,
+    "nombre": "Valparaíso",
+    "pais_id": 2
+  },
+  {
+    "id": 81,
+    "nombre": "Artigas",
+    "pais_id": 3
+  },
+  {
+    "id": 82,
+    "nombre": "Canelones",
+    "pais_id": 3
+  },
+  {
+    "id": 83,
+    "nombre": "Cerro Largo",
+    "pais_id": 3
+  },
+  {
+    "id": 84,
+    "nombre": "Colonia",
+    "pais_id": 3
+  },
+  {
+    "id": 85,
+    "nombre": "Durazno",
+    "pais_id": 3
+  },
+  {
+    "id": 86,
+    "nombre": "Flores",
+    "pais_id": 3
+  },
+  {
+    "id": 87,
+    "nombre": "Florida",
+    "pais_id": 3
+  },
+  {
+    "id": 88,
+    "nombre": "Lavalleja",
+    "pais_id": 3
+  },
+  {
+    "id": 89,
+    "nombre": "Maldonado",
+    "pais_id": 3
+  },
+  {
+    "id": 90,
+    "nombre": "Montevideo",
+    "pais_id": 3
+  },
+  {
+    "id": 91,
+    "nombre": "Paysandú",
+    "pais_id": 3
+  },
+  {
+    "id": 92,
+    "nombre": "Río Negro",
+    "pais_id": 3
+  },
+  {
+    "id": 93,
+    "nombre": "Rivera",
+    "pais_id": 3
+  },
+  {
+    "id": 94,
+    "nombre": "Rocha",
+    "pais_id": 3
+  },
+  {
+    "id": 95,
+    "nombre": "Salto",
+    "pais_id": 3
+  },
+  {
+    "id": 96,
+    "nombre": "San José",
+    "pais_id": 3
+  },
+  {
+    "id": 97,
+    "nombre": "Soriano",
+    "pais_id": 3
+  },
+  {
+    "id": 98,
+    "nombre": "Tacuarembó",
+    "pais_id": 3
+  },
+  {
+    "id": 99,
+    "nombre": "Treinta y Tres",
+    "pais_id": 3
+  }
+]
