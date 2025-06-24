@@ -3,7 +3,6 @@ package BuenSabor.config;
 import BuenSabor.enums.Rol;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
-import BuenSabor.service.initDB.InitArticulosService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,23 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 @Configuration
 public class DataInitializer {
-
-    private final InitArticulosService initArticulosService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
     private final int idArgentina = 1;
     private final int idChile = 2;
     private final int idUruguay = 3;
-
-    public DataInitializer(InitArticulosService initArticulosService) {
-        this.initArticulosService = initArticulosService;
-    }
 
     @Bean
     CommandLineRunner crearUsuarios(UsuarioRepository userRepo, EmpleadoRepository empleadoRepo, PasswordEncoder encoder) {
@@ -91,16 +85,86 @@ public class DataInitializer {
     }
 
     @Bean
-    CommandLineRunner initInsumosYProductos() {
+    CommandLineRunner initCategoriasManufacturados(CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository) {
         return args -> {
-            // Insumos
-            initArticulosService.setupUnidadesMedida();
-            initArticulosService.setupCategoriaInsumos();
-            initArticulosService.setupArticulosInsumo();
-            // Manufacturados
-            initArticulosService.setupCategoriasManufacturados();
-            initArticulosService.setupArticulosManufacturados();
-            initArticulosService.setupArticuloManufacturadoDetalles();
+            if (categoriaArticuloManufacturadoRepository.count() == 0) {
+                CategoriaArticuloManufacturado pizza = new CategoriaArticuloManufacturado();
+                pizza.setDenominacion("Pizza");
+
+                CategoriaArticuloManufacturado hamburguesa = new CategoriaArticuloManufacturado();
+                hamburguesa.setDenominacion("Hamburguesa");
+
+                CategoriaArticuloManufacturado sandwich = new CategoriaArticuloManufacturado();
+                sandwich.setDenominacion("Sandwich");
+
+                CategoriaArticuloManufacturado lomo = new CategoriaArticuloManufacturado();
+                lomo.setDenominacion("Lomo");
+
+                CategoriaArticuloManufacturado empanadas = new CategoriaArticuloManufacturado();
+                empanadas.setDenominacion("Empanadas");
+
+                categoriaArticuloManufacturadoRepository.saveAll(List.of(pizza, hamburguesa, sandwich, lomo, empanadas));
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initArticuloManufacturado(
+            ArticuloManufacturadoRepository articuloManufacturadoRepository,
+            CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository
+    ) {
+        return args -> {
+            if (articuloManufacturadoRepository.count() == 0) {
+                List<CategoriaArticuloManufacturado> categorias = categoriaArticuloManufacturadoRepository.findAll();
+
+                if (!categorias.isEmpty()) {
+                    ArticuloManufacturado pizzaMuzzarella = new ArticuloManufacturado();
+                    pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
+                    pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
+                    pizzaMuzzarella.setCategoria(categorias.get(0));
+
+                    ArticuloManufacturado hamburguesaClasica = new ArticuloManufacturado();
+                    hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
+                    hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
+                    hamburguesaClasica.setCategoria(categorias.get(1));
+
+                    ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
+                    lomitoSimple.setDenominacion("Lomito Simple");
+                    lomitoSimple.setDescripcion("Lomito con jamón y queso");
+                    lomitoSimple.setCategoria(categorias.get(3));
+
+                    articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
+                }
+            }
+        };
+    }
+
+    @Bean
+    CommandLineRunner initUnidadesMedida(UnidadMedidaRepository unidadMedidaRepository) {
+        return args -> {
+            if (unidadMedidaRepository.count() == 0) {
+                UnidadMedida miligramos = new UnidadMedida();
+                miligramos.setDenominacion("Miligramos");
+
+                UnidadMedida gramos = new UnidadMedida();
+                gramos.setDenominacion("Gramos");
+
+                UnidadMedida kilogramos = new UnidadMedida();
+                kilogramos.setDenominacion("Kilogramos");
+
+                UnidadMedida mililitros = new UnidadMedida();
+                mililitros.setDenominacion("Mililitros");
+
+                UnidadMedida litros = new UnidadMedida();
+                litros.setDenominacion("Litros");
+
+                UnidadMedida unidades = new UnidadMedida();
+                unidades.setDenominacion("Unidades");
+
+                unidadMedidaRepository.saveAll(
+                        List.of(miligramos, gramos, kilogramos, mililitros, litros, unidades)
+                );
+            }
         };
     }
 
