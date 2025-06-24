@@ -2,7 +2,6 @@ package BuenSabor.service.auth;
 
 import BuenSabor.dto.auth.AuthRequest;
 import BuenSabor.dto.usuario.UsuarioDTO;
-import BuenSabor.enums.RolEnum;
 import BuenSabor.mapper.UsuarioDTOMapper;
 import BuenSabor.model.Usuario;
 import BuenSabor.service.usuario.UsuarioService;
@@ -55,10 +54,6 @@ public class AuthService {
 
             Usuario usuario = optionalUsuario.get();
             UsuarioDTO usuarioDTO = usuarioMapper.toUsuarioDTO(usuario);
-
-            if (usuarioDTO.getRol() == null) {
-                usuarioDTO.setRol(String.valueOf(RolEnum.CLIENTE));
-            }
 
             Map<String, Object> response = new HashMap<>();
             Map<String, Object> jwtObject = new HashMap<>();
