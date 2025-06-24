@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class UsuarioDTOMapper {
 
     public UsuarioDTO toUsuarioDTO(Usuario usuario) {
-        // Mapear datos de Empleado si existen
         UsuarioDTO.EmpleadoDTO empleadoDTO = null;
+
         if (usuario.getEmpleado() != null) {
             Empleado empleado = usuario.getEmpleado();
             empleadoDTO = new UsuarioDTO.EmpleadoDTO(
@@ -24,8 +24,8 @@ public class UsuarioDTOMapper {
             );
         }
 
-        // Mapear datos de Cliente si existen
         UsuarioDTO.ClienteDTO clienteDTO = null;
+
         if (usuario.getCliente() != null) {
             Cliente cliente = usuario.getCliente();
             clienteDTO = new UsuarioDTO.ClienteDTO(
@@ -36,15 +36,14 @@ public class UsuarioDTOMapper {
             );
         }
 
-        // Determinar el valor del rol
         String rol;
+
         if (usuario.getEmpleado() != null && usuario.getEmpleado().getRol() != null) {
-            rol = usuario.getEmpleado().getRol().toString(); // Rol asociado al empleado
+            rol = usuario.getEmpleado().getRol().toString();
         } else {
-            rol = RolEnum.CLIENTE.toString(); // Asumimos CLIENTE si no es empleado
+            rol = RolEnum.CLIENTE.toString();
         }
 
-        // Crear y retornar el DTO final
         return new UsuarioDTO(
                 usuario.isEstaActivo(),
                 usuario.getEmpleado() != null ? usuario.getEmpleado().getNombre() : (usuario.getCliente() != null ? usuario.getCliente().getNombre() : null),
