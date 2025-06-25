@@ -18,7 +18,7 @@ public class PromocionController {
     }
 
     @GetMapping
-    public Iterable<Promocion> listarPromociones() {
+    public Iterable<PromocionDTO> listarPromociones() {
         return promocionService.findAll();
     }
 
