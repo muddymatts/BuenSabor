@@ -13,4 +13,5 @@ public class PromocionDTO {
     private LocalDate fechaHasta;
     private double descuento;
     private List<PromocionDetalleDTO> detalle;
+    private double precioVenta;
 }
