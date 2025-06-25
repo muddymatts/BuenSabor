@@ -43,16 +43,8 @@ public class RegistroUsuarioService {
             throw new IllegalArgumentException("El nombre de usuario ya está en uso.");
         }
 
-        Localidad localidad = localidadRepository.findById(registroRequest.getLocalidadId())
+        Localidad localidad = localidadRepository.findById(registroRequest.getDireccion().getLocalidadId())
                 .orElseThrow(() -> new IllegalArgumentException("La localidad especificada no existe."));
-
-        if (localidad.getProvincia() == null || localidad.getProvincia().getId() != registroRequest.getProvinciaId()) {
-            throw new IllegalArgumentException("La localidad no corresponde a la provincia especificada.");
-        }
-
-        if (localidad.getProvincia().getPais() == null || localidad.getProvincia().getPais().getId() != registroRequest.getPaisId()) {
-            throw new IllegalArgumentException("La provincia no corresponde al país especificado.");
-        }
 
         Domicilio domicilio = new Domicilio();
         domicilio.setCalle(registroRequest.getDireccion().getCalle());

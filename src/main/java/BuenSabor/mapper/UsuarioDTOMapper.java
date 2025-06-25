@@ -1,40 +1,58 @@
 package BuenSabor.mapper;
 
 import BuenSabor.dto.usuario.UsuarioDTO;
+import BuenSabor.enums.RolEnum;
+import BuenSabor.model.Cliente;
+import BuenSabor.model.Empleado;
 import BuenSabor.model.Usuario;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 public class UsuarioDTOMapper {
 
     public UsuarioDTO toUsuarioDTO(Usuario usuario) {
-        UsuarioDTO.EmpleadoDTO empleadoDTO = usuario.getEmpleado() != null
-                ? new UsuarioDTO.EmpleadoDTO(
-                usuario.getEmpleado().getNombre(),
-                usuario.getEmpleado().getApellido(),
-                usuario.getEmpleado().getEmail(),
-                usuario.getEmpleado().getTelefono(),
-                usuario.getEmpleado().getRol())
-                : null;
+        UsuarioDTO.EmpleadoDTO empleadoDTO = null;
 
-        UsuarioDTO.ClienteDTO clienteDTO = usuario.getCliente() != null
-                ? new UsuarioDTO.ClienteDTO(
-                usuario.getCliente().getNombre(),
-                usuario.getCliente().getApellido(),
-                usuario.getCliente().getEmail(),
-                usuario.getCliente().getTelefono())
-                : null;
+        if (usuario.getEmpleado() != null) {
+            Empleado empleado = usuario.getEmpleado();
+            empleadoDTO = new UsuarioDTO.EmpleadoDTO(
+                    empleado.getNombre(),
+                    empleado.getApellido(),
+                    empleado.getEmail(),
+                    empleado.getTelefono(),
+                    empleado.getRol()
+            );
+        }
+
+        UsuarioDTO.ClienteDTO clienteDTO = null;
+
+        if (usuario.getCliente() != null) {
+            Cliente cliente = usuario.getCliente();
+            clienteDTO = new UsuarioDTO.ClienteDTO(
+                    cliente.getNombre(),
+                    cliente.getApellido(),
+                    cliente.getEmail(),
+                    cliente.getTelefono()
+            );
+        }
+
+        String rol;
+
+        if (usuario.getEmpleado() != null && usuario.getEmpleado().getRol() != null) {
+            rol = usuario.getEmpleado().getRol().toString();
+        } else {
+            rol = RolEnum.CLIENTE.toString();
+        }
 
         return new UsuarioDTO(
                 usuario.isEstaActivo(),
-                usuario.getEmpleado() != null ? usuario.getEmpleado().getNombre() : Objects.requireNonNull(usuario.getCliente()).getNombre(),
-                usuario.getEmpleado() != null ? usuario.getEmpleado().getApellido() : usuario.getCliente().getApellido(),
-                usuario.getEmpleado() != null ? usuario.getEmpleado().getEmail() : usuario.getCliente().getEmail(),
-                usuario.getEmpleado() != null ? usuario.getEmpleado().getTelefono() : usuario.getCliente().getTelefono(),
-                usuario.getEmpleado() != null ? String.valueOf(usuario.getEmpleado().getRol()) : null,
+                usuario.getEmpleado() != null ? usuario.getEmpleado().getNombre() : (usuario.getCliente() != null ? usuario.getCliente().getNombre() : null),
+                usuario.getEmpleado() != null ? usuario.getEmpleado().getApellido() : (usuario.getCliente() != null ? usuario.getCliente().getApellido() : null),
+                usuario.getEmpleado() != null ? usuario.getEmpleado().getEmail() : (usuario.getCliente() != null ? usuario.getCliente().getEmail() : null),
+                usuario.getEmpleado() != null ? usuario.getEmpleado().getTelefono() : (usuario.getCliente() != null ? usuario.getCliente().getTelefono() : null),
+                rol,
                 empleadoDTO,
-                clienteDTO);
+                clienteDTO
+        );
     }
 }

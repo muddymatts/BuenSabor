@@ -1,6 +1,6 @@
 package BuenSabor.model;
 
-import BuenSabor.enums.Rol;
+import BuenSabor.enums.RolEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,5 +18,5 @@ public class Empleado extends EntityBean {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private Rol rol;
+    private RolEnum rol;
 }
