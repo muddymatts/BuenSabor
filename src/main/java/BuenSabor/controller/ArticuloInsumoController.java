@@ -25,4 +25,9 @@ public class ArticuloInsumoController {
     public List<ArticuloInsumo> listarTodas() {
         return service.listarTodas();
     }
+
+    @GetMapping("/{id}")
+    public ArticuloInsumo getArticuloInsumo(@PathVariable Long id) {
+        return service.findById(id);
+    }
 }

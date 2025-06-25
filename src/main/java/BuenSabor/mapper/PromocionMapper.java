@@ -7,7 +7,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper (componentModel = "spring", uses = { PromocionDetalleMapper.class,
+@Mapper (componentModel = "spring", uses = {
+        PromocionDetalleMapper.class,
         ArticuloInsumoMapper.class,
         ArticuloManufacturadoMapper.class })
 public interface PromocionMapper {
