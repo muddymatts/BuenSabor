@@ -7,11 +7,8 @@ public class RegistroUsuarioRequest {
     private String nombre;
     private String apellido;
     private String email;
-    private int paisId;
-    private int provinciaId;
-    private int localidadId;
-    private RegistroDireccion direccion;
     private String telefono;
+    private RegistroDireccion direccion;
     private String username;
     private String password;
 
@@ -20,5 +17,6 @@ public class RegistroUsuarioRequest {
         private String calle;
         private int numeroCalle;
         private int codigoPostal;
+        private int localidadId;
     }
 }

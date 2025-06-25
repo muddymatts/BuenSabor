@@ -1,9 +1,10 @@
 package BuenSabor.config;
 
-import BuenSabor.enums.Rol;
+import BuenSabor.enums.RolEnum;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
 import BuenSabor.service.initDB.InitArticulosService;
+import BuenSabor.service.initDB.InitClientesService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +28,7 @@ import java.util.logging.Logger;
 public class DataInitializer {
 
     private final InitArticulosService initArticulosService;
+    private final InitClientesService initClientesService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
@@ -34,8 +36,10 @@ public class DataInitializer {
     private final int idChile = 2;
     private final int idUruguay = 3;
 
-    public DataInitializer(InitArticulosService initArticulosService) {
+    public DataInitializer(InitArticulosService initArticulosService,
+                           InitClientesService initClientesService) {
         this.initArticulosService = initArticulosService;
+        this.initClientesService = initClientesService;
     }
 
     @Bean
@@ -48,7 +52,7 @@ public class DataInitializer {
                 adminEmpleado.setApellido("Admin");
                 adminEmpleado.setTelefono("123456789");
                 adminEmpleado.setEmail("admin@example.com");
-                adminEmpleado.setRol(Rol.admin);
+                adminEmpleado.setRol(RolEnum.ADMIN);
                 empleadoRepo.save(adminEmpleado);
 
                 Usuario adminUser = new Usuario();
@@ -60,34 +64,49 @@ public class DataInitializer {
                 userRepo.save(adminUser);
             }
 
-            if (userRepo.findByUsername("empleado").isEmpty()) {
-                // Empleado
-                Empleado empleadoEmpleado = new Empleado();
-                empleadoEmpleado.setNombre("Empleado");
-                empleadoEmpleado.setApellido("Empleado");
-                empleadoEmpleado.setTelefono("987654321");
-                empleadoEmpleado.setEmail("empleado@example.com");
-                empleadoEmpleado.setRol(Rol.empleado);
-                empleadoRepo.save(empleadoEmpleado);
+            if (userRepo.findByUsername("cocina").isEmpty()) {
+                // Cocina
+                Empleado cocinaEmpleado = new Empleado();
+                cocinaEmpleado.setNombre("Cocina");
+                cocinaEmpleado.setApellido("Cocina");
+                cocinaEmpleado.setTelefono("987654321");
+                cocinaEmpleado.setEmail("cocina@example.com");
+                cocinaEmpleado.setRol(RolEnum.COCINA);
+                empleadoRepo.save(cocinaEmpleado);
 
-                Usuario empleadoUser = new Usuario();
-                empleadoUser.setUsername("empleado");
-                empleadoUser.setPassword(encoder.encode("empleado123"));
-                empleadoUser.setEmpleado(empleadoEmpleado);
-                empleadoUser.setEstaActivo(true);
+                Usuario cocinaUser = new Usuario();
+                cocinaUser.setUsername("cocina");
+                cocinaUser.setPassword(encoder.encode("cocina123"));
+                cocinaUser.setEmpleado(cocinaEmpleado);
+                cocinaUser.setEstaActivo(true);
 
-                userRepo.save(empleadoUser);
+                userRepo.save(cocinaUser);
             }
 
-            if (userRepo.findByUsername("cliente").isEmpty()) {
-                Usuario clienteUser = new Usuario();
-                clienteUser.setUsername("cliente");
-                clienteUser.setPassword(encoder.encode("cliente123"));
-                clienteUser.setEstaActivo(true);
+            if (userRepo.findByUsername("delivery").isEmpty()) {
+                // Delivery
+                Empleado empleadoDelivery = new Empleado();
+                empleadoDelivery.setNombre("Delivery");
+                empleadoDelivery.setApellido("Delivery");
+                empleadoDelivery.setTelefono("987654321");
+                empleadoDelivery.setEmail("delivery@example.com");
+                empleadoDelivery.setRol(RolEnum.DELIVERY);
+                empleadoRepo.save(empleadoDelivery);
 
-                userRepo.save(clienteUser);
+                Usuario deliveryUser = new Usuario();
+                deliveryUser.setUsername("delivery");
+                deliveryUser.setPassword(encoder.encode("delivery123"));
+                deliveryUser.setEmpleado(empleadoDelivery);
+                deliveryUser.setEstaActivo(true);
+
+                userRepo.save(deliveryUser);
             }
         };
+    }
+
+    @Bean
+    CommandLineRunner initClientes() {
+        return args -> this.initClientesService.setupClientes();
     }
 
     @Bean

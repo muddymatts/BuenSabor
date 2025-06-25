@@ -1,11 +1,13 @@
 package BuenSabor.dto.usuario;
 
-import BuenSabor.enums.Rol;
+import BuenSabor.enums.RolEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UsuarioDTO {
 
     private boolean estaActivo;
@@ -25,7 +27,7 @@ public class UsuarioDTO {
         private String apellido;
         private String email;
         private String telefono;
-        private Rol rol;
+        private RolEnum rol;
     }
 
     @Data
