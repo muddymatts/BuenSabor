@@ -5,7 +5,9 @@ import BuenSabor.mapper.PromocionMapper;
 import BuenSabor.model.Promocion;
 import BuenSabor.repository.PromocionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +20,14 @@ public class PromocionService {
         if (!promocion.getDetalle().isEmpty()){
             Promocion finalPromocion = promocion;
             promocion.getDetalle().forEach(d -> d.setPromocion(finalPromocion));
-        } else throw new RuntimeException("La promocion debe tener al menos un detalle");
+        } else throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "La promocion debe tener al menos un detalle");
 
         if(promocion.getDescuento() >= 1){
-            throw new RuntimeException("El descuento debe estar entre 0 y 0.99");
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "El descuento debe estar entre 0 y 0.99");
         }
 
         promocion = promocionRepository.save(promocion);
