@@ -1,25 +1,33 @@
 package BuenSabor.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario extends EntityApp {
 
-    private String auth0Id;
+    @NotBlank(message = "El nombre de usuario no puede estar vacío")
+    @Column(unique = true, nullable = false)
     private String username;
 
-    // Relación 1-1 con Cliente
+    @NotBlank(message = "La contraseña no puede estar vacía")
+    private String password;
+
+    @Column(name = "esta_activo", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    private boolean estaActivo = true;
+
     @OneToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    // Relación 1-1 con Empleado
     @OneToOne
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;

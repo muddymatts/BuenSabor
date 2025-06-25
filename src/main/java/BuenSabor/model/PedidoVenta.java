@@ -1,23 +1,27 @@
 package BuenSabor.model;
 
+import BuenSabor.enums.Estado;
+import BuenSabor.enums.TipoEnvio;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class PedidoVenta extends EntityApp {
 
     private String horaEstimadaFinalizacion;
     private BigDecimal subtotal;
     private BigDecimal gastosEnvio;
     private BigDecimal total;
-    private BigDecimal toalCosto;
+    private BigDecimal costoTotal;
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
@@ -25,7 +29,7 @@ public class PedidoVenta extends EntityApp {
     @Enumerated(EnumType.STRING)
     private TipoEnvio tipoEnvio;
 
-    private LocalDate fechaPedido;
+    private LocalDateTime fechaHoraPedido;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoVentaDetalle> detalles;

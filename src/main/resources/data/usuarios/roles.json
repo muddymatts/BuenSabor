@@ -1,0 +1,13 @@
+{
+  "roles": {
+    "cliente": [
+      "cliente"
+    ],
+    "empleado": [
+      "admin",
+      "cocinero",
+      "delivery",
+      "operador"
+    ]
+  }
+}
