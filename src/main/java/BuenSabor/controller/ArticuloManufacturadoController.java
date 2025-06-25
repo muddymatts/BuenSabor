@@ -2,8 +2,8 @@ package BuenSabor.controller;
 
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.service.ArticuloManufacturadoService;
-import BuenSabor.service.BajaLogicaService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,39 +13,42 @@ import java.util.List;
 @RequestMapping("/api/articulos-manufacturados")
 public class ArticuloManufacturadoController {
 
-    private final BajaLogicaService bajaLogicaService;
+    private final ArticuloManufacturadoService articuloManufacturadoService;
 
-    private final ArticuloManufacturadoService service;
-
-    public ArticuloManufacturadoController(ArticuloManufacturadoService service, BajaLogicaService bajaLogicaService) {
-        this.service = service;
-        this.bajaLogicaService = bajaLogicaService;
+    public ArticuloManufacturadoController(ArticuloManufacturadoService articuloManufacturadoService) {
+        this.articuloManufacturadoService = articuloManufacturadoService;
     }
 
     @PostMapping
-    public ArticuloManufacturado crear(@RequestBody ArticuloManufacturado articulo) {
-        return service.crear(articulo);
+    public  ResponseEntity<ArticuloManufacturado> crear(@RequestBody ArticuloManufacturado articulo) {
+        ArticuloManufacturado nuevo = articuloManufacturadoService.crear(articulo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    @GetMapping("/{id}")
-    public ArticuloManufacturado buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    @GetMapping("detalle/{id}")
+    public ResponseEntity<ArticuloManufacturado> buscarPorId(@PathVariable Long id) {
+        ArticuloManufacturado busqueda = articuloManufacturadoService.buscarPorId(id);
+        if (busqueda != null) {
+            return ResponseEntity.ok(busqueda);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/listar")
     public List<ArticuloManufacturado> listar() {
-        return service.findByFechaBajaIsNull();
+        return articuloManufacturadoService.findByFechaBajaIsNull();
     }
-
-    @GetMapping
+  
+    @GetMapping("/mostrarTodos")
     public List<ArticuloManufacturado> mostrarTodos() {
-        return service.findAll();
+        return articuloManufacturadoService.findAll();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarArticuloManufacturado(@PathVariable Long id) {
         try {
-            String nombreArticulo = service.eliminarArticuloManufacturado(id);
+            String nombreArticulo = articuloManufacturadoService.eliminarArticuloManufacturado(id);
             String mensaje = "El artículo manufacturado \"" + nombreArticulo + "\" fue eliminado correctamente.";
 
             return ResponseEntity.ok(mensaje);
