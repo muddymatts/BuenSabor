@@ -1,8 +1,10 @@
 package BuenSabor.config;
 
-import BuenSabor.enums.Rol;
+import BuenSabor.enums.RolEnum;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
+import BuenSabor.service.initDB.InitArticulosService;
+import BuenSabor.service.initDB.InitClientesService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,18 +21,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Configuration
 public class DataInitializer {
+
+    private final InitArticulosService initArticulosService;
+    private final InitClientesService initClientesService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
     private final int idArgentina = 1;
     private final int idChile = 2;
     private final int idUruguay = 3;
+
+    public DataInitializer(InitArticulosService initArticulosService,
+                           InitClientesService initClientesService) {
+        this.initArticulosService = initArticulosService;
+        this.initClientesService = initClientesService;
+    }
 
     @Bean
     CommandLineRunner crearUsuarios(UsuarioRepository userRepo, EmpleadoRepository empleadoRepo, PasswordEncoder encoder) {
@@ -42,7 +52,7 @@ public class DataInitializer {
                 adminEmpleado.setApellido("Admin");
                 adminEmpleado.setTelefono("123456789");
                 adminEmpleado.setEmail("admin@example.com");
-                adminEmpleado.setRol(Rol.admin);
+                adminEmpleado.setRol(RolEnum.ADMIN);
                 empleadoRepo.save(adminEmpleado);
 
                 Usuario adminUser = new Usuario();
@@ -54,117 +64,62 @@ public class DataInitializer {
                 userRepo.save(adminUser);
             }
 
-            if (userRepo.findByUsername("empleado").isEmpty()) {
-                // Empleado
-                Empleado empleadoEmpleado = new Empleado();
-                empleadoEmpleado.setNombre("Empleado");
-                empleadoEmpleado.setApellido("Empleado");
-                empleadoEmpleado.setTelefono("987654321");
-                empleadoEmpleado.setEmail("empleado@example.com");
-                empleadoEmpleado.setRol(Rol.empleado);
-                empleadoRepo.save(empleadoEmpleado);
+            if (userRepo.findByUsername("cocina").isEmpty()) {
+                // Cocina
+                Empleado cocinaEmpleado = new Empleado();
+                cocinaEmpleado.setNombre("Cocina");
+                cocinaEmpleado.setApellido("Cocina");
+                cocinaEmpleado.setTelefono("987654321");
+                cocinaEmpleado.setEmail("cocina@example.com");
+                cocinaEmpleado.setRol(RolEnum.COCINA);
+                empleadoRepo.save(cocinaEmpleado);
 
-                Usuario empleadoUser = new Usuario();
-                empleadoUser.setUsername("empleado");
-                empleadoUser.setPassword(encoder.encode("empleado123"));
-                empleadoUser.setEmpleado(empleadoEmpleado);
-                empleadoUser.setEstaActivo(true);
+                Usuario cocinaUser = new Usuario();
+                cocinaUser.setUsername("cocina");
+                cocinaUser.setPassword(encoder.encode("cocina123"));
+                cocinaUser.setEmpleado(cocinaEmpleado);
+                cocinaUser.setEstaActivo(true);
 
-                userRepo.save(empleadoUser);
+                userRepo.save(cocinaUser);
             }
 
-            if (userRepo.findByUsername("cliente").isEmpty()) {
-                Usuario clienteUser = new Usuario();
-                clienteUser.setUsername("cliente");
-                clienteUser.setPassword(encoder.encode("cliente123"));
-                clienteUser.setEstaActivo(true);
+            if (userRepo.findByUsername("delivery").isEmpty()) {
+                // Delivery
+                Empleado empleadoDelivery = new Empleado();
+                empleadoDelivery.setNombre("Delivery");
+                empleadoDelivery.setApellido("Delivery");
+                empleadoDelivery.setTelefono("987654321");
+                empleadoDelivery.setEmail("delivery@example.com");
+                empleadoDelivery.setRol(RolEnum.DELIVERY);
+                empleadoRepo.save(empleadoDelivery);
 
-                userRepo.save(clienteUser);
-            }
-        };
-    }
+                Usuario deliveryUser = new Usuario();
+                deliveryUser.setUsername("delivery");
+                deliveryUser.setPassword(encoder.encode("delivery123"));
+                deliveryUser.setEmpleado(empleadoDelivery);
+                deliveryUser.setEstaActivo(true);
 
-    @Bean
-    CommandLineRunner initCategoriasManufacturados(CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository) {
-        return args -> {
-            if (categoriaArticuloManufacturadoRepository.count() == 0) {
-                CategoriaArticuloManufacturado pizza = new CategoriaArticuloManufacturado();
-                pizza.setDenominacion("Pizza");
-
-                CategoriaArticuloManufacturado hamburguesa = new CategoriaArticuloManufacturado();
-                hamburguesa.setDenominacion("Hamburguesa");
-
-                CategoriaArticuloManufacturado sandwich = new CategoriaArticuloManufacturado();
-                sandwich.setDenominacion("Sandwich");
-
-                CategoriaArticuloManufacturado lomo = new CategoriaArticuloManufacturado();
-                lomo.setDenominacion("Lomo");
-
-                CategoriaArticuloManufacturado empanadas = new CategoriaArticuloManufacturado();
-                empanadas.setDenominacion("Empanadas");
-
-                categoriaArticuloManufacturadoRepository.saveAll(List.of(pizza, hamburguesa, sandwich, lomo, empanadas));
+                userRepo.save(deliveryUser);
             }
         };
     }
 
     @Bean
-    CommandLineRunner initArticuloManufacturado(
-            ArticuloManufacturadoRepository articuloManufacturadoRepository,
-            CategoriaArticuloManufacturadoRepository categoriaArticuloManufacturadoRepository
-    ) {
-        return args -> {
-            if (articuloManufacturadoRepository.count() == 0) {
-                List<CategoriaArticuloManufacturado> categorias = categoriaArticuloManufacturadoRepository.findAll();
-
-                if (!categorias.isEmpty()) {
-                    ArticuloManufacturado pizzaMuzzarella = new ArticuloManufacturado();
-                    pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
-                    pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
-                    pizzaMuzzarella.setCategoria(categorias.get(0));
-
-                    ArticuloManufacturado hamburguesaClasica = new ArticuloManufacturado();
-                    hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
-                    hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
-                    hamburguesaClasica.setCategoria(categorias.get(1));
-
-                    ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
-                    lomitoSimple.setDenominacion("Lomito Simple");
-                    lomitoSimple.setDescripcion("Lomito con jamón y queso");
-                    lomitoSimple.setCategoria(categorias.get(3));
-
-                    articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
-                }
-            }
-        };
+    CommandLineRunner initClientes() {
+        return args -> this.initClientesService.setupClientes();
     }
 
     @Bean
-    CommandLineRunner initUnidadesMedida(UnidadMedidaRepository unidadMedidaRepository) {
+    CommandLineRunner initInsumosYProductos() {
         return args -> {
-            if (unidadMedidaRepository.count() == 0) {
-                UnidadMedida miligramos = new UnidadMedida();
-                miligramos.setDenominacion("Miligramos");
-
-                UnidadMedida gramos = new UnidadMedida();
-                gramos.setDenominacion("Gramos");
-
-                UnidadMedida kilogramos = new UnidadMedida();
-                kilogramos.setDenominacion("Kilogramos");
-
-                UnidadMedida mililitros = new UnidadMedida();
-                mililitros.setDenominacion("Mililitros");
-
-                UnidadMedida litros = new UnidadMedida();
-                litros.setDenominacion("Litros");
-
-                UnidadMedida unidades = new UnidadMedida();
-                unidades.setDenominacion("Unidades");
-
-                unidadMedidaRepository.saveAll(
-                        List.of(miligramos, gramos, kilogramos, mililitros, litros, unidades)
-                );
-            }
+            // Insumos
+            initArticulosService.setupUnidadesMedida();
+            initArticulosService.setupCategoriaInsumos();
+            initArticulosService.setupArticulosInsumo();
+            // Manufacturados
+            initArticulosService.setupCategoriasManufacturados();
+            initArticulosService.setupArticulosManufacturados();
+            initArticulosService.setupArticuloManufacturadoDetalles();
         };
     }
 
