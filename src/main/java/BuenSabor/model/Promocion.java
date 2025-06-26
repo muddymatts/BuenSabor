@@ -1,5 +1,6 @@
 package BuenSabor.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Promocion extends EntityApp {
     private LocalDate fechaHasta;
     private double descuento;
 
-    @OneToMany(mappedBy = "promocion")
+    @OneToMany(mappedBy = "promocion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PromocionDetalle> detalle;
 
 }

@@ -13,11 +13,11 @@ import lombok.Setter;
 public class PromocionDetalle extends EntityApp {
     private Integer cantidad;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "articulo_inmsumo_id")
     private ArticuloInsumo articuloInsumo;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "articulo_manufacturado_id")
     private ArticuloManufacturado articuloManufacturado;
 
