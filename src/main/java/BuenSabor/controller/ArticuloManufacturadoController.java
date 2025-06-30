@@ -21,7 +21,7 @@ public class ArticuloManufacturadoController {
 
     @PostMapping
     public  ResponseEntity<ArticuloManufacturado> crear(@RequestBody ArticuloManufacturado articulo) {
-        ArticuloManufacturado nuevo = articuloManufacturadoService.crear(articulo);
+        ArticuloManufacturado nuevo = articuloManufacturadoService.guardar(articulo);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 

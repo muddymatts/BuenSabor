@@ -1,6 +1,7 @@
 package BuenSabor.mapper;
 
 import BuenSabor.dto.promocion.PromocionDTO;
+import BuenSabor.model.ImagenManufacturado;
 import BuenSabor.model.Promocion;
 import BuenSabor.model.PromocionDetalle;
 import org.mapstruct.AfterMapping;
@@ -22,8 +23,14 @@ public interface PromocionMapper {
         if(promocion.getDetalle() != null){
             for (PromocionDetalle pd : promocion.getDetalle()) {
                 if(pd.getArticuloInsumo() != null){
+                    dto.getImagenes().add(pd.getArticuloInsumo().getImagenInsumo().getDenominacion());
                     precioVenta += pd.getCantidad()* pd.getArticuloInsumo().getPrecioVenta();
                 } else if(pd.getArticuloManufacturado() != null){
+                    if(pd.getArticuloManufacturado().getImagenes() != null){
+                        for (ImagenManufacturado imagen : pd.getArticuloManufacturado().getImagenes()){
+                            dto.getImagenes().add(imagen.getDenominacion());
+                        }
+                    }
                     precioVenta += pd.getCantidad() * pd.getArticuloManufacturado().getPrecioVenta();
                 }
             }

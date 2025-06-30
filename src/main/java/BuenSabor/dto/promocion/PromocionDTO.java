@@ -14,4 +14,5 @@ public class PromocionDTO {
     private double descuento;
     private List<PromocionDetalleDTO> detalle;
     private double precioVenta;
+    private List<String> imagenes;
 }
