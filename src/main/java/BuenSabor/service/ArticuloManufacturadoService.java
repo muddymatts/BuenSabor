@@ -3,6 +3,7 @@ package BuenSabor.service;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
+import BuenSabor.model.ImagenManufacturado;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,11 +33,15 @@ public class ArticuloManufacturadoService {
     @Transactional
     public ArticuloManufacturado guardar(ArticuloManufacturado articulo) {
 
-        if(articulo.getImagenes().get(0).getDenominacion().isBlank()){
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "El artículo debe tener al menos una imagen");
-        }
+        double precioCosto = 0.0;
+
+        if(!articulo.getImagenes().get(0).getDenominacion().isBlank()){
+            for (ImagenManufacturado imagen : articulo.getImagenes()) {
+                imagen.setArticuloManufacturado(articulo);
+            }
+        } else throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "El artículo debe tener al menos una imagen");
 
         for (ArticuloManufacturadoDetalle detalle : articulo.getDetalles()) {
             detalle.setManufacturado(articulo);
@@ -44,8 +49,11 @@ public class ArticuloManufacturadoService {
                     ArticuloInsumo.class,
                     detalle.getInsumo().getId()
             );
+            precioCosto += insumo.getPrecioCompra() * detalle.getCantidad();
             detalle.setInsumo(insumo);
         }
+
+        articulo.setPrecioCosto(precioCosto);
 
         return repository.save(articulo);
     }
