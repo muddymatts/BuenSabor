@@ -3,6 +3,7 @@ package BuenSabor.service;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.EntityApp;
 import BuenSabor.model.PedidoVenta;
+import BuenSabor.model.Promocion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -25,6 +26,8 @@ public class BajaLogicaService {
             articulo.getDetalles().forEach(EntityApp::setFechaBaja);
         } else if (entidad instanceof PedidoVenta pedido){
             pedido.getDetalles().forEach(EntityApp::setFechaBaja);
+        } else if (entidad instanceof Promocion promocion){
+            promocion.getDetalle().forEach(EntityApp::setFechaBaja);
         }
         entidad.setFechaBaja();
         entityManager.merge(entidad);
