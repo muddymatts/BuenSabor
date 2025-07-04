@@ -1,9 +1,6 @@
 package BuenSabor.service;
 
-import BuenSabor.model.ArticuloManufacturado;
-import BuenSabor.model.EntityApp;
-import BuenSabor.model.PedidoVenta;
-import BuenSabor.model.Promocion;
+import BuenSabor.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -22,12 +19,18 @@ public class BajaLogicaService {
         if (entidad == null) {
             throw new EntityNotFoundException("No se encontró el recurso con ID: " + id);
         }
+        if(entidad.getFechaBaja() != null){
+            throw new RuntimeException("La entidad ya ha sido dada de baja");
+        }
         if(entidad instanceof ArticuloManufacturado articulo){
             articulo.getDetalles().forEach(EntityApp::setFechaBaja);
+            articulo.getImagenes().forEach(EntityApp::setFechaBaja);
         } else if (entidad instanceof PedidoVenta pedido){
             pedido.getDetalles().forEach(EntityApp::setFechaBaja);
         } else if (entidad instanceof Promocion promocion){
             promocion.getDetalle().forEach(EntityApp::setFechaBaja);
+        } else if (entidad instanceof ArticuloInsumo insumo){
+            insumo.getImagenInsumo().setFechaBaja();
         }
         entidad.setFechaBaja();
         entityManager.merge(entidad);
