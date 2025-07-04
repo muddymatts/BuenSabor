@@ -1,5 +1,6 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.imagen.ImagenRespuestaDTO;
 import BuenSabor.service.ImagenService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -42,7 +43,7 @@ public class ImagenController {
         }
     }
     @PostMapping()
-    public ResponseEntity<String> subirImagen(
+    public ResponseEntity<ImagenRespuestaDTO> subirImagen(
             @RequestParam("imagen") MultipartFile file) {
         return service.subirImagen(file);
     }
