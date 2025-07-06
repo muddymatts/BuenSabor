@@ -1,6 +1,6 @@
 package BuenSabor.service;
 
-import BuenSabor.dto.CategoriaArticuloManufacturadoDTO;
+import BuenSabor.dto.articuloManufacturado.CategoriaArticuloManufacturadoDTO;
 import BuenSabor.model.CategoriaArticuloManufacturado;
 import BuenSabor.repository.CategoriaArticuloManufacturadoRepository;
 import org.springframework.stereotype.Service;
