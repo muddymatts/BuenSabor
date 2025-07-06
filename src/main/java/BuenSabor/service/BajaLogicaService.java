@@ -14,8 +14,8 @@ public class BajaLogicaService {
     private EntityManager entityManager;
 
     @Transactional
-    public <T extends EntityApp> void darDeBaja(Class<T> clazz, Long id) {
-        T entidad = entityManager.find(clazz, id);
+    public <T extends EntityApp> void darDeBaja(Class<T> tClass, Long id) {
+        T entidad = entityManager.find(tClass, id);
         if (entidad == null) {
             throw new EntityNotFoundException("No se encontró el recurso con ID: " + id);
         }
@@ -33,6 +33,29 @@ public class BajaLogicaService {
             insumo.getImagenInsumo().setFechaBaja();
         }
         entidad.setFechaBaja();
+        entityManager.merge(entidad);
+    }
+
+    @Transactional
+    public <T extends EntityApp> void reestablecer (Class<T> tClass, Long id){
+        T entidad = entityManager.find(tClass, id);
+        if (entidad == null) {
+            throw new EntityNotFoundException("No se encontró el recurso con ID: " + id);
+        }
+        if(entidad.getFechaBaja() == null){
+            throw new RuntimeException("La entidad ya está activa");
+        }
+        if(entidad instanceof ArticuloManufacturado articulo){
+            articulo.getDetalles().forEach(EntityApp::eliminarBaja);
+            articulo.getImagenes().forEach(EntityApp::eliminarBaja);
+        } else if (entidad instanceof PedidoVenta pedido){
+            pedido.getDetalles().forEach(EntityApp::eliminarBaja);
+        } else if (entidad instanceof Promocion promocion){
+            promocion.getDetalle().forEach(EntityApp::eliminarBaja);
+        } else if (entidad instanceof ArticuloInsumo insumo){
+            insumo.getImagenInsumo().eliminarBaja();
+        }
+        entidad.eliminarBaja();
         entityManager.merge(entidad);
     }
 
