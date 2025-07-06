@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Empresa extends EntityApp {
 
-    private int cuil;
+    private Long cuil;
     private String nombre;
     private String razonSocial;
 
