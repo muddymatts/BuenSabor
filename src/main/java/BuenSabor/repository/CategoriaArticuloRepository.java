@@ -1,9 +1,9 @@
 package BuenSabor.repository;
 
-import BuenSabor.model.CategoriaArticulo;
+import BuenSabor.model.CategoriaArticuloInsumo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoriaArticuloRepository extends JpaRepository<CategoriaArticulo, Long> {
+public interface CategoriaArticuloRepository extends JpaRepository<CategoriaArticuloInsumo, Long> {
 }

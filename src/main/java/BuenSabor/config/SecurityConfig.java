@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/registro-usuario").permitAll()
+                        .requestMatchers("/uploads/images/**").permitAll()
                         .requestMatchers("/api/paises/**", "/api/provincias/**", "/api/localidades/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -11,9 +11,4 @@ public class UnidadMedida extends EntityBean {
 
     private String denominacion;
 
-    /*
-    @OneToMany(mappedBy = "unidadMedida", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticuloInsumo> insumos;
-    */
-
 }

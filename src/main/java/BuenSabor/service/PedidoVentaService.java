@@ -7,6 +7,7 @@ import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.PedidoVentaDetalle;
 import BuenSabor.repository.PedidoVentaRepository;
+import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import BuenSabor.service.promocion.PromocionService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
