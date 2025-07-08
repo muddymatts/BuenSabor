@@ -7,14 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class SucursalInsumo {
+public class SucursalInsumo extends EntityBean {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
-    private String stockActual;
-    private String stockMinimo;
-    private String stockMaximo;
+    private Long stockActual;
+    private Long stockMinimo;
+    private Long stockMaximo;
 
     // Relación N-1 con SucursalEmpresa
     @ManyToOne
