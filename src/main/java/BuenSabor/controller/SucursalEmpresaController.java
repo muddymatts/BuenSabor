@@ -1,6 +1,6 @@
 package BuenSabor.controller;
 
-import BuenSabor.dto.sucursal.StockDTO;
+import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.model.SucursalEmpresa;
 import BuenSabor.service.SucursalEmpresaService;
 import org.springframework.http.ResponseEntity;
@@ -29,14 +29,15 @@ public class SucursalEmpresaController {
     }
 
     @GetMapping("/{id}/stock")
-    public ResponseEntity<List<StockDTO>> verStock (@PathVariable Long id){
-       List <StockDTO> stockSucursal = service.getStock(id);
-       return stockSucursal.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(stockSucursal);
+    public ResponseEntity<List<SucursalInsumoDTO>> verStock (@PathVariable Long id){
+       List <SucursalInsumoDTO> stockSucursal = service.getStock(id);
+       return ResponseEntity.ok(stockSucursal);
     }
-    
-    public ResponseEntity<StockDTO> actualizarStock (@PathVariable Long id, @RequestBody StockDTO stock){
-        //TODO metodo para cargar un insumo al stock
-        return null;
+
+    @PutMapping("/{id}/stock")
+    public ResponseEntity<SucursalInsumoDTO> actualizarStock (@PathVariable Long id, @RequestBody SucursalInsumoDTO stock){
+        service.addStock(id, stock);
+        return ResponseEntity.ok().build();
     }
 
 }

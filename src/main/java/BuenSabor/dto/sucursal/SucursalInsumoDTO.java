@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class StockDTO {
+public class SucursalInsumoDTO {
     private Long idInsumo;
     private String denominacion;
-    private int cantidadMinima;
-    private int cantidadMaxima;
-    private int cantidadActual;
+    private Long cantidadMinima;
+    private Long cantidadMaxima;
+    private Long cantidadActual;
     private String UnidadMedida;
 }

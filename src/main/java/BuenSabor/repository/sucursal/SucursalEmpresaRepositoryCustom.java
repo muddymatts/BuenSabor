@@ -1,9 +1,9 @@
 package BuenSabor.repository.sucursal;
 
-import BuenSabor.dto.sucursal.StockDTO;
+import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 
 import java.util.List;
 
 public interface SucursalEmpresaRepositoryCustom {
-    List<StockDTO> getStock(Long SucursalId);
+    List<SucursalInsumoDTO> getStock(Long SucursalId);
 }

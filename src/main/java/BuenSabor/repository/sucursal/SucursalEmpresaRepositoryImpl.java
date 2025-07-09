@@ -1,6 +1,6 @@
 package BuenSabor.repository.sucursal;
 
-import BuenSabor.dto.sucursal.StockDTO;
+import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
     private EntityManager entityManager;
 
     @Override
-    public List<StockDTO> getStock(Long SucursalId) {
+    public List<SucursalInsumoDTO> getStock(Long SucursalId) {
         String sql = "SELECT " +
                 "i.id, " +
                 "i.denominacion, " +
@@ -30,12 +30,12 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
         List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
 
         return results.stream()
-                .map(row -> new StockDTO(
+                .map(row -> new SucursalInsumoDTO(
                         ((Number) row[0]).longValue(),
                         (String) row[1],
-                        ((Number) row[2]).intValue(),
-                        ((Number) row[3]).intValue(),
-                        ((Number) row[4]).intValue(),
+                        ((Number) row[2]).longValue(),
+                        ((Number) row[3]).longValue(),
+                        ((Number) row[4]).longValue(),
                         (String) row[5]
                 ))
                 .toList();
