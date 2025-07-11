@@ -1,6 +1,6 @@
 package BuenSabor.controller;
 
-import BuenSabor.model.CategoriaArticulo;
+import BuenSabor.model.CategoriaArticuloInsumo;
 import BuenSabor.service.CategoriaArticuloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,22 +16,22 @@ public class CategoriaArticuloController {
     private CategoriaArticuloService categoriaArticuloService;
 
     @PostMapping
-    public CategoriaArticulo crear(@RequestBody CategoriaArticulo categoria) {
+    public CategoriaArticuloInsumo crear(@RequestBody CategoriaArticuloInsumo categoria) {
         return categoriaArticuloService.crear(categoria);
     }
 
     @GetMapping
-    public List<CategoriaArticulo> obtenerTodas() {
+    public List<CategoriaArticuloInsumo> obtenerTodas() {
         return categoriaArticuloService.obtenerTodas();
     }
 
     @GetMapping("/{id}")
-    public CategoriaArticulo obtenerPorId(@PathVariable Long id) {
+    public CategoriaArticuloInsumo obtenerPorId(@PathVariable Long id) {
         return categoriaArticuloService.obtenerPorId(id);
     }
 
     @PutMapping("/{id}")
-    public CategoriaArticulo actualizar(@PathVariable Long id, @RequestBody CategoriaArticulo nuevaData) {
+    public CategoriaArticuloInsumo actualizar(@PathVariable Long id, @RequestBody CategoriaArticuloInsumo nuevaData) {
         return categoriaArticuloService.actualizar(id, nuevaData);
     }
 

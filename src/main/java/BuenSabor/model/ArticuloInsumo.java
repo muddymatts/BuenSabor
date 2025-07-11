@@ -22,7 +22,7 @@ public class ArticuloInsumo extends EntityApp {
     // Relación N-1 con CategoriaArticulo
     @ManyToOne
     @JoinColumn(name = "categoria_articulo_insumo_id")
-    private CategoriaArticulo categoriaArticulo;
+    private CategoriaArticuloInsumo categoriaArticuloInsumo;
 
     // Relación 1-1 con ImagenInsumo
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

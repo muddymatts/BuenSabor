@@ -1,4 +1,4 @@
-package BuenSabor.dto;
+package BuenSabor.dto.articuloManufacturado;
 
 import lombok.Data;
 

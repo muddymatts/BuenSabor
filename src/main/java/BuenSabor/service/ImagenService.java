@@ -1,5 +1,6 @@
 package BuenSabor.service;
 
+import BuenSabor.dto.imagen.ImagenRespuestaDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,21 @@ import java.nio.file.Paths;
 @Service
 public class ImagenService {
 
-    public ResponseEntity<String> subirImagen(MultipartFile file) {
+    public ResponseEntity<ImagenRespuestaDTO> subirImagen(MultipartFile file) {
+
 
         if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El archivo está vacío.");
+            ImagenRespuestaDTO respuesta = new ImagenRespuestaDTO(null,"El archivo está vacío");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
         }
 
         String contentType = file.getContentType();
         if (contentType == null || !(contentType.equals("image/jpeg") || contentType.equals("image/pjpeg") || contentType.equals("image/webp"))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Formato de archivo no soportado. Solo se permiten .jpg, .pjpeg o .webp");
+            ImagenRespuestaDTO respuesta = new ImagenRespuestaDTO(
+                    null,
+                    "Formato de archivo no soportado. Solo se permiten .jpg, .pjpeg o .webp");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
         }
 
         try {
@@ -38,12 +44,12 @@ public class ImagenService {
             Path filePath = Paths.get(uploadDir, fileName);
             Files.copy(file.getInputStream(), filePath);
 
-
-            return ResponseEntity.ok("Imagen subida exitosamente: " + fileName);
+            ImagenRespuestaDTO respuesta = new ImagenRespuestaDTO(fileName,"Imagen subida exitosamente");
+            return ResponseEntity.ok(respuesta);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al subir la imagen.");
+                    .body(new ImagenRespuestaDTO(null,"Error al subir la imagen"));
         }
     }
 }

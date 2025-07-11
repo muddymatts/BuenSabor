@@ -1,6 +1,6 @@
 package BuenSabor.controller;
 
-import BuenSabor.dto.CategoriaArticuloManufacturadoDTO;
+import BuenSabor.dto.articuloManufacturado.CategoriaArticuloManufacturadoDTO;
 import BuenSabor.model.CategoriaArticuloManufacturado;
 import BuenSabor.service.CategoriaArticuloManufacturadoService;
 import org.springframework.web.bind.annotation.*;

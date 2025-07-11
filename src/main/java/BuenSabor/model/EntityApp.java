@@ -18,6 +18,10 @@ public abstract class EntityApp extends EntityBean {
         this.fechaBaja = LocalDate.now();
     }
 
+    public void eliminarBaja(){
+        this.fechaBaja = null;
+    }
+
     public boolean estaActivo() {
         return this.fechaBaja == null;
     }
