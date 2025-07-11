@@ -38,6 +38,9 @@ public class SucursalEmpresaController {
     public ResponseEntity<SucursalInsumoDTO> actualizarStock (@PathVariable Long id, @RequestBody SucursalInsumoDTO stock){
         service.addStock(id, stock);
         return ResponseEntity.ok().build();
+    public ResponseEntity<SucursalInsumoDTO> addStock(@PathVariable Long id, @RequestBody SucursalInsumoDTO stock){
+        return ResponseEntity.ok(service.addStock(id, stock));
+    }
     }
 
 }

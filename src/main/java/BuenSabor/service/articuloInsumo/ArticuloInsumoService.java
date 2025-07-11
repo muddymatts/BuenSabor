@@ -1,6 +1,7 @@
 package BuenSabor.service.articuloInsumo;
 
 import BuenSabor.model.ArticuloInsumo;
+import BuenSabor.model.CategoriaArticuloInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
 import BuenSabor.service.BajaLogicaService;
 import jakarta.transaction.Transactional;
@@ -54,5 +55,15 @@ public class ArticuloInsumoService extends BajaLogicaService {
     public ArticuloInsumo anularBaja (Long id){
         reestablecer(ArticuloInsumo.class, id);
         return repository.findById(id).orElse(null);
+    }
+
+    public List<String> getCategogoriasAnidadas (CategoriaArticuloInsumo categoria, List<String> categoriasAnidadas){
+        if (categoria == null) return categoriasAnidadas;
+
+        getCategogoriasAnidadas(categoria.getCategoriaPadre(), categoriasAnidadas);
+
+        categoriasAnidadas.add(categoria.getDenominacion());
+
+        return categoriasAnidadas;
     }
 }

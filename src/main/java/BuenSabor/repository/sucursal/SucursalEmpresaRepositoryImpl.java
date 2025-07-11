@@ -36,7 +36,8 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
                         ((Number) row[2]).longValue(),
                         ((Number) row[3]).longValue(),
                         ((Number) row[4]).longValue(),
-                        (String) row[5]
+                        (String) row[5],
+                        new ArrayList<>()
                 ))
                 .toList();
     }

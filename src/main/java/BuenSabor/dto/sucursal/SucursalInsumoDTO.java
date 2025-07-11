@@ -3,6 +3,8 @@ package BuenSabor.dto.sucursal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class SucursalInsumoDTO {
@@ -12,4 +14,5 @@ public class SucursalInsumoDTO {
     private Long cantidadMaxima;
     private Long cantidadActual;
     private String UnidadMedida;
+    private List<String> categorias;
 }
