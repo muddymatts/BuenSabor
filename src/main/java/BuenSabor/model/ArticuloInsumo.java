@@ -33,7 +33,7 @@ public class ArticuloInsumo extends EntityApp {
     @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
 
-    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<ArticuloManufacturadoDetalle> detalles;
 
