@@ -1,5 +1,7 @@
 package BuenSabor.service;
 
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
+import BuenSabor.mapper.ArticuloManufacturadoMapper;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
@@ -16,18 +18,18 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
-public class ArticuloManufacturadoService {
+public class ArticuloManufacturadoService extends BajaLogicaService{
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private final ArticuloManufacturadoRepository repository;
-    private final BajaLogicaService bajaLogicaService;
+    private final ArticuloManufacturadoMapper mapper;
 
     public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository,
-                                        BajaLogicaService bajaLogicaService) {
+                                        ArticuloManufacturadoMapper mapper) {
         this.repository = repository;
-        this.bajaLogicaService = bajaLogicaService;
+        this.mapper = mapper;
     }
 
     @Transactional
@@ -58,8 +60,8 @@ public class ArticuloManufacturadoService {
         return repository.save(articulo);
     }
 
-    public ArticuloManufacturado buscarPorId(Long id) {
-        return repository.getReferenceByIdAndFechaBajaIsNull(id);
+    public ArticuloManufacturado getArticuloManufacturado(Long id) {
+        return repository.getReferenceById(id);
     }
 
     public List<ArticuloManufacturado> findByFechaBajaIsNull() {
@@ -78,7 +80,22 @@ public class ArticuloManufacturadoService {
             throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
         }
 
-        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
+        darDeBaja(ArticuloManufacturado.class, id);
         return articulo.getDenominacion();
+    }
+
+    public List<ArticuloManufacturadoDTO> getArticulosManufacturadoDTO() {
+        List<ArticuloManufacturado> articulos = repository.findAll();
+        return articulos.stream().map(articulo -> {
+            ArticuloManufacturadoDTO articuloDTO = mapper.toDTO(articulo);
+            articuloDTO.setNombreCategoria(articulo.getCategoria().getDenominacion());
+            articulo.getImagenes().forEach(imagen -> {
+                articuloDTO.getListaImagenes().add(imagen.getDenominacion());
+            });
+            articulo.getDetalles().forEach(detalle -> {
+                articuloDTO.getIngredientes().add(detalle.getInsumo().getDenominacion());
+            });
+            return articuloDTO;
+        }).toList();
     }
 }
