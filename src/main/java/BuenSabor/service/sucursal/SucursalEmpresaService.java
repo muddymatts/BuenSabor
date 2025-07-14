@@ -1,6 +1,8 @@
 package BuenSabor.service.sucursal;
 
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
 import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
+import BuenSabor.dto.sucursal.CantidadDisponibleDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.mapper.ProductosMapper;
 import BuenSabor.mapper.SucursalInsumoMapper;
@@ -10,11 +12,14 @@ import BuenSabor.model.SucursalInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
 import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalInsumoRepository;
+import BuenSabor.service.ArticuloManufacturadoService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SucursalEmpresaService {
@@ -23,21 +28,22 @@ public class SucursalEmpresaService {
     private final SucursalInsumoRepository sucursalInsumoRepository;
     private final ArticuloInsumoRepository articuloInsumoRepository;
     private final SucursalInsumoMapper sucursalInsumoMapper;
-    private final ProductosMapper productosMapper;
     private final ArticuloInsumoService articuloInsumoService;
+    private final ArticuloManufacturadoService articuloManufacturadoService;
 
     public SucursalEmpresaService (
             SucursalEmpresaRepository repository,
             SucursalInsumoRepository stockRepository,
             ArticuloInsumoRepository articuloInsumoRepository,
             SucursalInsumoMapper sucursalInsumoMapper,
-            ProductosMapper productosMapper, ArticuloInsumoService articuloInsumoService){
+            ArticuloInsumoService articuloInsumoService,
+            ArticuloManufacturadoService articuloManufacturadoService){
         this.repository = repository;
         this.sucursalInsumoRepository = stockRepository;
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.sucursalInsumoMapper = sucursalInsumoMapper;
-        this.productosMapper = productosMapper;
         this.articuloInsumoService = articuloInsumoService;
+        this.articuloManufacturadoService = articuloManufacturadoService;
     }
 
     public SucursalEmpresa guardar(SucursalEmpresa sucursal) {
@@ -99,8 +105,23 @@ public class SucursalEmpresaService {
         SucursalEmpresa sucursal = repository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
 
-        List<ArticulosManufacturadosDisponiblesDTO> lista = repository.getProducts(id);
+        List<CantidadDisponibleDTO> disponiblesEnSucursal = repository.getCantidadDisponible(id);
 
-        return lista.stream().map(productosMapper::toDTO).toList();
+        Map<Long, Integer> mapCantidadDisponible = disponiblesEnSucursal.stream()
+                .collect(Collectors.toMap(CantidadDisponibleDTO::getId, CantidadDisponibleDTO::getCantidadDisponible));
+
+        List<ArticuloManufacturadoDTO> listaArticulos = articuloManufacturadoService.getArticulosManufacturadoDTO();
+
+        return listaArticulos.stream()
+                .map(articulo -> {
+                    ArticulosManufacturadosDisponiblesDTO dto = new ArticulosManufacturadosDisponiblesDTO();
+                    dto.setId(articulo.getId());
+                    dto.setDenominacion(articulo.getDenominacion());
+                    dto.setFechaBaja(articulo.getFechaBaja());
+                    dto.setIngredientes(articulo.getIngredientes());
+                    dto.setListaImagenes(articulo.getListaImagenes());
+                    dto.setCantidadDisponible(mapCantidadDisponible.getOrDefault(articulo.getId(), 0));
+                    return dto;
+                }).toList();
     }
 }
