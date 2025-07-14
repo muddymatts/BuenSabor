@@ -71,7 +71,7 @@ public class PedidoVentaService {
         double costoTotal = 0.0;
         for(PedidoVentaDetalle detalle : pedido.getDetalles()) {
             if (detalle.getArticuloManufacturado() != null) {
-                double costo = articuloManufacturadoService.buscarPorId(detalle.getArticuloManufacturado().getId()).getPrecioCosto();
+                double costo = articuloManufacturadoService.getArticuloManufacturado(detalle.getArticuloManufacturado().getId()).getPrecioCosto();
                 costoTotal += costo * detalle.getCantidad();
             }
             if (detalle.getArticuloInsumo() != null) {
@@ -87,14 +87,14 @@ public class PedidoVentaService {
         long demoraTotal = 0;
         for(PedidoVentaDetalle detallePedido : pedido.getDetalles()){
             if(detallePedido.getArticuloManufacturado() != null){
-                ArticuloManufacturado articulo = articuloManufacturadoService.buscarPorId(detallePedido.getArticuloManufacturado().getId());
+                ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
                 demoraTotal += articulo.getTiempoEstimado() * (long)detallePedido.getCantidad();
             } else if (detallePedido.getPromocion() != null) {
                 PromocionDTO promocion = promocionService.buscarPorId(detallePedido.getPromocion().getId());
                 long demoraPromocion = 0;
                 for (PromocionDetalleDTO pd : promocion.getDetalle()){
                     if (pd.getArticuloManufacturado() == null) continue;
-                    ArticuloManufacturado articulo = articuloManufacturadoService.buscarPorId(pd.getArticuloManufacturado().getId());
+                    ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(pd.getArticuloManufacturado().getId());
                     demoraPromocion += articulo.getTiempoEstimado() * (long)pd.getCantidad();
                 }
                 demoraTotal += demoraPromocion * (long)detallePedido.getCantidad();

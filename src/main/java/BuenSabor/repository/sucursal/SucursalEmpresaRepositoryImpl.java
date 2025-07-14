@@ -1,10 +1,12 @@
 package BuenSabor.repository.sucursal;
 
+import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -42,4 +44,27 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
                 .toList();
     }
 
+    @Override
+    public List<ArticulosManufacturadosDisponiblesDTO> getProducts(Long SucursalId) {
+
+        String sql = "SELECT "+
+                "am.id,"+
+                "am.denominacion,"+
+                "am.descripcion,"+
+                "am.precio_venta,"+
+                "ca.denominacion as categoria,"+
+                "MIN( COALESCE(si.stock_actual / amd.cantidad, 0) ) AS cantidad_disponible " +
+                "FROM articulo_manufacturado am " +
+                "JOIN articulo_manufacturado_detalle amd " +
+                "ON amd.articulo_manufacturado_id = am.id " +
+                "LEFT JOIN sucursal_insumo si " +
+                "ON si.insumo_id = amd.articulo_insumo_id " +
+                "AND si.sucursal_id = " + SucursalId +
+                " LEFT JOIN categoria_articulo_manufacturado ca " +
+                "ON ca.id = am.categoria_articulo_manufacturado_id " +
+                "GROUP BY am.id, am.denominacion";
+
+        return entityManager.createNativeQuery(sql).getResultList();
+
+    }
 }

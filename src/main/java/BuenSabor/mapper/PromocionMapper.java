@@ -18,7 +18,7 @@ public interface PromocionMapper {
     PromocionDTO toDto(Promocion promocion);
 
     @AfterMapping
-    default void calcularPrecioVenta (Promocion promocion, @MappingTarget PromocionDTO dto) {
+    default void setValoresCalculados(Promocion promocion, @MappingTarget PromocionDTO dto) {
         double precioVenta = 0;
         if(promocion.getDetalle() != null){
             for (PromocionDetalle pd : promocion.getDetalle()) {

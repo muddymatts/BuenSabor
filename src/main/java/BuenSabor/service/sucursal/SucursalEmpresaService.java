@@ -1,6 +1,6 @@
 package BuenSabor.service.sucursal;
 
-import BuenSabor.dto.sucursal.ProductosDTO;
+import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.mapper.ProductosMapper;
 import BuenSabor.mapper.SucursalInsumoMapper;
@@ -94,12 +94,12 @@ public class SucursalEmpresaService {
 
     }
 
-    public List<ProductosDTO> getProducts(Long id) {
+    public List<ArticulosManufacturadosDisponiblesDTO> getProducts(Long id) {
         // 1. Buscar la sucursal
         SucursalEmpresa sucursal = repository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
 
-        List<ProductosDTO> lista = repository.getProducts(id);
+        List<ArticulosManufacturadosDisponiblesDTO> lista = repository.getProducts(id);
 
         return lista.stream().map(productosMapper::toDTO).toList();
     }

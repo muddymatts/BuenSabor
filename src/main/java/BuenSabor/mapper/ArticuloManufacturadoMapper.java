@@ -1,12 +1,12 @@
 package BuenSabor.mapper;
 
-import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoResumenDTO;
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
 import BuenSabor.model.ArticuloManufacturado;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ArticuloManufacturadoMapper {
 
-    ArticuloManufacturadoResumenDTO toDTO (ArticuloManufacturado entity);
+    ArticuloManufacturadoDTO toDTO (ArticuloManufacturado entity);
 
 }

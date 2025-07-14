@@ -1,5 +1,7 @@
 package BuenSabor.service.articuloInsumo;
 
+import BuenSabor.dto.articuloInsumo.ArticuloInsumoDTO;
+import BuenSabor.mapper.ArticuloInsumoMapper;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.CategoriaArticuloInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
@@ -15,10 +17,13 @@ import java.util.List;
 public class ArticuloInsumoService extends BajaLogicaService {
 
     private final ArticuloInsumoRepository repository;
+    private final ArticuloInsumoMapper mapperInsumo;
 
     public ArticuloInsumoService(
-            ArticuloInsumoRepository repository) {
+            ArticuloInsumoRepository repository,
+            ArticuloInsumoMapper mapperInsumo) {
         this.repository = repository;
+        this.mapperInsumo = mapperInsumo;
     }
 
     @Transactional
@@ -65,5 +70,18 @@ public class ArticuloInsumoService extends BajaLogicaService {
         categoriasAnidadas.add(categoria.getDenominacion());
 
         return categoriasAnidadas;
+    }
+
+    public List<ArticuloInsumoDTO> getInsumosDTO() {
+        List<ArticuloInsumo> insumos = repository.findAll();
+        return insumos.stream()
+                .map(insumo -> {
+                    ArticuloInsumoDTO insumoDTO =  mapperInsumo.toDto(insumo);
+                    insumoDTO.setNombreImagen(insumo.getImagenInsumo().getDenominacion());
+                    insumoDTO.setCategorias(getCategogoriasAnidadas(insumo.getCategoriaArticuloInsumo(), insumoDTO.getCategorias()));
+                    insumoDTO.setNombreUnidadMedida(insumo.getUnidadMedida().getDenominacion());
+                    return insumoDTO;
+                })
+                .toList();
     }
 }

@@ -1,5 +1,6 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.articuloInsumo.ArticuloInsumoDTO;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,15 @@ public class ArticuloInsumoController {
     }
 
     @GetMapping
+    public ResponseEntity<List<ArticuloInsumoDTO>> getInsumos(){
+        return ResponseEntity.ok().body(service.getInsumosDTO());
+    }
+    /*
+    @GetMapping
     public List<ArticuloInsumo> listarTodas() {
         return service.listarTodas();
     }
+    */
 
     @GetMapping("/{id}")
     public ResponseEntity<ArticuloInsumo> getArticuloInsumo(@PathVariable Long id) {

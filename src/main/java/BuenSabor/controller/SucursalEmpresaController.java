@@ -1,8 +1,10 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.model.SucursalEmpresa;
-import BuenSabor.service.SucursalEmpresaService;
+import BuenSabor.service.sucursal.SucursalEmpresaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,8 @@ public class SucursalEmpresaController {
     }
 
     @PostMapping
-    public ResponseEntity<SucursalEmpresa> crear (@RequestBody SucursalEmpresa sucursal){
-        return ResponseEntity.ok(service.guardar(sucursal));
+    public ResponseEntity<SucursalEmpresa> create(@RequestBody SucursalEmpresa sucursal){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(sucursal));
     }
 
     @GetMapping("/{id}")
@@ -29,18 +31,19 @@ public class SucursalEmpresaController {
     }
 
     @GetMapping("/{id}/stock")
-    public ResponseEntity<List<SucursalInsumoDTO>> verStock (@PathVariable Long id){
+    public ResponseEntity<List<SucursalInsumoDTO>> getStock(@PathVariable Long id){
        List <SucursalInsumoDTO> stockSucursal = service.getStock(id);
        return ResponseEntity.ok(stockSucursal);
     }
 
     @PutMapping("/{id}/stock")
-    public ResponseEntity<SucursalInsumoDTO> actualizarStock (@PathVariable Long id, @RequestBody SucursalInsumoDTO stock){
-        service.addStock(id, stock);
-        return ResponseEntity.ok().build();
     public ResponseEntity<SucursalInsumoDTO> addStock(@PathVariable Long id, @RequestBody SucursalInsumoDTO stock){
         return ResponseEntity.ok(service.addStock(id, stock));
     }
+
+    @GetMapping("/{id}/productos")
+    public ResponseEntity<List<ArticulosManufacturadosDisponiblesDTO>> getProducts(@PathVariable Long id){
+        return ResponseEntity.ok(service.getProducts(id));
     }
 
 }
