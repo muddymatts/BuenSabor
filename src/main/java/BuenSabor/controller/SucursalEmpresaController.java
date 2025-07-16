@@ -1,6 +1,7 @@
 package BuenSabor.controller;
 
 import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
+import BuenSabor.dto.promocion.PromocionesDisponiblesDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.model.SucursalEmpresa;
 import BuenSabor.service.sucursal.SucursalEmpresaService;
@@ -44,6 +45,11 @@ public class SucursalEmpresaController {
     @GetMapping("/{id}/productos")
     public ResponseEntity<List<ArticulosManufacturadosDisponiblesDTO>> getProducts(@PathVariable Long id){
         return ResponseEntity.ok(service.getProducts(id));
+    }
+
+    @GetMapping("{id}/promociones")
+    public ResponseEntity<List<PromocionesDisponiblesDTO>> getPromos(@PathVariable Long id){
+        return ResponseEntity.ok(service.getPromos(id));
     }
 
 }

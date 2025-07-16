@@ -2,9 +2,10 @@ package BuenSabor.service.sucursal;
 
 import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
 import BuenSabor.dto.articuloManufacturado.ArticulosManufacturadosDisponiblesDTO;
+import BuenSabor.dto.promocion.PromocionDTO;
+import BuenSabor.dto.promocion.PromocionesDisponiblesDTO;
 import BuenSabor.dto.sucursal.CantidadDisponibleDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
-import BuenSabor.mapper.ProductosMapper;
 import BuenSabor.mapper.SucursalInsumoMapper;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.SucursalEmpresa;
@@ -14,6 +15,7 @@ import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalInsumoRepository;
 import BuenSabor.service.ArticuloManufacturadoService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
+import BuenSabor.service.promocion.PromocionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class SucursalEmpresaService {
     private final SucursalInsumoMapper sucursalInsumoMapper;
     private final ArticuloInsumoService articuloInsumoService;
     private final ArticuloManufacturadoService articuloManufacturadoService;
+    private final PromocionService promocionService;
 
     public SucursalEmpresaService (
             SucursalEmpresaRepository repository,
@@ -37,13 +40,14 @@ public class SucursalEmpresaService {
             ArticuloInsumoRepository articuloInsumoRepository,
             SucursalInsumoMapper sucursalInsumoMapper,
             ArticuloInsumoService articuloInsumoService,
-            ArticuloManufacturadoService articuloManufacturadoService){
+            ArticuloManufacturadoService articuloManufacturadoService, PromocionService promocionService){
         this.repository = repository;
         this.sucursalInsumoRepository = stockRepository;
         this.articuloInsumoRepository = articuloInsumoRepository;
         this.sucursalInsumoMapper = sucursalInsumoMapper;
         this.articuloInsumoService = articuloInsumoService;
         this.articuloManufacturadoService = articuloManufacturadoService;
+        this.promocionService = promocionService;
     }
 
     public SucursalEmpresa guardar(SucursalEmpresa sucursal) {
@@ -121,6 +125,33 @@ public class SucursalEmpresaService {
                     dto.setIngredientes(articulo.getIngredientes());
                     dto.setListaImagenes(articulo.getListaImagenes());
                     dto.setCantidadDisponible(mapCantidadDisponible.getOrDefault(articulo.getId(), 0));
+                    return dto;
+                }).toList();
+    }
+
+    public List<PromocionesDisponiblesDTO> getPromos(Long id) {
+        SucursalEmpresa sucursal = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
+
+        List<CantidadDisponibleDTO> disponiblesEnSucursal = repository.getCantidadDisponiblePromos(sucursal.getId());
+
+        Map<Long, Integer> mapCantidadDisponible = disponiblesEnSucursal.stream()
+                .collect(Collectors.toMap(CantidadDisponibleDTO::getId, CantidadDisponibleDTO::getCantidadDisponible));
+
+        List<PromocionDTO> listaPromociones = (List<PromocionDTO>) promocionService.findAll();
+
+        return listaPromociones.stream()
+                .map(promocionDTO -> {
+                    PromocionesDisponiblesDTO dto = new PromocionesDisponiblesDTO();
+                    dto.setId(promocionDTO.getId());
+                    dto.setDenominacion(promocionDTO.getDenominacion());
+                    dto.setPrecioVenta(promocionDTO.getPrecioVenta());
+                    dto.setDetalle(promocionDTO.getDetalle());
+                    dto.setDescuento(promocionDTO.getDescuento());
+                    dto.setFechaDesde(promocionDTO.getFechaDesde());
+                    dto.setFechaHasta(promocionDTO.getFechaHasta());
+                    dto.setImagenes(promocionDTO.getImagenes());
+                    dto.setCantidad(mapCantidadDisponible.getOrDefault(promocionDTO.getId(), 0));
                     return dto;
                 }).toList();
     }

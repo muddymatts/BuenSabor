@@ -9,4 +9,6 @@ public interface SucursalEmpresaRepositoryCustom {
     List<SucursalInsumoDTO> getStock(Long SucursalId);
 
     List<CantidadDisponibleDTO> getCantidadDisponible (Long SucursalId);
+
+    List<CantidadDisponibleDTO> getCantidadDisponiblePromos (Long SucursalId);
 }

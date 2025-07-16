@@ -19,8 +19,8 @@ public interface PromocionMapper {
 
     @AfterMapping
     default void setValoresCalculados(Promocion promocion, @MappingTarget PromocionDTO dto) {
-        double precioVenta = 0;
         if(promocion.getDetalle() != null){
+            double precioVenta = 0;
             for (PromocionDetalle pd : promocion.getDetalle()) {
                 if(pd.getArticuloInsumo() != null){
                     dto.getImagenes().add(pd.getArticuloInsumo().getImagenInsumo().getDenominacion());
