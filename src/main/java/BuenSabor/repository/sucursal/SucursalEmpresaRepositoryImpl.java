@@ -73,20 +73,25 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
     @Override
     public List<CantidadDisponibleDTO> getCantidadDisponiblePromos (Long SucursalId) {
 
-        String sql = "SELECT "+
-                "am.id,"+
-                "MIN( COALESCE( TRUNCATE(si.stock_actual / (amd.cantidad * pd.cantidad), 0))) AS cantidad_disponible " +
-                "FROM articulo_manufacturado am " +
-                "JOIN articulo_manufacturado_detalle amd " +
-                "ON amd.articulo_manufacturado_id = am.id " +
-                "JOIN promocion_detalle pd " +
-                "ON pd.articulo_manufacturado_id = amd.articulo_manufacturado_id " +
-                " LEFT JOIN sucursal_insumo si " +
-                "ON si.insumo_id = amd.articulo_insumo_id " +
-                "AND si.sucursal_id = " + SucursalId +
-                " GROUP BY am.id, am.denominacion";
+        String sql = """
+                SELECT 
+                    p.id AS id,
+                    MIN(
+                        TRUNCATE(COALESCE(si.stock_actual, 0) / (amd.cantidad * pd.cantidad), 0)
+                    ) AS cantidadDisponible
+                FROM promocion p
+                JOIN promocion_detalle pd ON pd.promocion_id = p.id
+                JOIN articulo_manufacturado am ON am.id = pd.articulo_manufacturado_id
+                JOIN articulo_manufacturado_detalle amd ON amd.articulo_manufacturado_id = am.id
+                LEFT JOIN sucursal_insumo si 
+                    ON si.insumo_id = amd.articulo_insumo_id
+                    AND si.sucursal_id = :sucursalId
+                GROUP BY p.id
+                """;
 
-        List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> results = entityManager.createNativeQuery(sql)
+                .setParameter("sucursalId", SucursalId)
+                .getResultList();
 
         return results.stream()
                 .map(row -> {
