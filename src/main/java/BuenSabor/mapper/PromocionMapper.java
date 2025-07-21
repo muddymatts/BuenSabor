@@ -23,7 +23,9 @@ public interface PromocionMapper {
             double precioVenta = 0;
             for (PromocionDetalle pd : promocion.getDetalle()) {
                 if(pd.getArticuloInsumo() != null){
-                    dto.getImagenes().add(pd.getArticuloInsumo().getImagenInsumo().getDenominacion());
+                    if(pd.getArticuloInsumo().getImagenInsumo() != null){
+                        dto.getImagenes().add(pd.getArticuloInsumo().getImagenInsumo().getDenominacion());
+                    }
                     precioVenta += pd.getCantidad()* pd.getArticuloInsumo().getPrecioVenta();
                 } else if(pd.getArticuloManufacturado() != null){
                     if(pd.getArticuloManufacturado().getImagenes() != null){

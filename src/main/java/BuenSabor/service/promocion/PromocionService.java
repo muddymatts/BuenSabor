@@ -33,8 +33,7 @@ public class PromocionService {
                     "El descuento debe estar entre 0 y 0.99");
         }
 
-        promocion = promocionRepository.save(promocion);
-        return promocionMapper.toDto(promocion);
+        return promocionMapper.toDto(promocionRepository.save(promocion));
     }
 
 

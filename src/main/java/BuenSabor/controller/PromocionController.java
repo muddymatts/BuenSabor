@@ -29,7 +29,6 @@ public class PromocionController {
 
     @PostMapping
     public ResponseEntity<PromocionDTO> crearPromocion(@RequestBody Promocion promocion) {
-        System.out.println("Promocion recibida: " + promocion);
         return ResponseEntity.ok(promocionService.guardar(promocion));
     }
 }
