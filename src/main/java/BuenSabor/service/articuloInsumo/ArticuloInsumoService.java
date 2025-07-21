@@ -77,7 +77,11 @@ public class ArticuloInsumoService extends BajaLogicaService {
         return insumos.stream()
                 .map(insumo -> {
                     ArticuloInsumoDTO insumoDTO =  mapperInsumo.toDto(insumo);
-                    insumoDTO.setNombreImagen(insumo.getImagenInsumo().getDenominacion());
+                    if (insumo.getImagenInsumo() != null) {
+                        insumoDTO.setNombreImagen(insumo.getImagenInsumo().getDenominacion());
+                    } else {
+                        insumoDTO.setNombreImagen("no image");
+                    }
                     insumoDTO.setCategorias(getCategogoriasAnidadas(insumo.getCategoriaArticuloInsumo(), insumoDTO.getCategorias()));
                     insumoDTO.setNombreUnidadMedida(insumo.getUnidadMedida().getDenominacion());
                     return insumoDTO;

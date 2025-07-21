@@ -24,7 +24,8 @@ public class EmpresaService extends BajaLogicaService {
     }
 
     public Empresa getEmpresa(Long id) {
-        return respository.getReferenceById(id);
+        return respository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Empresa no encontrada"));
     }
 
     public Empresa editarEmpresa(Empresa empresa) {
