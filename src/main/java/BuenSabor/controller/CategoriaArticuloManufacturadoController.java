@@ -26,4 +26,9 @@ public class CategoriaArticuloManufacturadoController {
     public List<CategoriaArticuloManufacturadoDTO> obtenerCategorias() {
         return service.obtenerTodas();
     }
+
+    @GetMapping("/{id}")
+    public CategoriaArticuloManufacturado getCategoria(@PathVariable Long id) {
+        return service.getCategoria(id);
+    }
 }
