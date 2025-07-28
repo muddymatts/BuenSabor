@@ -26,7 +26,7 @@ public class ArticuloManufacturadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    @GetMapping("detalle/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ArticuloManufacturado> getArticuloManufacturado(@PathVariable Long id) {
         ArticuloManufacturado busqueda = articuloManufacturadoService.getArticuloManufacturado(id);
         if (busqueda != null) {
@@ -45,12 +45,12 @@ public class ArticuloManufacturadoController {
     public List<ArticuloManufacturado> listar() {
         return articuloManufacturadoService.findByFechaBajaIsNull();
     }
-  
-    @GetMapping("/mostrarTodos")
+  /*
+    @GetMapping()
     public List<ArticuloManufacturado> mostrarTodos() {
         return articuloManufacturadoService.findAll();
     }
-
+*/
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarArticuloManufacturado(@PathVariable Long id) {
         try {

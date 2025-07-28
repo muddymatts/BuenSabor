@@ -54,21 +54,20 @@ public class SucursalEmpresaService {
         return repository.save(sucursal);
     }
 
-    public SucursalEmpresa getSucursal(Long id) { return repository.getReferenceById(id); }
+    public SucursalEmpresa getSucursal(Long id) { return repository.findById(id)
+            .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + ".")); }
 
     public List<SucursalInsumoDTO> getStock(Long id) {
         List<SucursalInsumoDTO> stock = repository.getStock(id);
-        stock.stream().map(item -> {
+        stock.forEach(item -> {
             ArticuloInsumo articulo = articuloInsumoRepository.getReferenceById(item.getIdInsumo());
 
             item.setCategorias(articuloInsumoService.getCategogoriasAnidadas(articulo.getCategoriaArticuloInsumo(),item.getCategorias()));
-            return item.getDenominacion();
-        }
-        ).toList();
+        });
         return stock;
     }
 
-    public SucursalInsumoDTO addStock(Long id, SucursalInsumoDTO stock) {
+    public SucursalInsumoDTO setStock(Long id, SucursalInsumoDTO stock) {
         // 1. Buscar la sucursal
         SucursalEmpresa sucursal = repository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
@@ -109,7 +108,7 @@ public class SucursalEmpresaService {
         SucursalEmpresa sucursal = repository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
 
-        List<CantidadDisponibleDTO> disponiblesEnSucursal = repository.getCantidadDisponible(id);
+        List<CantidadDisponibleDTO> disponiblesEnSucursal = repository.getCantidadDisponible(sucursal.getId());
 
         Map<Long, Integer> mapCantidadDisponible = disponiblesEnSucursal.stream()
                 .collect(Collectors.toMap(CantidadDisponibleDTO::getId, CantidadDisponibleDTO::getCantidadDisponible));
@@ -154,5 +153,39 @@ public class SucursalEmpresaService {
                     dto.setCantidad(mapCantidadDisponible.getOrDefault(promocionDTO.getId(), 0));
                     return dto;
                 }).toList();
+    }
+
+    public SucursalInsumoDTO addStock(Long id, Long idInsumo, Integer cantidad) {
+        // 1. Buscar la sucursal
+        SucursalEmpresa sucursal = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
+
+        // 2. Buscar el insumo
+        ArticuloInsumo insumo = articuloInsumoRepository.findById(idInsumo)
+                .orElseThrow(()-> new RuntimeException("Articulo no encontrado, id: " +idInsumo + "."));
+
+        // 3. Verificar si ya existe el stock para esa combinación
+        Optional<SucursalInsumo> existente = sucursalInsumoRepository.findBySucursalAndInsumo(sucursal, insumo);
+
+        SucursalInsumo sucursalInsumo;
+
+        if (existente.isPresent()) {
+            // Actualiza los valores existentes
+            sucursalInsumo = existente.get();
+        } else {
+            throw new RuntimeException("No existe el stock para la sucursal y el insumo especificados.");
+        }
+
+        // 4. Setear los valores desde el DTO
+        sucursalInsumo.setStockActual(sucursalInsumo.getStockActual() + cantidad);
+
+        // 5. Guardar
+        sucursalInsumoRepository.save(sucursalInsumo);
+
+        return sucursalInsumoMapper.toDTO(sucursalInsumo);
+    }
+
+    public List<SucursalEmpresa> findAll() {
+        return repository.findAll();
     }
 }
