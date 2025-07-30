@@ -82,14 +82,6 @@ public class ArticuloManufacturadoService extends BajaLogicaService{
 
     public List<ArticuloManufacturadoDTO> getArticulosManufacturadoDTO() {
         List<ArticuloManufacturado> articulos = repository.findAll();
-        return articulos.stream().map(articulo -> {
-            ArticuloManufacturadoDTO articuloDTO = mapper.toDTO(articulo);
-            articuloDTO.setNombreCategoria(articulo.getCategoria().getDenominacion());
-            articulo.getImagenes().forEach(imagen ->
-                    articuloDTO.getListaImagenes().add(imagen.getDenominacion()));
-            articulo.getDetalles().forEach(detalle ->
-                    articuloDTO.getIngredientes().add(detalle.getInsumo().getDenominacion()));
-            return articuloDTO;
-        }).toList();
+        return articulos.stream().map(mapper::toDTO).toList();
     }
 }
