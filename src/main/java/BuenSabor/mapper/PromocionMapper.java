@@ -8,12 +8,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper (componentModel = "spring", uses = {
-        PromocionDetalleMapper.class,
-        ArticuloInsumoMapper.class,
-        ArticuloManufacturadoMapper.class })
+@Mapper (componentModel = "spring", uses = {PromocionDetalleMapper.class})
 public interface PromocionMapper {
-
 
     PromocionDTO toDto(Promocion promocion);
 

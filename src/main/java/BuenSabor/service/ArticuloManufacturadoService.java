@@ -8,7 +8,6 @@ import BuenSabor.model.ArticuloManufacturadoDetalle;
 import BuenSabor.model.ImagenManufacturado;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -74,11 +73,8 @@ public class ArticuloManufacturadoService extends BajaLogicaService{
 
     @Transactional
     public String eliminarArticuloManufacturado(Long id) {
-        ArticuloManufacturado articulo = repository.getReferenceByIdAndFechaBajaIsNull(id);
-
-        if (articulo == null) {
-            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
-        }
+        ArticuloManufacturado articulo = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Articulo no encontrado"));
 
         darDeBaja(ArticuloManufacturado.class, id);
         return articulo.getDenominacion();
@@ -89,12 +85,10 @@ public class ArticuloManufacturadoService extends BajaLogicaService{
         return articulos.stream().map(articulo -> {
             ArticuloManufacturadoDTO articuloDTO = mapper.toDTO(articulo);
             articuloDTO.setNombreCategoria(articulo.getCategoria().getDenominacion());
-            articulo.getImagenes().forEach(imagen -> {
-                articuloDTO.getListaImagenes().add(imagen.getDenominacion());
-            });
-            articulo.getDetalles().forEach(detalle -> {
-                articuloDTO.getIngredientes().add(detalle.getInsumo().getDenominacion());
-            });
+            articulo.getImagenes().forEach(imagen ->
+                    articuloDTO.getListaImagenes().add(imagen.getDenominacion()));
+            articulo.getDetalles().forEach(detalle ->
+                    articuloDTO.getIngredientes().add(detalle.getInsumo().getDenominacion()));
             return articuloDTO;
         }).toList();
     }

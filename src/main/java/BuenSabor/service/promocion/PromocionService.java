@@ -21,13 +21,12 @@ public class PromocionService {
 
     public PromocionDTO guardar(Promocion promocion) {
         if (!promocion.getDetalle().isEmpty()){
-            Promocion finalPromocion = promocion;
-            promocion.getDetalle().forEach(d -> d.setPromocion(finalPromocion));
+            promocion.getDetalle().forEach(d -> d.setPromocion(promocion));
         } else throw new ResponseStatusException(
                 HttpStatus.FORBIDDEN,
                 "La promocion debe tener al menos un detalle");
 
-        if(promocion.getDescuento() >= 1){
+        if (promocion.getDescuento() >= 1 || promocion.getDescuento() <= 0){
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN,
                     "El descuento debe estar entre 0 y 0.99");
