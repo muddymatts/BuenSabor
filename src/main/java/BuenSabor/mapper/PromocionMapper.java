@@ -36,6 +36,7 @@ public interface PromocionMapper {
                     precioVenta += pd.getCantidad() * pd.getArticuloManufacturado().getPrecioVenta();
                 }
             }
+            dto.setPrecioSinDescuento(precioVenta);
             dto.setPrecioVenta(precioVenta*(1-promocion.getDescuento()));
         }
     }
