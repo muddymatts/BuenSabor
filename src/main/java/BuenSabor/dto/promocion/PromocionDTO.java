@@ -14,6 +14,7 @@ public class PromocionDTO {
     private LocalDate fechaHasta;
     private double descuento;
     private List<PromocionDetalleDTO> detalle;
+    private double precioSinDescuento;
     private double precioVenta;
     private List<String> imagenes = new ArrayList<>();
 }

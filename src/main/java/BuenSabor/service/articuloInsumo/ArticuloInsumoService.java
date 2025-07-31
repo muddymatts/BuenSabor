@@ -44,8 +44,6 @@ public class ArticuloInsumoService extends BajaLogicaService {
         return repository.findById(id).orElse(null);
     }
 
-    public List<ArticuloInsumo> listarTodas() { return repository.findAll(); }
-
     @Transactional
     public ArticuloInsumo bajaLogica(Long id) {
         darDeBaja(ArticuloInsumo.class, id);
@@ -77,9 +75,7 @@ public class ArticuloInsumoService extends BajaLogicaService {
         return insumos.stream()
                 .map(insumo -> {
                     ArticuloInsumoDTO insumoDTO =  mapperInsumo.toDto(insumo);
-                    insumoDTO.setNombreImagen(insumo.getImagenInsumo().getDenominacion());
                     insumoDTO.setCategorias(getCategogoriasAnidadas(insumo.getCategoriaArticuloInsumo(), insumoDTO.getCategorias()));
-                    insumoDTO.setNombreUnidadMedida(insumo.getUnidadMedida().getDenominacion());
                     return insumoDTO;
                 })
                 .toList();

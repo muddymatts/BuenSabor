@@ -35,4 +35,8 @@ public class CategoriaArticuloManufacturadoService {
         dto.setDenominacion(categoria.getDenominacion());
         return dto;
     }
+
+    public CategoriaArticuloManufacturado getCategoria(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+    }
 }

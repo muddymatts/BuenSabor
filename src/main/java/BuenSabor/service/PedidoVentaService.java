@@ -46,19 +46,21 @@ public class PedidoVentaService {
     @Transactional
     public PedidoVenta crear(PedidoVenta pedido) {
 
-        //asigno hora y fecha local de pedido
-        LocalDateTime fechaHoraPedido = LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"));
-        pedido.setFechaHoraPedido(fechaHoraPedido);
-
-        //Asigno estado inicial
-        pedido.setEstado(Estado.preparacion);
+        if(pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
+        if(pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
 
         //Crear y cargar los detalles
         if(!pedido.getDetalles().isEmpty()){
             for(PedidoVentaDetalle detalle : pedido.getDetalles()){
                 detalle.setPedido(pedido);
             }
-        }
+        } else throw new RuntimeException("El pedido debe tener al menos un detalle");
+
+        //asigno hora y fecha local de pedido
+        pedido.setFechaHoraPedido(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")));
+
+        //Asigno estado inicial
+        pedido.setEstado(Estado.pendiente);
 
         pedido.setHoraEstimadaFinalizacion(CalcularDemoraTotal(pedido));
 
@@ -104,11 +106,7 @@ public class PedidoVentaService {
     }
 
     public String darDeBaja(Long id) {
-        PedidoVenta pedido = repository.getReferenceById(id);
-
-        if (pedido == null) {
-            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
-        }
+        PedidoVenta pedido = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado con id: " + id));
 
         bajaLogicaService.darDeBaja(PedidoVenta.class, id);
 

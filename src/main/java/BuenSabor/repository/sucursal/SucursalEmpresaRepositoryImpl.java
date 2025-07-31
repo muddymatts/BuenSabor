@@ -69,4 +69,37 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
                 }).toList();
 
     }
+
+    @Override
+    public List<CantidadDisponibleDTO> getCantidadDisponiblePromos (Long SucursalId) {
+
+        String sql = """
+                SELECT 
+                    p.id AS id,
+                    MIN(
+                        TRUNCATE(COALESCE(si.stock_actual, 0) / (amd.cantidad * pd.cantidad), 0)
+                    ) AS cantidadDisponible
+                FROM promocion p
+                JOIN promocion_detalle pd ON pd.promocion_id = p.id
+                JOIN articulo_manufacturado am ON am.id = pd.articulo_manufacturado_id
+                JOIN articulo_manufacturado_detalle amd ON amd.articulo_manufacturado_id = am.id
+                LEFT JOIN sucursal_insumo si 
+                    ON si.insumo_id = amd.articulo_insumo_id
+                    AND si.sucursal_id = :sucursalId
+                GROUP BY p.id
+                """;
+
+        List<Object[]> results = entityManager.createNativeQuery(sql)
+                .setParameter("sucursalId", SucursalId)
+                .getResultList();
+
+        return results.stream()
+                .map(row -> {
+                    CantidadDisponibleDTO dto = new CantidadDisponibleDTO(
+                            ((Number)row[0]).longValue(),
+                            ((Number)row[1]).intValue()
+                    );
+                    return dto;
+                }).toList();
+    }
 }
