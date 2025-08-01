@@ -2,6 +2,7 @@ package BuenSabor.service;
 
 import BuenSabor.dto.promocion.PromocionDTO;
 import BuenSabor.dto.promocion.PromocionDetalleDTO;
+import BuenSabor.dto.reportes.ReporteVentasDTO;
 import BuenSabor.enums.Estado;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
@@ -116,5 +117,12 @@ public class PedidoVentaService {
     public PedidoVenta buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
+    }
+
+    public ReporteVentasDTO getVentasDTO() {
+        List<PedidoVenta> ventas = repository.findAll();
+        ReporteVentasDTO reporte = new ReporteVentasDTO();
+        reporte.setCantidadVentas(ventas.size());
+        return reporte;
     }
 }
