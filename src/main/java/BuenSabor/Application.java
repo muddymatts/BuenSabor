@@ -1,5 +1,7 @@
 package BuenSabor;
 
+import com.mercadopago.MercadoPagoConfig;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,6 +15,7 @@ public class Application {
 
     public static void main(String[] args) {
         createDatabaseIfNotExists();
+        setupKeyMp();
         SpringApplication.run(Application.class, args);
     }
 
@@ -30,5 +33,18 @@ public class Application {
         } catch (SQLException e) {
             throw new RuntimeException("ERROR AL CREAR BASE DE DATOS: " + dbName, e);
         }
+    }
+
+    private static void setupKeyMp() {
+        Dotenv dotenv = Dotenv.configure()
+                .ignoreIfMissing()
+                .load();
+        String mpKey = dotenv.get("PROD_ACCESS_TOKEN");
+
+        if (mpKey == null || mpKey.isEmpty()) {
+            throw new IllegalStateException("Falta la variable de entorno VITE_MERCADOPAGO_KEY.");
+        }
+
+        MercadoPagoConfig.setAccessToken(mpKey);
     }
 }
