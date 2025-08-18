@@ -1,5 +1,6 @@
 package BuenSabor.service;
 
+import BuenSabor.dto.preferenceMp.PreferenceMpDTO;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
@@ -19,7 +20,7 @@ public class MercadoPagoService {
 
     private static final Logger logger = Logger.getLogger(MercadoPagoService.class.getName());
 
-    public String solicitarIdPreferencia() throws MPException, MPApiException {
+    public PreferenceMpDTO solicitarIdPreferencia() throws MPException, MPApiException {
         Preference preference;
 
         try {
@@ -47,6 +48,7 @@ public class MercadoPagoService {
             logger.log(Level.SEVERE, "Error al crear la preferencia en Mercado Pago", e);
             throw e;
         }
-        return preference.getId();
+
+        return new PreferenceMpDTO(preference.getId());
     }
 }
