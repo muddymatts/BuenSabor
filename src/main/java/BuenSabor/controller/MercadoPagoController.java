@@ -4,10 +4,7 @@ import BuenSabor.dto.preferenceMp.PreferenceMpDTO;
 import BuenSabor.service.MercadoPagoService;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -20,7 +17,7 @@ public class MercadoPagoController {
         this.mercadoPagoService = mercadoPagoService;
     }
 
-    @GetMapping("/checkout")
+    @PostMapping("/checkout")
     public PreferenceMpDTO checkout() throws MPException, MPApiException {
         return mercadoPagoService.solicitarIdPreferencia();
     }
