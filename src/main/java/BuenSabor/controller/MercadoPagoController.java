@@ -1,6 +1,7 @@
 package BuenSabor.controller;
 
-import BuenSabor.dto.preferenceMp.PreferenceMpDTO;
+import BuenSabor.dto.preferenceMp.PreferenceIdDTO;
+import BuenSabor.dto.preferenceMp.PreferencePedidoDTO;
 import BuenSabor.service.MercadoPagoService;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
@@ -18,8 +19,9 @@ public class MercadoPagoController {
     }
 
     @PostMapping("/checkout")
-    public PreferenceMpDTO checkout() throws MPException, MPApiException {
-        return mercadoPagoService.solicitarIdPreferencia();
+    public PreferenceIdDTO checkout(@RequestBody PreferencePedidoDTO pedido)
+            throws MPException, MPApiException {
+        return mercadoPagoService.solicitarIdPreferencia(pedido);
     }
 }
 
