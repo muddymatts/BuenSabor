@@ -3,6 +3,7 @@ package BuenSabor.service;
 import BuenSabor.dto.preferenceMp.PreferenceIdDTO;
 import BuenSabor.dto.preferenceMp.PreferenceItemDTO;
 import BuenSabor.dto.preferenceMp.PreferencePedidoDTO;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
@@ -27,6 +28,14 @@ public class MercadoPagoService {
         try {
             List<PreferenceItemRequest> items = new ArrayList<>();
 
+            // TODO: redireccionar al nuevo componente de estado del pedido una vez creado
+            PreferenceBackUrlsRequest backUrls =
+                    PreferenceBackUrlsRequest.builder()
+                            .success("https://localhost:5173/productos")
+                            .pending("https://localhost:5173/productos")
+                            .failure("https://localhost:5173/productos")
+                            .build();
+
             for (PreferenceItemDTO dto : pedidoDto.getItems()) {
                 PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                         .id(dto.getId())
@@ -43,8 +52,8 @@ public class MercadoPagoService {
 
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
-                    // si quisieras, podrías usar pedidoDto.getMontoCarrito()
-                    // para validar el total o agregarlo como metadata
+                    .backUrls(backUrls)
+                    .autoReturn("approved")
                     .build();
 
             PreferenceClient client = new PreferenceClient();
