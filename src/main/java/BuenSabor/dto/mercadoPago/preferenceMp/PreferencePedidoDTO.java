@@ -13,4 +13,5 @@ import java.util.List;
 public class PreferencePedidoDTO {
     private BigDecimal montoCarrito;
     private List<PreferenceItemDTO> items;
+    private String idPedido;
 }

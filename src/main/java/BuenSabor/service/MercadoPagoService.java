@@ -74,6 +74,7 @@ public class MercadoPagoService {
                     .backUrls(backUrls)
                     .autoReturn("approved")
                     .notificationUrl(tunnelUrlCompleta)
+                    .externalReference(pedidoDto.getIdPedido())
                     .build();
 
             PreferenceClient client = new PreferenceClient();
