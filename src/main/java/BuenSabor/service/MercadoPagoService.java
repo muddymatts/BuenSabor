@@ -1,5 +1,6 @@
 package BuenSabor.service;
 
+import BuenSabor.config.LocalTunnelManager;
 import BuenSabor.dto.preferenceMp.PreferenceIdDTO;
 import BuenSabor.dto.preferenceMp.PreferenceItemDTO;
 import BuenSabor.dto.preferenceMp.PreferencePedidoDTO;
@@ -20,10 +21,18 @@ import java.util.logging.Logger;
 @Service
 public class MercadoPagoService {
 
+    private final LocalTunnelManager localTunnelManager;
+
     private static final Logger logger = Logger.getLogger(MercadoPagoService.class.getName());
+
+    public MercadoPagoService(LocalTunnelManager localTunnelManager) {
+        this.localTunnelManager = localTunnelManager;
+    }
 
     public PreferenceIdDTO solicitarIdPreferencia(PreferencePedidoDTO pedidoDto) throws MPException, MPApiException {
         Preference preference;
+        String tunnelUrl = localTunnelManager.getLocalTunnelUrl();
+        System.out.println(tunnelUrl);
 
         try {
             List<PreferenceItemRequest> items = new ArrayList<>();
@@ -54,6 +63,7 @@ public class MercadoPagoService {
                     .items(items)
                     .backUrls(backUrls)
                     .autoReturn("approved")
+                    .notificationUrl(tunnelUrl + "/mercadopago/notification")
                     .build();
 
             PreferenceClient client = new PreferenceClient();
