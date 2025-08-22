@@ -1,4 +1,4 @@
-package BuenSabor.dto.preferenceMp;
+package BuenSabor.dto.mercadoPago.preferenceMp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
