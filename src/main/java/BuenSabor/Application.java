@@ -42,7 +42,7 @@ public class Application {
         String mpKey = dotenv.get("PROD_ACCESS_TOKEN");
 
         if (mpKey == null || mpKey.isEmpty()) {
-            throw new IllegalStateException("Falta la variable de entorno VITE_MERCADOPAGO_KEY.");
+            throw new IllegalStateException("Falta la variable de entorno PROD_ACCESS_TOKEN.");
         }
 
         MercadoPagoConfig.setAccessToken(mpKey);
