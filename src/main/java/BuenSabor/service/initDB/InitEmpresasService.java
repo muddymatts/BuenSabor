@@ -39,11 +39,9 @@ public class InitEmpresasService {
                 List<EmpresaDTO> empresasDto = objectMapper.readValue(inputStream,
                         objectMapper.getTypeFactory().constructCollectionType(List.class, EmpresaDTO.class));
 
-                // Convertir EmpresaDTO a Empresa
                 List<Empresa> empresas = empresasDto.stream().map(dto -> {
                     Empresa empresa = new Empresa();
 
-                    // Convertimos las fechas de String a LocalDate
                     empresa.setFechaAlta(dto.getFechaAlta() != null ? LocalDate.parse(dto.getFechaAlta()) : null);
                     empresa.setFechaBaja(dto.getFechaBaja() != null ? LocalDate.parse(dto.getFechaBaja()) : null);
 
@@ -54,7 +52,6 @@ public class InitEmpresasService {
                     return empresa;
                 }).collect(Collectors.toList());
 
-                // Guardar las empresas en la base de datos
                 empresaRespository.saveAll(empresas);
                 logger.info("Empresas cargadas exitosamente desde 'empresas.json'");
             } else {
