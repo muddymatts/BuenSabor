@@ -2,7 +2,7 @@ package BuenSabor.service.empresa;
 
 import BuenSabor.model.Empresa;
 import BuenSabor.model.SucursalEmpresa;
-import BuenSabor.repository.empresa.EmpresaRespository;
+import BuenSabor.repository.empresa.EmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.service.BajaLogicaService;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmpresaService extends BajaLogicaService {
 
-    private final EmpresaRespository respository;
+    private final EmpresaRepository respository;
     private final SucursalEmpresaRepository sucursalEmpresaRepository;
 
-    public EmpresaService (EmpresaRespository repository, SucursalEmpresaRepository sucursalEmpresaRepository){
+    public EmpresaService (EmpresaRepository repository, SucursalEmpresaRepository sucursalEmpresaRepository){
         this.respository = repository;
         this.sucursalEmpresaRepository = sucursalEmpresaRepository;
     }

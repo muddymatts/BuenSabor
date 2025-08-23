@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EmpresaDTO {
+public class EmpresaJsonDTO {
 
     @JsonProperty("fecha_alta")
     private String fechaAlta;

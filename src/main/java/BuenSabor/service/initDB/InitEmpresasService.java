@@ -1,8 +1,8 @@
 package BuenSabor.service.initDB;
 
-import BuenSabor.dto.jsonMapperDtos.EmpresaDTO;
+import BuenSabor.dto.jsonMapperDtos.EmpresaJsonDTO;
 import BuenSabor.model.Empresa;
-import BuenSabor.repository.empresa.EmpresaRespository;
+import BuenSabor.repository.empresa.EmpresaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,27 +17,27 @@ import java.util.stream.Collectors;
 @Service
 public class InitEmpresasService {
 
-    private final EmpresaRespository empresaRespository;
+    private final EmpresaRepository empresaRepository;
 
     private static final Logger logger = Logger.getLogger(InitEmpresasService.class.getName());
 
-    public InitEmpresasService(EmpresaRespository empresaRespository) {
-        this.empresaRespository = empresaRespository;
+    public InitEmpresasService(EmpresaRepository empresaRepository) {
+        this.empresaRepository = empresaRepository;
     }
 
     @Transactional
     public void setupEmpresas() {
         try {
-            if (empresaRespository.count() == 0) {
+            if (empresaRepository.count() == 0) {
                 InputStream inputStream = getClass().getResourceAsStream("/data/empresas/empresas.json");
 
                 if (inputStream == null) {
-                    throw new RuntimeException("Archivo 'empresas.json' no encontrado");
+                    throw new RuntimeException("Archivo 'empresas.json' no encontrado.");
                 }
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                List<EmpresaDTO> empresasDto = objectMapper.readValue(inputStream,
-                        objectMapper.getTypeFactory().constructCollectionType(List.class, EmpresaDTO.class));
+                List<EmpresaJsonDTO> empresasDto = objectMapper.readValue(inputStream,
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, EmpresaJsonDTO.class));
 
                 List<Empresa> empresas = empresasDto.stream().map(dto -> {
                     Empresa empresa = new Empresa();
@@ -52,7 +52,7 @@ public class InitEmpresasService {
                     return empresa;
                 }).collect(Collectors.toList());
 
-                empresaRespository.saveAll(empresas);
+                empresaRepository.saveAll(empresas);
                 logger.info("Empresas cargadas exitosamente desde 'empresas.json'");
             } else {
                 logger.info("No se cargaron empresas, ya existen datos en la base de datos.");

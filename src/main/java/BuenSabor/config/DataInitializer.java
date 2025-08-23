@@ -6,6 +6,7 @@ import BuenSabor.repository.*;
 import BuenSabor.service.initDB.InitArticulosService;
 import BuenSabor.service.initDB.InitClientesService;
 import BuenSabor.service.initDB.InitEmpresasService;
+import BuenSabor.service.initDB.InitSucursalesService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +32,7 @@ public class DataInitializer {
     private final InitArticulosService initArticulosService;
     private final InitClientesService initClientesService;
     private final InitEmpresasService initEmpresasService;
+    private final InitSucursalesService initSucursalesService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
@@ -40,15 +42,22 @@ public class DataInitializer {
 
     public DataInitializer(InitArticulosService initArticulosService,
                            InitClientesService initClientesService,
-                           InitEmpresasService initEmpresasService) {
+                           InitEmpresasService initEmpresasService,
+                           InitSucursalesService initSucursalesService) {
         this.initArticulosService = initArticulosService;
         this.initClientesService = initClientesService;
         this.initEmpresasService = initEmpresasService;
+        this.initSucursalesService = initSucursalesService;
     }
 
     @Bean
-    CommandLineRunner crearEmpresas() {
+    CommandLineRunner initEmpresas() {
         return args -> this.initEmpresasService.setupEmpresas();
+    }
+
+    @Bean
+    CommandLineRunner initSucursales() {
+        return args -> this.initSucursalesService.setupSucursales();
     }
 
     @Bean
