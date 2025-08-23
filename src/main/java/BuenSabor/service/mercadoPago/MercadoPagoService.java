@@ -88,6 +88,7 @@ public class MercadoPagoService {
         return toDto(preference);
     }
 
+    // TODO: modificar para que genere los datos cuando tenga la transaccion completa, ya que recibe varias peticiones
     public PaymentResponseDTO processWebhook(String body) throws Exception {
         JsonNode root = mapper.readTree(body);
         String paymentIdStr = extractPaymentId(root);
