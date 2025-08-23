@@ -1,4 +1,4 @@
-package BuenSabor.dto.empresa;
+package BuenSabor.dto.jsonMapperDtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

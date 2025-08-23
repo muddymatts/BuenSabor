@@ -1,6 +1,6 @@
 package BuenSabor.service.initDB;
 
-import BuenSabor.dto.empresa.EmpresaDTO;
+import BuenSabor.dto.jsonMapperDtos.EmpresaDTO;
 import BuenSabor.model.Empresa;
 import BuenSabor.repository.empresa.EmpresaRespository;
 import com.fasterxml.jackson.databind.ObjectMapper;
