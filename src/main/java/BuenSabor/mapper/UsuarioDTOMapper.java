@@ -29,6 +29,7 @@ public class UsuarioDTOMapper {
         if (usuario.getCliente() != null) {
             Cliente cliente = usuario.getCliente();
             clienteDTO = new UsuarioDTO.ClienteDTO(
+                    cliente.getId(),
                     cliente.getNombre(),
                     cliente.getApellido(),
                     cliente.getEmail(),
