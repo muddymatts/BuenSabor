@@ -1,4 +1,4 @@
-package BuenSabor.service;
+package BuenSabor.service.mercadoPago;
 
 import BuenSabor.config.LocalTunnelManager;
 import BuenSabor.dto.mercadoPago.paymentResponse.PaymentResponseDTO;
