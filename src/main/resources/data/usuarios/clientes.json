@@ -3,12 +3,7 @@
     "nombre": "Juan",
     "apellido": "Perez",
     "email": "juan.perez@mail.com",
-    "direccion": {
-      "calle": "La Pampa",
-      "numeroCalle": 123,
-      "codigoPostal": 1000,
-      "localidadId": 55
-    },
+    "domicilio_id": 1,
     "telefono": "261111111",
     "username": "juan",
     "password": "juan123"
@@ -17,12 +12,7 @@
     "nombre": "Sofia",
     "apellido": "Garcia",
     "email": "sofia.garcia@mail.com",
-    "direccion": {
-      "calle": "Las Heras",
-      "numeroCalle": 234,
-      "codigoPostal": 2000,
-      "localidadId": 450
-    },
+    "domicilio_id": 2,
     "telefono": "261222222",
     "username": "sofia",
     "password": "sofia123"
@@ -31,12 +21,7 @@
     "nombre": "Marcelo",
     "apellido": "Lopez",
     "email": "marcelo.lopez@mail.com",
-    "direccion": {
-      "calle": "San Martin",
-      "numeroCalle": 111,
-      "codigoPostal": 3000,
-      "localidadId": 120
-    },
+    "domicilio_id": 3,
     "telefono": "261333333",
     "username": "marcelo",
     "password": "marcelo123"
@@ -45,12 +30,7 @@
     "nombre": "Lucia",
     "apellido": "Martinez",
     "email": "lucia.martinez@mail.com",
-    "direccion": {
-      "calle": "Belgrano",
-      "numeroCalle": 432,
-      "codigoPostal": 4000,
-      "localidadId": 129
-    },
+    "domicilio_id": 4,
     "telefono": "261444444",
     "username": "lucia",
     "password": "lucia123"
@@ -59,12 +39,7 @@
     "nombre": "Ricardo",
     "apellido": "Reyes",
     "email": "ricardo.reyes@mail.com",
-    "direccion": {
-      "calle": "Santa Fe",
-      "numeroCalle": 500,
-      "codigoPostal": 5000,
-      "localidadId": 90
-    },
+    "domicilio_id": 5,
     "telefono": "261555555",
     "username": "ricardo",
     "password": "ricardo123"
@@ -73,12 +48,7 @@
     "nombre": "Camila",
     "apellido": "Gonzalez",
     "email": "camila.gonzalez@mail.com",
-    "direccion": {
-      "calle": "Corrientes",
-      "numeroCalle": 321,
-      "codigoPostal": 6000,
-      "localidadId": 300
-    },
+    "domicilio_id": 6,
     "telefono": "261666666",
     "username": "camila",
     "password": "camila123"
@@ -87,12 +57,7 @@
     "nombre": "Lautaro",
     "apellido": "Fernandez",
     "email": "lautaro.fernandez@mail.com",
-    "direccion": {
-      "calle": "Zona Norte",
-      "numeroCalle": 223,
-      "codigoPostal": 7000,
-      "localidadId": 392
-    },
+    "domicilio_id": 7,
     "telefono": "261777777",
     "username": "lautaro",
     "password": "lautaro123"
@@ -101,12 +66,7 @@
     "nombre": "Juliana",
     "apellido": "Diaz",
     "email": "juliana.diaz@mail.com",
-    "direccion": {
-      "calle": "9 de Julio",
-      "numeroCalle": 345,
-      "codigoPostal": 8000,
-      "localidadId": 15
-    },
+    "domicilio_id": 8,
     "telefono": "261888888",
     "username": "juliana",
     "password": "juliana123"
@@ -115,12 +75,7 @@
     "nombre": "Brenda",
     "apellido": "Rivas",
     "email": "brenda.rivas@mail.com",
-    "direccion": {
-      "calle": "Avellaneda",
-      "numeroCalle": 567,
-      "codigoPostal": 9000,
-      "localidadId": 50
-    },
+    "domicilio_id": 9,
     "telefono": "261999999",
     "username": "brenda",
     "password": "brenda123"
@@ -129,12 +84,7 @@
     "nombre": "Diego",
     "apellido": "Calderon",
     "email": "diego.calderon@mail.com",
-    "direccion": {
-      "calle": "Alvear",
-      "numeroCalle": 211,
-      "codigoPostal": 10000,
-      "localidadId": 205
-    },
+    "domicilio_id": 10,
     "telefono": "261000000",
     "username": "diego",
     "password": "diego123"
@@ -143,12 +93,7 @@
     "nombre": "Francisca",
     "apellido": "Cortez",
     "email": "francisca.cortez@mail.com",
-    "direccion": {
-      "calle": "Los Andes",
-      "numeroCalle": 120,
-      "codigoPostal": 11000,
-      "localidadId": 530
-    },
+    "domicilio_id": 11,
     "telefono": "562111111",
     "username": "francisca",
     "password": "francisca123"
@@ -157,12 +102,7 @@
     "nombre": "Luis",
     "apellido": "Bravo",
     "email": "luis.bravo@mail.com",
-    "direccion": {
-      "calle": "Maipu",
-      "numeroCalle": 134,
-      "codigoPostal": 12000,
-      "localidadId": 672
-    },
+    "domicilio_id": 12,
     "telefono": "562222222",
     "username": "luis",
     "password": "luis123"
@@ -171,12 +111,7 @@
     "nombre": "Daniela",
     "apellido": "Pizarro",
     "email": "daniela.pizarro@mail.com",
-    "direccion": {
-      "calle": "Providencia",
-      "numeroCalle": 311,
-      "codigoPostal": 13000,
-      "localidadId": 759
-    },
+    "domicilio_id": 13,
     "telefono": "562333333",
     "username": "daniela",
     "password": "daniela123"
@@ -185,12 +120,7 @@
     "nombre": "Jorge",
     "apellido": "Zamora",
     "email": "jorge.zamora@mail.com",
-    "direccion": {
-      "calle": "Concepcion",
-      "numeroCalle": 501,
-      "codigoPostal": 14000,
-      "localidadId": 812
-    },
+    "domicilio_id": 14,
     "telefono": "562444444",
     "username": "jorge",
     "password": "jorge123"
@@ -199,12 +129,7 @@
     "nombre": "Sandra",
     "apellido": "Mendez",
     "email": "sandra.mendez@mail.com",
-    "direccion": {
-      "calle": "Temuco",
-      "numeroCalle": 615,
-      "codigoPostal": 15000,
-      "localidadId": 855
-    },
+    "domicilio_id": 15,
     "telefono": "562555555",
     "username": "sandra",
     "password": "sandra123"
@@ -213,12 +138,7 @@
     "nombre": "Federico",
     "apellido": "Suarez",
     "email": "federico.suarez@mail.com",
-    "direccion": {
-      "calle": "Independencia",
-      "numeroCalle": 121,
-      "codigoPostal": 16000,
-      "localidadId": 873
-    },
+    "domicilio_id": 16,
     "telefono": "598111111",
     "username": "federico",
     "password": "federico123"
@@ -227,12 +147,7 @@
     "nombre": "Carolina",
     "apellido": "Figueredo",
     "email": "carolina.figueredo@mail.com",
-    "direccion": {
-      "calle": "Colonia",
-      "numeroCalle": 230,
-      "codigoPostal": 17000,
-      "localidadId": 905
-    },
+    "domicilio_id": 17,
     "telefono": "598222222",
     "username": "carolina",
     "password": "carolina123"
@@ -241,12 +156,7 @@
     "nombre": "Sebastian",
     "apellido": "Ramos",
     "email": "sebastian.ramos@mail.com",
-    "direccion": {
-      "calle": "Libertad",
-      "numeroCalle": 322,
-      "codigoPostal": 18000,
-      "localidadId": 1000
-    },
+    "domicilio_id": 18,
     "telefono": "598333333",
     "username": "sebastian",
     "password": "sebastian123"
@@ -255,12 +165,7 @@
     "nombre": "Laura",
     "apellido": "Gomez",
     "email": "laura.gomez@mail.com",
-    "direccion": {
-      "calle": "San Jose",
-      "numeroCalle": 456,
-      "codigoPostal": 19000,
-      "localidadId": 1100
-    },
+    "domicilio_id": 19,
     "telefono": "598444444",
     "username": "laura",
     "password": "laura123"
@@ -269,12 +174,7 @@
     "nombre": "Matias",
     "apellido": "Torres",
     "email": "matias.torres@mail.com",
-    "direccion": {
-      "calle": "Montevideo",
-      "numeroCalle": 678,
-      "codigoPostal": 20000,
-      "localidadId": 1200
-    },
+    "domicilio_id": 20,
     "telefono": "598555555",
     "username": "matias",
     "password": "matias123"
