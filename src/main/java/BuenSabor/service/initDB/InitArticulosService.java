@@ -114,12 +114,12 @@ public class InitArticulosService {
             salsaTomate.setPrecioVenta(0.75);
 
             ArticuloInsumo cocaCola = new ArticuloInsumo();
-            cocaCola.setPrecioCompra(1000.0);
+            cocaCola.setPrecioCompra(100.0);
             cocaCola.setUnidadMedida(unidades.get(4));
             cocaCola.setCategoriaArticuloInsumo(categorias.get(2));
             cocaCola.setDenominacion("Coca Cola");
             cocaCola.setEsParaElaborar(false);
-            cocaCola.setPrecioVenta(1500.0);
+            cocaCola.setPrecioVenta(150.0);
 
             articuloInsumoRepository.saveAll(
                     List.of(quesoMuzzarella, salsaTomate, cocaCola)
@@ -157,7 +157,7 @@ public class InitArticulosService {
                 pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
                 pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
                 pizzaMuzzarella.setCategoria(categorias.get(0));
-                pizzaMuzzarella.setPrecioVenta(2500.0);
+                pizzaMuzzarella.setPrecioVenta(250.0);
                 pizzaMuzzarella.setTiempoEstimado(30);
 
 
@@ -165,14 +165,14 @@ public class InitArticulosService {
                 hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
                 hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
                 hamburguesaClasica.setCategoria(categorias.get(1));
-                hamburguesaClasica.setPrecioVenta(1500.0);
+                hamburguesaClasica.setPrecioVenta(150.0);
                 hamburguesaClasica.setTiempoEstimado(20);
 
                 ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
                 lomitoSimple.setDenominacion("Lomito Simple");
                 lomitoSimple.setDescripcion("Lomito con jamón y queso");
                 lomitoSimple.setCategoria(categorias.get(3));
-                lomitoSimple.setPrecioVenta(1000.0);
+                lomitoSimple.setPrecioVenta(100.0);
                 lomitoSimple.setTiempoEstimado(25);
 
                 articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));
