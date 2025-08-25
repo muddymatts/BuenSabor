@@ -8,9 +8,12 @@ import BuenSabor.dto.sucursal.CantidadDisponibleDTO;
 import BuenSabor.dto.sucursal.SucursalInsumoDTO;
 import BuenSabor.mapper.SucursalInsumoMapper;
 import BuenSabor.model.ArticuloInsumo;
+import BuenSabor.model.Cliente;
 import BuenSabor.model.SucursalEmpresa;
 import BuenSabor.model.SucursalInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
+import BuenSabor.repository.ClienteRepository;
+import BuenSabor.repository.empresa.EmpresaRespository;
 import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalInsumoRepository;
 import BuenSabor.service.ArticuloManufacturadoService;
@@ -34,6 +37,8 @@ public class SucursalEmpresaService extends BajaLogicaService {
     private final ArticuloInsumoService articuloInsumoService;
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final PromocionService promocionService;
+    private final ClienteRepository clienteRepository;
+    private final EmpresaRespository empresaRespository;
 
     public SucursalEmpresaService (
             SucursalEmpresaRepository repository,
@@ -41,7 +46,10 @@ public class SucursalEmpresaService extends BajaLogicaService {
             ArticuloInsumoRepository articuloInsumoRepository,
             SucursalInsumoMapper sucursalInsumoMapper,
             ArticuloInsumoService articuloInsumoService,
-            ArticuloManufacturadoService articuloManufacturadoService, PromocionService promocionService){
+            ArticuloManufacturadoService articuloManufacturadoService,
+            PromocionService promocionService,
+            EmpresaRespository empresaRespository,
+            ClienteRepository clienteRepository){
         this.repository = repository;
         this.sucursalInsumoRepository = stockRepository;
         this.articuloInsumoRepository = articuloInsumoRepository;
@@ -49,6 +57,8 @@ public class SucursalEmpresaService extends BajaLogicaService {
         this.articuloInsumoService = articuloInsumoService;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.promocionService = promocionService;
+        this.clienteRepository = clienteRepository;
+        this.empresaRespository = empresaRespository;
     }
 
     public SucursalEmpresa guardar(SucursalEmpresa sucursal) {
@@ -193,5 +203,10 @@ public class SucursalEmpresaService extends BajaLogicaService {
     public SucursalEmpresa editarSucursal(SucursalEmpresa sucursal) {
         if (sucursal.getId() == null) throw new RuntimeException("no es posible editar una sucursal sin id");
         return repository.save(sucursal);
+    }
+
+    public List<SucursalEmpresa> findByCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(()-> new RuntimeException("Cliente no encontrado con id: " + id));
+        return repository.findByDomicilio_Localidad_Provincia(cliente.getDomicilio().getLocalidad().getProvincia());
     }
 }
