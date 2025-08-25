@@ -13,7 +13,6 @@ import BuenSabor.model.SucursalEmpresa;
 import BuenSabor.model.SucursalInsumo;
 import BuenSabor.repository.ArticuloInsumoRepository;
 import BuenSabor.repository.ClienteRepository;
-import BuenSabor.repository.empresa.EmpresaRespository;
 import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalInsumoRepository;
 import BuenSabor.service.ArticuloManufacturadoService;
@@ -38,7 +37,6 @@ public class SucursalEmpresaService extends BajaLogicaService {
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final PromocionService promocionService;
     private final ClienteRepository clienteRepository;
-    private final EmpresaRespository empresaRespository;
 
     public SucursalEmpresaService (
             SucursalEmpresaRepository repository,
@@ -48,7 +46,6 @@ public class SucursalEmpresaService extends BajaLogicaService {
             ArticuloInsumoService articuloInsumoService,
             ArticuloManufacturadoService articuloManufacturadoService,
             PromocionService promocionService,
-            EmpresaRespository empresaRespository,
             ClienteRepository clienteRepository){
         this.repository = repository;
         this.sucursalInsumoRepository = stockRepository;
@@ -58,7 +55,6 @@ public class SucursalEmpresaService extends BajaLogicaService {
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.promocionService = promocionService;
         this.clienteRepository = clienteRepository;
-        this.empresaRespository = empresaRespository;
     }
 
     public SucursalEmpresa guardar(SucursalEmpresa sucursal) {
