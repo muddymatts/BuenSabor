@@ -2,7 +2,10 @@ package BuenSabor.service.mercadoPago;
 
 import BuenSabor.dto.mercadoPago.paymentResponse.PaymentResponseDTO;
 import BuenSabor.model.DatosMercadoPago;
+import BuenSabor.model.PedidoVenta;
 import BuenSabor.repository.DatosMercadoPagoRepository;
+import BuenSabor.repository.PedidoVentaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -19,10 +22,12 @@ import java.time.format.DateTimeParseException;
 public class DatosMercadoPagoService {
 
     private final DatosMercadoPagoRepository repository;
+    private final PedidoVentaRepository pedidoVentaRepository;
 
     @Transactional
     public void guardarDesdeRespuesta(PaymentResponseDTO dto) {
         Long paymentId = dto.getId();
+        Long pedidoVentaId = Long.parseLong(dto.getExternalReference());
 
         DatosMercadoPago datos = paymentId != null
                 ? repository.findByPaymentId(paymentId).orElseGet(DatosMercadoPago::new)
@@ -36,6 +41,17 @@ public class DatosMercadoPagoService {
         datos.setPaymentMethodId(dto.getPaymentMethodId());
         datos.setStatus(dto.getStatus());
         datos.setStatusDetail(dto.getStatusDetail());
+
+        PedidoVenta pedido = pedidoVentaRepository.findById(pedidoVentaId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No se encontró PedidoVenta con id " + pedidoVentaId));
+        datos.setPedidoVenta(pedido);
+
+//        TODO: para cuando este implementada facturacion
+        //        FacturaVenta factura = facturaVentaRepository.findById(facturaVentaId)
+//                .orElseThrow(() -> new EntityNotFoundException(
+//                        "No se encontró FacturaVenta con id " + facturaVentaId));
+//        datos.setFacturaVenta(factura);
 
         try {
             repository.save(datos);

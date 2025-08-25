@@ -29,5 +29,8 @@ public class PaymentResponseDTO {
 
     @JsonProperty("status_detail")
     private String statusDetail;
+
+    @JsonProperty("factura_venta_id")
+    private String externalReference;
 }
 

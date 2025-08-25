@@ -108,7 +108,8 @@ public class MercadoPagoService {
                 payment.getPaymentTypeId(),
                 payment.getPaymentMethodId(),
                 payment.getStatus(),
-                payment.getStatusDetail()
+                payment.getStatusDetail(),
+                payment.getExternalReference()
         );
     }
 
@@ -136,7 +137,7 @@ public class MercadoPagoService {
         return null;
     }
 
-    private Payment getPaymentById(Long paymentId) throws Exception {
+    public Payment getPaymentById(Long paymentId) throws Exception {
         PaymentClient paymentClient = new PaymentClient();
         return paymentClient.get(paymentId);
     }
