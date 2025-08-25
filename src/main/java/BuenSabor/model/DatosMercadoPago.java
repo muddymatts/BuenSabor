@@ -7,7 +7,7 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,14 +17,19 @@ public class DatosMercadoPago extends EntityApp {
     @Column(name = "payment_id", unique = true)
     private Long paymentId;
 
+    @Column(name = "date_created")
+    private LocalDateTime dateCreated;
 
-    private Date date_created;
-    private Date date_approved;
-    private Date date_last_update;
-    private String payment_type_id;
-    private String payment_method_id;
+    @Column(name = "date_approved")
+    private LocalDateTime dateApproved;
+
+    @Column(name = "date_last_update")
+    private LocalDateTime dateLastUpdate;
+
+    private String paymentTypeId;
+    private String paymentMethodId;
     private String status;
-    private String status_detail;
+    private String statusDetail;
 
     @OneToOne
     @JoinColumn(name = "factura_venta_id")
