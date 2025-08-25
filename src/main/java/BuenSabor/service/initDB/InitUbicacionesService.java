@@ -49,6 +49,8 @@ public class InitUbicacionesService {
     public void setupPaises() {
         try {
             if (paisRepository.count() == 0) {
+                logger.info(">>> Insertando paises...");
+
                 Pais argentina = new Pais();
                 argentina.setNombre("Argentina");
 
@@ -68,10 +70,14 @@ public class InitUbicacionesService {
 
     @Transactional
     public void setupProvincias() {
+
         try {
             if (provinciaRepository.count() == 0) {
+                logger.info(">>> Insertando provincias...");
+
                 List<Provincia> provincias = loadProvinciasFromJson();
                 provinciaRepository.saveAll(provincias);
+                logger.info("Provincias cargadas exitosamente.");
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error al inicializar los datos de provincias.", e);
@@ -80,10 +86,13 @@ public class InitUbicacionesService {
 
     @Transactional
     public void setupLocalidades() {
+        logger.info(">>> Insertando localidades...");
+
         try {
             setupLocalidadesPorPais(1, "argentina");
             setupLocalidadesPorPais(2, "chile");
             setupLocalidadesPorPais(3, "uruguay");
+            logger.info("Localidades cargadas exitosamente.");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error al inicializar los datos de localidades.", e);
         }
