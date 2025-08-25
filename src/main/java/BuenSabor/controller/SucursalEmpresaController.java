@@ -27,6 +27,11 @@ public class SucursalEmpresaController {
         return ResponseEntity.ok(service.findAll());
     }
 
+    @GetMapping("/cliente/{id}")
+    public ResponseEntity<List<SucursalEmpresa>> getSucursalesCliente(@PathVariable Long id){
+        return ResponseEntity.ok(service.findByCliente(id));
+    }
+
     @PostMapping
     public ResponseEntity<SucursalEmpresa> create(@RequestBody SucursalEmpresa sucursal){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(sucursal));
