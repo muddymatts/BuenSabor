@@ -8,9 +8,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 
 @Service
@@ -28,13 +29,13 @@ public class DatosMercadoPagoService {
                 : new DatosMercadoPago();
 
         datos.setPaymentId(paymentId);
-        datos.setDate_created(parseDate(dto.getDateCreated()));
-        datos.setDate_approved(parseDate(dto.getDateApproved()));
-        datos.setDate_last_update(parseDate(dto.getDateLastUpdated()));
-        datos.setPayment_type_id(dto.getPaymentTypeId());
-        datos.setPayment_method_id(dto.getPaymentMethodId());
+        datos.setDateCreated(parseToLocalDateTime(dto.getDateCreated()));
+        datos.setDateApproved(parseToLocalDateTime(dto.getDateApproved()));
+        datos.setDateLastUpdate(parseToLocalDateTime(dto.getDateLastUpdated()));
+        datos.setPaymentTypeId(dto.getPaymentTypeId());
+        datos.setPaymentMethodId(dto.getPaymentMethodId());
         datos.setStatus(dto.getStatus());
-        datos.setStatus_detail(dto.getStatusDetail());
+        datos.setStatusDetail(dto.getStatusDetail());
 
         try {
             repository.save(datos);
@@ -47,10 +48,13 @@ public class DatosMercadoPagoService {
         }
     }
 
-    private Date parseDate(String value) {
+    private LocalDateTime parseToLocalDateTime(String value) {
         if (value == null || value.isBlank()) return null;
         try {
-            return Date.from(OffsetDateTime.parse(value).toInstant());
+            OffsetDateTime odt = OffsetDateTime.parse(value);
+            return odt.toInstant()
+                    .atZone(ZoneId.of("UTC"))
+                    .toLocalDateTime();
         } catch (DateTimeParseException e) {
             return null;
         }
