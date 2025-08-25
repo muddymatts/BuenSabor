@@ -25,9 +25,6 @@ import java.util.logging.Logger;
 @Service
 public class InitUbicacionesService {
 
-    private static final String FIELD_NOMBRE = "nombre";
-    private static final String FIELD_PAIS_ID = "pais_id";
-
     private final PaisRepository paisRepository;
     private final ProvinciaRepository provinciaRepository;
     private final LocalidadRepository localidadRepository;
@@ -70,7 +67,6 @@ public class InitUbicacionesService {
 
     @Transactional
     public void setupProvincias() {
-
         try {
             if (provinciaRepository.count() == 0) {
                 logger.info(">>> Insertando provincias...");
@@ -86,8 +82,6 @@ public class InitUbicacionesService {
 
     @Transactional
     public void setupLocalidades() {
-        logger.info(">>> Insertando localidades...");
-
         try {
             setupLocalidadesPorPais(1, "argentina");
             setupLocalidadesPorPais(2, "chile");
@@ -120,9 +114,9 @@ public class InitUbicacionesService {
 
     private Provincia mapToProvincia(Map<String, Object> provinciaJson) {
         Provincia provincia = new Provincia();
-        provincia.setNombre((String) provinciaJson.get(FIELD_NOMBRE));
+        provincia.setNombre((String) provinciaJson.get("nombre"));
 
-        int paisId = (Integer) provinciaJson.get(FIELD_PAIS_ID);
+        int paisId = (Integer) provinciaJson.get("pais_id");
         Pais pais = paisRepository.findById(paisId)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontró el país con ID: " + paisId));
         provincia.setPais(pais);
