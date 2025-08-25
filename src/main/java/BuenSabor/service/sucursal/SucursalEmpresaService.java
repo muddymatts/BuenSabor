@@ -14,6 +14,7 @@ import BuenSabor.repository.ArticuloInsumoRepository;
 import BuenSabor.repository.sucursal.SucursalEmpresaRepository;
 import BuenSabor.repository.sucursal.SucursalInsumoRepository;
 import BuenSabor.service.ArticuloManufacturadoService;
+import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import BuenSabor.service.promocion.PromocionService;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class SucursalEmpresaService {
+public class SucursalEmpresaService extends BajaLogicaService {
 
     private final SucursalEmpresaRepository repository;
     private final SucursalInsumoRepository sucursalInsumoRepository;
@@ -187,5 +188,10 @@ public class SucursalEmpresaService {
 
     public List<SucursalEmpresa> findAll() {
         return repository.findAll();
+    }
+
+    public SucursalEmpresa editarSucursal(SucursalEmpresa sucursal) {
+        if (sucursal.getId() == null) throw new RuntimeException("no es posible editar una sucursal sin id");
+        return repository.save(sucursal);
     }
 }

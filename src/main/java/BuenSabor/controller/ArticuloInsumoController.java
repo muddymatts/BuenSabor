@@ -21,7 +21,7 @@ public class ArticuloInsumoController {
     }
 
     @PostMapping
-    public ResponseEntity<ArticuloInsumo> crear(@RequestBody ArticuloInsumo insumo) {
+    public ResponseEntity<ArticuloInsumo> create(@RequestBody ArticuloInsumo insumo) {
         ArticuloInsumo nuevoInsumo = service.crear(insumo);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoInsumo);
     }
@@ -30,12 +30,6 @@ public class ArticuloInsumoController {
     public ResponseEntity<List<ArticuloInsumoDTO>> getInsumos(){
         return ResponseEntity.ok().body(service.getInsumosDTO());
     }
-    /*
-    @GetMapping
-    public List<ArticuloInsumo> listarTodas() {
-        return service.listarTodas();
-    }
-    */
 
     @GetMapping("/{id}")
     public ResponseEntity<ArticuloInsumo> getArticuloInsumo(@PathVariable Long id) {
