@@ -3,10 +3,7 @@ package BuenSabor.config;
 import BuenSabor.enums.RolEnum;
 import BuenSabor.model.*;
 import BuenSabor.repository.*;
-import BuenSabor.service.initDB.InitArticulosService;
-import BuenSabor.service.initDB.InitClientesService;
-import BuenSabor.service.initDB.InitEmpresasService;
-import BuenSabor.service.initDB.InitSucursalesService;
+import BuenSabor.service.initDB.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +30,7 @@ public class DataInitializer {
     private final InitClientesService initClientesService;
     private final InitEmpresasService initEmpresasService;
     private final InitSucursalesService initSucursalesService;
+    private final InitDomiciliosService initDomiciliosService;
 
     private static final Logger logger = Logger.getLogger(DataInitializer.class.getName());
 
@@ -43,11 +41,13 @@ public class DataInitializer {
     public DataInitializer(InitArticulosService initArticulosService,
                            InitClientesService initClientesService,
                            InitEmpresasService initEmpresasService,
-                           InitSucursalesService initSucursalesService) {
+                           InitSucursalesService initSucursalesService,
+                           InitDomiciliosService initDomiciliosService) {
         this.initArticulosService = initArticulosService;
         this.initClientesService = initClientesService;
         this.initEmpresasService = initEmpresasService;
         this.initSucursalesService = initSucursalesService;
+        this.initDomiciliosService = initDomiciliosService;
     }
 
     @Bean
@@ -165,7 +165,7 @@ public class DataInitializer {
     CommandLineRunner initProvincias(ProvinciaRepository provinciaRepository, PaisRepository paisRepository, ResourceLoader resourceLoader) {
         return args -> {
             if (provinciaRepository.count() == 0) {
-                Resource resource = resourceLoader.getResource("classpath:data/provincias.json");
+                Resource resource = resourceLoader.getResource("classpath:data/ubicaciones/provincias.json");
                 ObjectMapper objectMapper = new ObjectMapper();
                 TypeReference<List<Map<String, Object>>> typeReference = new TypeReference<>() {
                 };
@@ -203,7 +203,7 @@ public class DataInitializer {
                         .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
 
                 if (!localidadesArgentinaCargadas) {
-                    InputStream is = getClass().getResourceAsStream("/data/localidades_argentina.json");
+                    InputStream is = getClass().getResourceAsStream("/data/ubicaciones/localidades_argentina.json");
 
                     if (is == null) {
                         throw new RuntimeException("Archivo 'localidades_argentina.json' no encontrado");
@@ -251,7 +251,7 @@ public class DataInitializer {
                         .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
 
                 if (!localidadesChileCargadas) {
-                    InputStream is = getClass().getResourceAsStream("/data/localidades_chile.json");
+                    InputStream is = getClass().getResourceAsStream("/data/ubicaciones/localidades_chile.json");
 
                     if (is == null) {
                         throw new RuntimeException("Archivo 'localidades_chile.json' no encontrado");
@@ -305,7 +305,7 @@ public class DataInitializer {
                         .anyMatch(provincia -> !localidadRepository.findByProvinciaId(provincia.getId()).isEmpty());
 
                 if (!localidadesUruguayCargadas) {
-                    InputStream is = getClass().getResourceAsStream("/data/localidades_uruguay.json");
+                    InputStream is = getClass().getResourceAsStream("/data/ubicaciones/localidades_uruguay.json");
 
                     if (is == null) {
                         throw new RuntimeException("Archivo 'localidades_uruguay.json' no encontrado");
@@ -347,5 +347,11 @@ public class DataInitializer {
                 logger.log(Level.SEVERE, "Error al inicializar los datos de localidades de Uruguay.", e);
             }
         };
+    }
+
+    @Bean
+    @Order(6)
+    CommandLineRunner initDomicilios() {
+        return args -> this.initDomiciliosService.setupDomicilios();
     }
 }
