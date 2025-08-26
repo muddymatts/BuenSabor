@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PreferencePedidoDTO {
-    private BigDecimal montoCarrito;
+    private BigDecimal shipment;
     private List<PreferenceItemDTO> items;
     private String idPedido;
 }

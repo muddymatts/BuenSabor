@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.client.preference.*;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
@@ -69,8 +66,14 @@ public class MercadoPagoService {
                 items.add(itemRequest);
             }
 
+            PreferenceShipmentsRequest shipment = PreferenceShipmentsRequest.builder()
+                    .mode("not_specified")
+                    .cost(pedidoDto.getShipment())
+                    .build();
+
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
+                    .shipments(shipment)
                     .backUrls(backUrls)
                     .autoReturn("approved")
                     .notificationUrl(tunnelUrlCompleta)
