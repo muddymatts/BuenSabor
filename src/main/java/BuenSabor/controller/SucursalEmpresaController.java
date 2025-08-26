@@ -26,6 +26,12 @@ public class SucursalEmpresaController {
     public ResponseEntity<List<SucursalEmpresa>> getSucursales(){
         return ResponseEntity.ok(service.findAll());
     }
+
+    @GetMapping("/cliente/{id}")
+    public ResponseEntity<List<SucursalEmpresa>> getSucursalesCliente(@PathVariable Long id){
+        return ResponseEntity.ok(service.findByCliente(id));
+    }
+
     @PostMapping
     public ResponseEntity<SucursalEmpresa> create(@RequestBody SucursalEmpresa sucursal){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(sucursal));
@@ -34,6 +40,23 @@ public class SucursalEmpresaController {
     @GetMapping("/{id}")
     public ResponseEntity<SucursalEmpresa> getSucursal (@PathVariable Long id){
         return ResponseEntity.ok(service.getSucursal(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SucursalEmpresa> bajaSucursal(@PathVariable Long id){
+        service.darDeBaja(SucursalEmpresa.class, id);
+        return ResponseEntity.ok(service.getSucursal(id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<SucursalEmpresa> reestablecerSucursal(@PathVariable Long id){
+        service.reestablecer(SucursalEmpresa.class, id);
+        return ResponseEntity.ok(service.getSucursal(id));
+    }
+
+    @PutMapping()
+    public ResponseEntity<SucursalEmpresa> setSucursal(@RequestBody SucursalEmpresa sucursal){
+        return ResponseEntity.ok(service.editarSucursal(sucursal));
     }
 
     @GetMapping("/{id}/stock")
