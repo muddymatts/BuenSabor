@@ -47,7 +47,7 @@ public class MercadoPagoService {
             // TODO: redireccionar al nuevo componente de estado del pedido una vez creado
             PreferenceBackUrlsRequest backUrls =
                     PreferenceBackUrlsRequest.builder()
-                            .success("https://localhost:5173/productos")
+                            .success("https://localhost:5173/estado-pedido")
                             .pending("https://localhost:5173/productos")
                             .failure("https://localhost:5173/productos")
                             .build();
