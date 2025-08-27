@@ -41,16 +41,18 @@ public class ArticuloManufacturadoController {
         return ResponseEntity.ok().body(articuloManufacturadoService.getArticulosManufacturadoDTO());
     }
 
+    /*
     @GetMapping("/listar")
     public List<ArticuloManufacturado> listar() {
         return articuloManufacturadoService.findByFechaBajaIsNull();
     }
-  /*
-    @GetMapping()
+  */
+
+    @GetMapping("/listar")
     public List<ArticuloManufacturado> mostrarTodos() {
         return articuloManufacturadoService.findAll();
     }
-*/
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarArticuloManufacturado(@PathVariable Long id) {
         try {
