@@ -4,6 +4,7 @@ import BuenSabor.service.initDB.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 public class DataInitializer {
@@ -33,6 +34,7 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(1)
     CommandLineRunner initUbicaciones() {
         return args -> {
             initUbicacionesService.setupPaises();
@@ -42,16 +44,19 @@ public class DataInitializer {
     }
 
     @Bean
+    @Order(2)
     CommandLineRunner initDomicilios() {
         return args -> this.initDomiciliosService.setupDomicilios();
     }
 
     @Bean
+    @Order(3)
     CommandLineRunner initEmpresas() {
         return args -> this.initEmpresasService.setupEmpresas();
     }
 
     @Bean
+    @Order(4)
     CommandLineRunner initSucursales() {
         return args -> this.initSucursalesService.setupSucursales();
     }
