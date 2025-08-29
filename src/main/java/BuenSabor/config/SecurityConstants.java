@@ -7,6 +7,7 @@ public class SecurityConstants {
             "/uploads/images/**",
             "/api/paises/**",
             "/api/provincias/**",
-            "/api/localidades/**"
+            "/api/localidades/**",
+            "/api/mercadopago/webhook"
     };
 }

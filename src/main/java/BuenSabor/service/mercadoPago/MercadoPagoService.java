@@ -1,0 +1,153 @@
+package BuenSabor.service.mercadoPago;
+
+import BuenSabor.config.LocalTunnelManager;
+import BuenSabor.dto.mercadoPago.paymentResponse.PaymentResponseDTO;
+import BuenSabor.dto.mercadoPago.preferenceMp.PreferenceIdDTO;
+import BuenSabor.dto.mercadoPago.preferenceMp.PreferenceItemDTO;
+import BuenSabor.dto.mercadoPago.preferenceMp.PreferencePedidoDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.client.preference.*;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.payment.Payment;
+import com.mercadopago.resources.preference.Preference;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@Service
+public class MercadoPagoService {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final LocalTunnelManager localTunnelManager;
+    private static final Logger logger = Logger.getLogger(MercadoPagoService.class.getName());
+    Dotenv dotenv = Dotenv.load();
+
+    public MercadoPagoService(LocalTunnelManager localTunnelManager) {
+        this.localTunnelManager = localTunnelManager;
+        String accessToken = dotenv.get("PROD_ACCESS_TOKEN");
+        MercadoPagoConfig.setAccessToken(accessToken);
+    }
+
+    public PreferenceIdDTO solicitarIdPreferencia(PreferencePedidoDTO pedidoDto) throws MPException, MPApiException {
+        Preference preference;
+        String tunnelUrl = localTunnelManager.getLocalTunnelUrl();
+        String tunnelUrlCompleta = tunnelUrl + "/api/mercadopago/webhook";
+
+        try {
+            List<PreferenceItemRequest> items = new ArrayList<>();
+
+            PreferenceBackUrlsRequest backUrls =
+                    PreferenceBackUrlsRequest.builder()
+                            .success("https://localhost:5173/estado-pedido")
+                            .pending("https://localhost:5173/estado-pedido")
+                            .failure("https://localhost:5173/productos")
+                            .build();
+
+            for (PreferenceItemDTO dto : pedidoDto.getItems()) {
+                PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                        .id(dto.getId())
+                        .title(dto.getTitle())
+                        .description(dto.getDescription())
+                        .pictureUrl(dto.getPictureUrl())
+                        .categoryId(dto.getCategoryId())
+                        .quantity(dto.getQuantity())
+                        .currencyId(dto.getCurrencyId())
+                        .unitPrice(dto.getUnitPrice())
+                        .build();
+                items.add(itemRequest);
+            }
+
+            PreferenceShipmentsRequest shipment = PreferenceShipmentsRequest.builder()
+                    .mode("not_specified")
+                    .cost(pedidoDto.getShipment())
+                    .build();
+
+            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                    .items(items)
+                    .shipments(shipment)
+                    .backUrls(backUrls)
+                    .autoReturn("approved")
+                    .notificationUrl(tunnelUrlCompleta)
+                    .externalReference(pedidoDto.getIdPedido())
+                    .build();
+
+            PreferenceClient client = new PreferenceClient();
+            preference = client.create(preferenceRequest);
+
+        } catch (MPException | MPApiException e) {
+            logger.log(Level.SEVERE, "Error al crear la preferencia en Mercado Pago", e);
+            throw e;
+        }
+
+        return toDto(preference);
+    }
+
+    public PaymentResponseDTO processWebhook(String body) throws Exception {
+        System.out.println("body " + body);
+        JsonNode root = mapper.readTree(body);
+
+        if (!isFinalPaymentWebhook(root)) {
+            System.out.println("Webhook ignorado: no es un pago final");
+            return null;
+        }
+
+        String paymentIdStr = extractPaymentId(root);
+
+        if (paymentIdStr == null || paymentIdStr.isBlank()) {
+            throw new IllegalArgumentException("No se encontró paymentId en el webhook: " + body);
+        }
+
+        Long paymentId = Long.parseLong(paymentIdStr);
+
+        Payment payment = getPaymentById(paymentId);
+
+        return new PaymentResponseDTO(
+                payment.getId(),
+                payment.getDateCreated() != null ? payment.getDateCreated().toString() : null,
+                payment.getDateApproved() != null ? payment.getDateApproved().toString() : null,
+                payment.getDateLastUpdated() != null ? payment.getDateLastUpdated().toString() : null,
+                payment.getPaymentTypeId(),
+                payment.getPaymentMethodId(),
+                payment.getStatus(),
+                payment.getStatusDetail(),
+                payment.getExternalReference()
+        );
+    }
+
+    private PreferenceIdDTO toDto(Preference preference) {
+        if (preference == null) {
+            return null;
+        }
+
+        return new PreferenceIdDTO(
+                preference.getId(),
+                preference.getInitPoint()
+        );
+    }
+
+    private boolean isFinalPaymentWebhook(JsonNode root) {
+        return root.has("type") && "payment".equals(root.path("type").asText())
+                && root.has("action") && "payment.created".equals(root.path("action").asText())
+                && root.has("data") && root.path("data").has("id");
+    }
+
+    private String extractPaymentId(JsonNode root) {
+        if (root.has("data") && root.path("data").has("id")) {
+            return root.path("data").path("id").asText();
+        }
+        return null;
+    }
+
+    public Payment getPaymentById(Long paymentId) throws Exception {
+        PaymentClient paymentClient = new PaymentClient();
+        return paymentClient.get(paymentId);
+    }
+}

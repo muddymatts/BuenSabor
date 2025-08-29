@@ -1,0 +1,23 @@
+[
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "cuil": 30123456787,
+    "nombre": "Empresa 1",
+    "razon_social": "Empresa 1 S.A."
+  },
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "cuil": 30321654987,
+    "nombre": "Empresa 2",
+    "razon_social": "Empresa 2 S.A."
+  },
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "cuil": 30876543217,
+    "nombre": "Empresa 3",
+    "razon_social": "Empresa 3 S.A."
+  }
+]

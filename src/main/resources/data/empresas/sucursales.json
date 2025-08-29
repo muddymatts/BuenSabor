@@ -1,0 +1,29 @@
+[
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "horario_apertura": "20:00",
+    "horario_cierre": "00:00",
+    "nombre": "Sucursal 1",
+    "domicilio_id": 8,
+    "empresa_id": 1
+  },
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "horario_apertura": "20:00",
+    "horario_cierre": "00:30",
+    "nombre": "Sucursal 2",
+    "domicilio_id": 10,
+    "empresa_id": 2
+  },
+  {
+    "fecha_alta": "2025-08-23",
+    "fecha_baja": null,
+    "horario_apertura": "21:00",
+    "horario_cierre": "01:00",
+    "nombre": "Sucursal 3",
+    "domicilio_id": 9,
+    "empresa_id": 3
+  }
+]
