@@ -58,16 +58,29 @@ public class LocalTunnelManager {
         System.out.println("Starting LocalTunnel on port " + PORT + "...");
 
         Dotenv dotenv = Dotenv.load();
-        String ltExecutable = dotenv.get("LT_PATH");
+        String ltExecutable = dotenv.get("LT_PATH"); // debe existir la variable LT_PATH en el archivo .env que apunte hacia "lt.cmd"
+        String customSubdomain = dotenv.get("LT_SUBDOMAIN");
 
         if (ltExecutable == null || ltExecutable.isBlank()) {
             ltExecutable = "lt";
         }
 
-        ProcessBuilder pb = new ProcessBuilder(
-                ltExecutable,
-                "--port", String.valueOf(PORT)
-        );
+        ProcessBuilder pb;
+
+        if (customSubdomain != null && !customSubdomain.isBlank()) {
+            pb = new ProcessBuilder(
+                    ltExecutable,
+                    "--port", String.valueOf(PORT),
+                    "--subdomain", customSubdomain
+            );
+            System.out.println("Using custom subdomain: " + customSubdomain);
+        } else {
+            pb = new ProcessBuilder(
+                    ltExecutable,
+                    "--port", String.valueOf(PORT)
+            );
+            System.out.println("No subdomain specified. Using random generated one.");
+        }
 
         pb.redirectErrorStream(true);
         Process localTunnelProcess = pb.start();
