@@ -47,12 +47,6 @@ public class DatosMercadoPagoService {
                         "No se encontró PedidoVenta con id " + pedidoVentaId));
         datos.setPedidoVenta(pedido);
 
-//        TODO: para cuando este implementada facturacion
-        //        FacturaVenta factura = facturaVentaRepository.findById(facturaVentaId)
-//                .orElseThrow(() -> new EntityNotFoundException(
-//                        "No se encontró FacturaVenta con id " + facturaVentaId));
-//        datos.setFacturaVenta(factura);
-
         try {
             repository.save(datos);
         } catch (DataIntegrityViolationException e) {

@@ -44,11 +44,10 @@ public class MercadoPagoService {
         try {
             List<PreferenceItemRequest> items = new ArrayList<>();
 
-            // TODO: redireccionar al nuevo componente de estado del pedido una vez creado
             PreferenceBackUrlsRequest backUrls =
                     PreferenceBackUrlsRequest.builder()
                             .success("https://localhost:5173/estado-pedido")
-                            .pending("https://localhost:5173/productos")
+                            .pending("https://localhost:5173/estado-pedido")
                             .failure("https://localhost:5173/productos")
                             .build();
 
@@ -91,9 +90,15 @@ public class MercadoPagoService {
         return toDto(preference);
     }
 
-    // TODO: modificar para que genere los datos cuando tenga la transaccion completa, ya que recibe varias peticiones
     public PaymentResponseDTO processWebhook(String body) throws Exception {
+        System.out.println("body " + body);
         JsonNode root = mapper.readTree(body);
+
+        if (!isFinalPaymentWebhook(root)) {
+            System.out.println("Webhook ignorado: no es un pago final");
+            return null;
+        }
+
         String paymentIdStr = extractPaymentId(root);
 
         if (paymentIdStr == null || paymentIdStr.isBlank()) {
@@ -101,6 +106,7 @@ public class MercadoPagoService {
         }
 
         Long paymentId = Long.parseLong(paymentIdStr);
+
         Payment payment = getPaymentById(paymentId);
 
         return new PaymentResponseDTO(
@@ -127,16 +133,16 @@ public class MercadoPagoService {
         );
     }
 
+    private boolean isFinalPaymentWebhook(JsonNode root) {
+        return root.has("type") && "payment".equals(root.path("type").asText())
+                && root.has("action") && "payment.created".equals(root.path("action").asText())
+                && root.has("data") && root.path("data").has("id");
+    }
+
     private String extractPaymentId(JsonNode root) {
         if (root.has("data") && root.path("data").has("id")) {
             return root.path("data").path("id").asText();
         }
-
-        if (root.has("resource") && "payment".equals(root.path("topic").asText())) {
-            return root.path("resource").asText();
-        }
-
-        root.path("topic").asText();
         return null;
     }
 
