@@ -1,25 +1,35 @@
 package BuenSabor.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 public class DatosMercadoPago extends EntityApp {
 
-    private Date date_created;
-    private Date date_approved;
-    private Date date_last_update;
-    private Integer payment_type_id;
-    private Integer payment_method_id;
+    @Column(name = "payment_id", unique = true)
+    private Long paymentId;
+
+    @Column(name = "date_created")
+    private LocalDateTime dateCreated;
+
+    @Column(name = "date_approved")
+    private LocalDateTime dateApproved;
+
+    @Column(name = "date_last_update")
+    private LocalDateTime dateLastUpdate;
+
+    private String paymentTypeId;
+    private String paymentMethodId;
     private String status;
-    private String status_detail;
+    private String statusDetail;
 
     @OneToOne
     @JoinColumn(name = "factura_venta_id")

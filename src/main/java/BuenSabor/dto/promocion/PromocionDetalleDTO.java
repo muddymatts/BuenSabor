@@ -1,6 +1,6 @@
 package BuenSabor.dto.promocion;
 
-import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoResumenDTO;
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
 import BuenSabor.dto.articuloInsumo.ArticuloInsumoDTO;
 import lombok.Data;
 
@@ -9,5 +9,5 @@ public class PromocionDetalleDTO {
 
     private Integer cantidad;
     private ArticuloInsumoDTO articuloInsumo;
-    private ArticuloManufacturadoResumenDTO articuloManufacturado;
+    private ArticuloManufacturadoDTO articuloManufacturado;
 }

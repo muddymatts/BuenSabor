@@ -1,5 +1,6 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.service.ArticuloManufacturadoService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,14 +21,14 @@ public class ArticuloManufacturadoController {
     }
 
     @PostMapping
-    public  ResponseEntity<ArticuloManufacturado> crear(@RequestBody ArticuloManufacturado articulo) {
-        ArticuloManufacturado nuevo = articuloManufacturadoService.crear(articulo);
+    public  ResponseEntity<ArticuloManufacturado> create (@RequestBody ArticuloManufacturado articulo) {
+        ArticuloManufacturado nuevo = articuloManufacturadoService.guardar(articulo);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    @GetMapping("detalle/{id}")
-    public ResponseEntity<ArticuloManufacturado> buscarPorId(@PathVariable Long id) {
-        ArticuloManufacturado busqueda = articuloManufacturadoService.buscarPorId(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticuloManufacturado> getArticuloManufacturado(@PathVariable Long id) {
+        ArticuloManufacturado busqueda = articuloManufacturadoService.getArticuloManufacturado(id);
         if (busqueda != null) {
             return ResponseEntity.ok(busqueda);
         } else {
@@ -35,12 +36,19 @@ public class ArticuloManufacturadoController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<ArticuloManufacturadoDTO>> getArticulosManufacturados() {
+        return ResponseEntity.ok().body(articuloManufacturadoService.getArticulosManufacturadoDTO());
+    }
+
+    /*
     @GetMapping("/listar")
     public List<ArticuloManufacturado> listar() {
         return articuloManufacturadoService.findByFechaBajaIsNull();
     }
-  
-    @GetMapping("/mostrarTodos")
+  */
+
+    @GetMapping("/listar")
     public List<ArticuloManufacturado> mostrarTodos() {
         return articuloManufacturadoService.findAll();
     }

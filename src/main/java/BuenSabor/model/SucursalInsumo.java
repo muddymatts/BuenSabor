@@ -7,21 +7,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class SucursalInsumo {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"sucursal_id", "insumo_id"}))
+public class SucursalInsumo extends EntityBean {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
-    private String stockActual;
-    private String stockMinimo;
-    private String stockMaximo;
+    private Long stockActual;
+    private Long stockMinimo;
+    private Long stockMaximo;
 
     // Relación N-1 con SucursalEmpresa
     @ManyToOne
-    @JoinColumn(name = "sucursal_id")
+    @JoinColumn(name = "sucursal_id", nullable = false)
     private SucursalEmpresa sucursal;
 
     @ManyToOne
-    @JoinColumn(name = "insumo_id")
+    @JoinColumn(name = "insumo_id", nullable = false)
     private ArticuloInsumo insumo;
 }

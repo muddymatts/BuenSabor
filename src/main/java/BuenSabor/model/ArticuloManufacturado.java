@@ -39,6 +39,9 @@ public class ArticuloManufacturado extends EntityApp {
     @OneToMany(mappedBy = "manufacturado", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticuloManufacturadoDetalle> detalles;
 
+    @OneToMany(mappedBy = "articuloManufacturado", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImagenManufacturado> imagenes;
+
     @JsonProperty("categoria")
     public String getCategoriaId() {
         return (categoria != null) ? categoria.getDenominacion() : null;

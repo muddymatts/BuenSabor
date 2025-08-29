@@ -1,0 +1,122 @@
+[
+  {
+    "calle": "Avenida San Martín",
+    "cp": 5500,
+    "numero": 1000,
+    "localidad_id": 352
+  },
+  {
+    "calle": "Las Heras",
+    "cp": 5539,
+    "numero": 1100,
+    "localidad_id": 129
+  },
+  {
+    "calle": "Rivadavia",
+    "cp": 5501,
+    "numero": 1200,
+    "localidad_id": 356
+  },
+  {
+    "calle": "Belgrano",
+    "cp": 4000,
+    "numero": 0,
+    "localidad_id": 129
+  },
+  {
+    "calle": "Santa Fe",
+    "cp": 5000,
+    "numero": 0,
+    "localidad_id": 90
+  },
+  {
+    "calle": "Corrientes",
+    "cp": 6000,
+    "numero": 0,
+    "localidad_id": 300
+  },
+  {
+    "calle": "Zona Norte",
+    "cp": 7000,
+    "numero": 0,
+    "localidad_id": 392
+  },
+  {
+    "calle": "9 de Julio",
+    "cp": 8000,
+    "numero": 0,
+    "localidad_id": 15
+  },
+  {
+    "calle": "Avellaneda",
+    "cp": 9000,
+    "numero": 0,
+    "localidad_id": 50
+  },
+  {
+    "calle": "Alvear",
+    "cp": 10000,
+    "numero": 0,
+    "localidad_id": 205
+  },
+  {
+    "calle": "Los Andes",
+    "cp": 11000,
+    "numero": 0,
+    "localidad_id": 530
+  },
+  {
+    "calle": "Maipu",
+    "cp": 12000,
+    "numero": 0,
+    "localidad_id": 672
+  },
+  {
+    "calle": "Providencia",
+    "cp": 13000,
+    "numero": 0,
+    "localidad_id": 759
+  },
+  {
+    "calle": "Concepcion",
+    "cp": 14000,
+    "numero": 0,
+    "localidad_id": 812
+  },
+  {
+    "calle": "Temuco",
+    "cp": 15000,
+    "numero": 0,
+    "localidad_id": 855
+  },
+  {
+    "calle": "Independencia",
+    "cp": 16000,
+    "numero": 0,
+    "localidad_id": 873
+  },
+  {
+    "calle": "Colonia",
+    "cp": 17000,
+    "numero": 0,
+    "localidad_id": 905
+  },
+  {
+    "calle": "Libertad",
+    "cp": 18000,
+    "numero": 0,
+    "localidad_id": 1000
+  },
+  {
+    "calle": "San Jose",
+    "cp": 19000,
+    "numero": 0,
+    "localidad_id": 1100
+  },
+  {
+    "calle": "Montevideo",
+    "cp": 20000,
+    "numero": 0,
+    "localidad_id": 1200
+  }
+]

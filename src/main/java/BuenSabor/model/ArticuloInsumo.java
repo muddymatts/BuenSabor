@@ -22,7 +22,7 @@ public class ArticuloInsumo extends EntityApp {
     // Relación N-1 con CategoriaArticulo
     @ManyToOne
     @JoinColumn(name = "categoria_articulo_insumo_id")
-    private CategoriaArticulo categoriaArticulo;
+    private CategoriaArticuloInsumo categoriaArticuloInsumo;
 
     // Relación 1-1 con ImagenInsumo
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -33,7 +33,7 @@ public class ArticuloInsumo extends EntityApp {
     @JoinColumn(name = "unidad_medida_id")
     private UnidadMedida unidadMedida;
 
-    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "insumo", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<ArticuloManufacturadoDetalle> detalles;
 

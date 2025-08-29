@@ -22,6 +22,6 @@ public class PromocionDetalle extends EntityApp {
     private ArticuloManufacturado articuloManufacturado;
 
     @ManyToOne
-    @JoinColumn(name = "promoción_id")
+    @JoinColumn(name = "promocion_id")
     private Promocion promocion;
 }

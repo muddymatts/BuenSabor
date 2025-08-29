@@ -1,9 +1,14 @@
 package BuenSabor.service;
 
+import BuenSabor.dto.promocion.PromocionDTO;
+import BuenSabor.dto.promocion.PromocionDetalleDTO;
 import BuenSabor.enums.Estado;
+import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.PedidoVentaDetalle;
 import BuenSabor.repository.PedidoVentaRepository;
+import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
+import BuenSabor.service.promocion.PromocionService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +25,18 @@ public class PedidoVentaService {
     private final BajaLogicaService bajaLogicaService;
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final ArticuloInsumoService articuloInsumoService;
+    private final PromocionService promocionService;
 
     public PedidoVentaService(
             PedidoVentaRepository repository,
             BajaLogicaService bajaLogicaService,
             ArticuloManufacturadoService articuloManufacturadoService,
-            ArticuloInsumoService articuloInsumoService) {
+            ArticuloInsumoService articuloInsumoService, PromocionService promocionService) {
         this.repository = repository;
         this.bajaLogicaService = bajaLogicaService;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.articuloInsumoService = articuloInsumoService;
+        this.promocionService = promocionService;
     }
 
     public List<PedidoVenta> listarTodas() {
@@ -39,19 +46,21 @@ public class PedidoVentaService {
     @Transactional
     public PedidoVenta crear(PedidoVenta pedido) {
 
-        //asigno hora y fecha local de pedido
-        LocalDateTime fechaHoraPedido = LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires"));
-        pedido.setFechaHoraPedido(fechaHoraPedido);
-
-        //Asigno estado inicial
-        pedido.setEstado(Estado.preparacion);
+        if(pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
+        if(pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
 
         //Crear y cargar los detalles
         if(!pedido.getDetalles().isEmpty()){
             for(PedidoVentaDetalle detalle : pedido.getDetalles()){
                 detalle.setPedido(pedido);
             }
-        }
+        } else throw new RuntimeException("El pedido debe tener al menos un detalle");
+
+        //asigno hora y fecha local de pedido
+        pedido.setFechaHoraPedido(LocalDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")));
+
+        //Asigno estado inicial
+        pedido.setEstado(Estado.pendiente);
 
         pedido.setHoraEstimadaFinalizacion(CalcularDemoraTotal(pedido));
 
@@ -64,7 +73,7 @@ public class PedidoVentaService {
         double costoTotal = 0.0;
         for(PedidoVentaDetalle detalle : pedido.getDetalles()) {
             if (detalle.getArticuloManufacturado() != null) {
-                double costo = articuloManufacturadoService.buscarPorId(detalle.getArticuloManufacturado().getId()).getPrecioCosto();
+                double costo = articuloManufacturadoService.getArticuloManufacturado(detalle.getArticuloManufacturado().getId()).getPrecioCosto();
                 costoTotal += costo * detalle.getCantidad();
             }
             if (detalle.getArticuloInsumo() != null) {
@@ -78,22 +87,26 @@ public class PedidoVentaService {
     private String CalcularDemoraTotal (PedidoVenta pedido) {
         LocalDateTime horaFinalizacion = pedido.getFechaHoraPedido();
         long demoraTotal = 0;
-        for(PedidoVentaDetalle detalle : pedido.getDetalles()){
-            if(detalle.getArticuloManufacturado() != null){
-                long demora = articuloManufacturadoService.buscarPorId(detalle.getArticuloManufacturado().getId()).getTiempoEstimado();
-                demoraTotal += demora * (long)detalle.getCantidad();
+        for(PedidoVentaDetalle detallePedido : pedido.getDetalles()){
+            if(detallePedido.getArticuloManufacturado() != null){
+                ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
+                demoraTotal += articulo.getTiempoEstimado() * (long)detallePedido.getCantidad();
+            } else if (detallePedido.getPromocion() != null) {
+                PromocionDTO promocion = promocionService.buscarPorId(detallePedido.getPromocion().getId());
+                long demoraPromocion = 0;
+                for (PromocionDetalleDTO pd : promocion.getDetalle()){
+                    if (pd.getArticuloManufacturado() == null) continue;
+                    ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(pd.getArticuloManufacturado().getId());
+                    demoraPromocion += articulo.getTiempoEstimado() * (long)pd.getCantidad();
+                }
+                demoraTotal += demoraPromocion * (long)detallePedido.getCantidad();
             }
-            //TODO agregar la demora de la "promocion"
         }
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
     }
 
     public String darDeBaja(Long id) {
-        PedidoVenta pedido = repository.getReferenceById(id);
-
-        if (pedido == null) {
-            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
-        }
+        PedidoVenta pedido = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado con id: " + id));
 
         bajaLogicaService.darDeBaja(PedidoVenta.class, id);
 

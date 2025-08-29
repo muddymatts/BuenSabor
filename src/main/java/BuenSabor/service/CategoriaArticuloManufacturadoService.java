@@ -1,6 +1,6 @@
 package BuenSabor.service;
 
-import BuenSabor.dto.CategoriaArticuloManufacturadoDTO;
+import BuenSabor.dto.articuloManufacturado.CategoriaArticuloManufacturadoDTO;
 import BuenSabor.model.CategoriaArticuloManufacturado;
 import BuenSabor.repository.CategoriaArticuloManufacturadoRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +34,9 @@ public class CategoriaArticuloManufacturadoService {
         dto.setId(categoria.getId());
         dto.setDenominacion(categoria.getDenominacion());
         return dto;
+    }
+
+    public CategoriaArticuloManufacturado getCategoria(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
     }
 }

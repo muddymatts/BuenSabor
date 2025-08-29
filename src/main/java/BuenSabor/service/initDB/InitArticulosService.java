@@ -58,31 +58,31 @@ public class InitArticulosService {
 
     public void setupCategoriaInsumos() {
         if (categoriaArticuloRepository.count() == 0) {
-            CategoriaArticulo alimentos = new CategoriaArticulo();
+            CategoriaArticuloInsumo alimentos = new CategoriaArticuloInsumo();
             alimentos.setDenominacion("Alimentos");
             alimentos.setCategoriaPadre(null);
 
-            CategoriaArticulo bebidas = new CategoriaArticulo();
+            CategoriaArticuloInsumo bebidas = new CategoriaArticuloInsumo();
             bebidas.setDenominacion("Bebidas");
             bebidas.setCategoriaPadre(null);
 
-            CategoriaArticulo gaseosas = new CategoriaArticulo();
+            CategoriaArticuloInsumo gaseosas = new CategoriaArticuloInsumo();
             gaseosas.setDenominacion("Gaseosas");
             gaseosas.setCategoriaPadre(bebidas);
 
-            CategoriaArticulo agua = new CategoriaArticulo();
+            CategoriaArticuloInsumo agua = new CategoriaArticuloInsumo();
             agua.setDenominacion("Agua");
             agua.setCategoriaPadre(bebidas);
 
-            CategoriaArticulo vegetales = new CategoriaArticulo();
+            CategoriaArticuloInsumo vegetales = new CategoriaArticuloInsumo();
             vegetales.setDenominacion("Vegetales");
             vegetales.setCategoriaPadre(alimentos);
 
-            CategoriaArticulo lacteos = new CategoriaArticulo();
+            CategoriaArticuloInsumo lacteos = new CategoriaArticuloInsumo();
             lacteos.setDenominacion("Lacteos");
             lacteos.setCategoriaPadre(alimentos);
 
-            CategoriaArticulo quesos = new CategoriaArticulo();
+            CategoriaArticuloInsumo quesos = new CategoriaArticuloInsumo();
             quesos.setDenominacion("Quesos");
             quesos.setCategoriaPadre(lacteos);
 
@@ -94,13 +94,13 @@ public class InitArticulosService {
 
     public void setupArticulosInsumo() {
         if (articuloInsumoRepository.count() == 0) {
-            List<CategoriaArticulo> categorias = categoriaArticuloRepository.findAll();
+            List<CategoriaArticuloInsumo> categorias = categoriaArticuloRepository.findAll();
             List<UnidadMedida> unidades = unidadMedidaRepository.findAll();
 
             ArticuloInsumo quesoMuzzarella = new ArticuloInsumo();
             quesoMuzzarella.setPrecioCompra(1.5);
             quesoMuzzarella.setUnidadMedida(unidades.get(1));
-            quesoMuzzarella.setCategoriaArticulo(categorias.get(6));
+            quesoMuzzarella.setCategoriaArticuloInsumo(categorias.get(6));
             quesoMuzzarella.setDenominacion("Queso Muzzarella");
             quesoMuzzarella.setEsParaElaborar(true);
             quesoMuzzarella.setPrecioVenta(1.75);
@@ -108,18 +108,18 @@ public class InitArticulosService {
             ArticuloInsumo salsaTomate = new ArticuloInsumo();
             salsaTomate.setPrecioCompra(0.5);
             salsaTomate.setUnidadMedida(unidades.get(3));
-            salsaTomate.setCategoriaArticulo(categorias.get(4));
+            salsaTomate.setCategoriaArticuloInsumo(categorias.get(4));
             salsaTomate.setDenominacion("Salsa de Tomate");
             salsaTomate.setEsParaElaborar(true);
             salsaTomate.setPrecioVenta(0.75);
 
             ArticuloInsumo cocaCola = new ArticuloInsumo();
-            cocaCola.setPrecioCompra(1000.0);
+            cocaCola.setPrecioCompra(100.0);
             cocaCola.setUnidadMedida(unidades.get(4));
-            cocaCola.setCategoriaArticulo(categorias.get(2));
+            cocaCola.setCategoriaArticuloInsumo(categorias.get(2));
             cocaCola.setDenominacion("Coca Cola");
             cocaCola.setEsParaElaborar(false);
-            cocaCola.setPrecioVenta(1500.0);
+            cocaCola.setPrecioVenta(150.0);
 
             articuloInsumoRepository.saveAll(
                     List.of(quesoMuzzarella, salsaTomate, cocaCola)
@@ -157,7 +157,7 @@ public class InitArticulosService {
                 pizzaMuzzarella.setDenominacion("Pizza Muzzarella");
                 pizzaMuzzarella.setDescripcion("Pizza con mozzarella y salsa de tomate");
                 pizzaMuzzarella.setCategoria(categorias.get(0));
-                pizzaMuzzarella.setPrecioVenta(2500.0);
+                pizzaMuzzarella.setPrecioVenta(250.0);
                 pizzaMuzzarella.setTiempoEstimado(30);
 
 
@@ -165,14 +165,14 @@ public class InitArticulosService {
                 hamburguesaClasica.setDenominacion("Hamburguesa Clásica");
                 hamburguesaClasica.setDescripcion("Hamburguesa con carne vacuna y vegetales frescos");
                 hamburguesaClasica.setCategoria(categorias.get(1));
-                hamburguesaClasica.setPrecioVenta(1500.0);
+                hamburguesaClasica.setPrecioVenta(150.0);
                 hamburguesaClasica.setTiempoEstimado(20);
 
                 ArticuloManufacturado lomitoSimple = new ArticuloManufacturado();
                 lomitoSimple.setDenominacion("Lomito Simple");
                 lomitoSimple.setDescripcion("Lomito con jamón y queso");
                 lomitoSimple.setCategoria(categorias.get(3));
-                lomitoSimple.setPrecioVenta(1000.0);
+                lomitoSimple.setPrecioVenta(100.0);
                 lomitoSimple.setTiempoEstimado(25);
 
                 articuloManufacturadoRepository.saveAll(List.of(pizzaMuzzarella, hamburguesaClasica, lomitoSimple));

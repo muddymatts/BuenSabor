@@ -1,49 +1,66 @@
 package BuenSabor.service;
 
+import BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoDTO;
+import BuenSabor.mapper.ArticuloManufacturadoMapper;
 import BuenSabor.model.ArticuloInsumo;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.ArticuloManufacturadoDetalle;
+import BuenSabor.model.ImagenManufacturado;
 import BuenSabor.repository.ArticuloManufacturadoRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
-public class ArticuloManufacturadoService {
+public class ArticuloManufacturadoService extends BajaLogicaService{
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private final ArticuloManufacturadoRepository repository;
-    private final BajaLogicaService bajaLogicaService;
+    private final ArticuloManufacturadoMapper mapper;
 
     public ArticuloManufacturadoService(ArticuloManufacturadoRepository repository,
-                                        BajaLogicaService bajaLogicaService) {
+                                        ArticuloManufacturadoMapper mapper) {
         this.repository = repository;
-        this.bajaLogicaService = bajaLogicaService;
+        this.mapper = mapper;
     }
 
     @Transactional
-    public ArticuloManufacturado crear(ArticuloManufacturado articulo) {
-        //recorrer la lista para asignar el objeto padre.
+    public ArticuloManufacturado guardar(ArticuloManufacturado articulo) {
+
+        double precioCosto = 0.0;
+
+        if(!articulo.getImagenes().get(0).getDenominacion().isBlank()){
+            for (ImagenManufacturado imagen : articulo.getImagenes()) {
+                imagen.setArticuloManufacturado(articulo);
+            }
+        } else throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "El artículo debe tener al menos una imagen");
+
         for (ArticuloManufacturadoDetalle detalle : articulo.getDetalles()) {
             detalle.setManufacturado(articulo);
             ArticuloInsumo insumo = entityManager.getReference(
                     ArticuloInsumo.class,
                     detalle.getInsumo().getId()
             );
+            precioCosto += insumo.getPrecioCompra() * detalle.getCantidad();
             detalle.setInsumo(insumo);
         }
+
+        articulo.setPrecioCosto(precioCosto);
 
         return repository.save(articulo);
     }
 
-    public ArticuloManufacturado buscarPorId(Long id) {
-        return repository.getReferenceByIdAndFechaBajaIsNull(id);
+    public ArticuloManufacturado getArticuloManufacturado(Long id) {
+        return repository.getReferenceById(id);
     }
 
     public List<ArticuloManufacturado> findByFechaBajaIsNull() {
@@ -56,13 +73,15 @@ public class ArticuloManufacturadoService {
 
     @Transactional
     public String eliminarArticuloManufacturado(Long id) {
-        ArticuloManufacturado articulo = repository.getReferenceByIdAndFechaBajaIsNull(id);
+        ArticuloManufacturado articulo = repository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Articulo no encontrado"));
 
-        if (articulo == null) {
-            throw new EntityNotFoundException("No se encontró el artículo manufacturado con ID: " + id);
-        }
-
-        bajaLogicaService.darDeBaja(ArticuloManufacturado.class, id);
+        darDeBaja(ArticuloManufacturado.class, id);
         return articulo.getDenominacion();
+    }
+
+    public List<ArticuloManufacturadoDTO> getArticulosManufacturadoDTO() {
+        List<ArticuloManufacturado> articulos = repository.findAll();
+        return articulos.stream().map(mapper::toDTO).toList();
     }
 }
