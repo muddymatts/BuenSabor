@@ -18,6 +18,7 @@ public class PedidoVentaDTO {
     private String tipoEnvio;
     private Long idDireccionEntrega;
     private LocalDate fechaCreacion;
+    private LocalDate fechaBaja;
     private LocalDateTime horaEstimadaFinalizacion;
     private BigDecimal total;
     private BigDecimal subtotal;

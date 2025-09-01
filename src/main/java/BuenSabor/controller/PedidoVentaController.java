@@ -1,9 +1,10 @@
 package BuenSabor.controller;
 
+import BuenSabor.dto.pedido.PedidoVentaDTO;
 import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
 import BuenSabor.model.PedidoVenta;
-import BuenSabor.service.PedidoVentaService;
+import BuenSabor.service.pedido.PedidoVentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class PedidoVentaController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> crear(@RequestBody PedidoVenta pedido) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoVentaService.crear(pedido));
+    public ResponseEntity<ResponseDTO> crear(@RequestBody PedidoVentaDTO pedidoDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoVentaService.crear(pedidoDto));
     }
 
     @GetMapping
@@ -47,14 +48,20 @@ public class PedidoVentaController {
     }
 
     @DeleteMapping("/{id}")
-    public String bajaLogica(@PathVariable Long id) {
-        String idPedido = pedidoVentaService.darDeBaja(id);
-        return "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
+    public ResponseEntity<ResponseDTO> bajaLogica(@PathVariable Long id) {
+        pedidoVentaService.darDeBaja(PedidoVenta.class, id);
+        return ResponseEntity.ok(new ResponseDTO("Pedido dado de baja.", id));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDTO> reestablecer(@PathVariable Long id) {
+        pedidoVentaService.reestablecer(PedidoVenta.class, id);
+        return ResponseEntity.ok(new ResponseDTO("Pedido reestablecido.", id));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoVenta> buscarPorId(@PathVariable Long id) {
-        PedidoVenta busqueda = pedidoVentaService.buscarPorId(id);
+    public ResponseEntity<PedidoVentaDTO> buscarPorId(@PathVariable Long id) {
+        PedidoVentaDTO busqueda = pedidoVentaService.buscarPorId(id);
 
         if (busqueda != null) {
             return ResponseEntity.ok(busqueda);
@@ -63,7 +70,7 @@ public class PedidoVentaController {
         }
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
         if (estado == null) {
             throw new IllegalArgumentException("El estado no puede ser nulo.");

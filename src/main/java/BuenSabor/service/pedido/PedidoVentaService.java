@@ -1,4 +1,4 @@
-package BuenSabor.service;
+package BuenSabor.service.pedido;
 
 import BuenSabor.dto.pedido.PedidoVentaDTO;
 import BuenSabor.dto.response.ResponseDTO;
@@ -8,6 +8,8 @@ import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.PedidoVentaDetalle;
 import BuenSabor.repository.PedidoVentaRepository;
+import BuenSabor.service.ArticuloManufacturadoService;
+import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,22 +21,19 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Service
-public class PedidoVentaService {
+public class PedidoVentaService extends BajaLogicaService {
 
     private final PedidoVentaRepository pedidoVentaRepository;
-    private final BajaLogicaService bajaLogicaService;
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final ArticuloInsumoService articuloInsumoService;
     private final PedidoVentaMapper pedidoVentaMapper;
 
     public PedidoVentaService(
             PedidoVentaRepository repository,
-            BajaLogicaService bajaLogicaService,
             ArticuloManufacturadoService articuloManufacturadoService,
             ArticuloInsumoService articuloInsumoService,
             PedidoVentaMapper pedidoVentaMapper) {
         this.pedidoVentaRepository = repository;
-        this.bajaLogicaService = bajaLogicaService;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.articuloInsumoService = articuloInsumoService;
         this.pedidoVentaMapper = pedidoVentaMapper;
@@ -45,7 +44,9 @@ public class PedidoVentaService {
     }
 
     @Transactional
-    public ResponseDTO crear(PedidoVenta pedido) {
+    public ResponseDTO crear(PedidoVentaDTO pedidodto) {
+
+        PedidoVenta pedido = pedidoVentaMapper.toEntity(pedidodto);
 
         if(pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
         if(pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
@@ -105,17 +106,9 @@ public class PedidoVentaService {
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
     }
 
-    public String darDeBaja(Long id) {
-        PedidoVenta pedido = pedidoVentaRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado con id: " + id));
-
-        bajaLogicaService.darDeBaja(PedidoVenta.class, id);
-
-        return pedido.getId().toString();
-    }
-
-    public PedidoVenta buscarPorId(Long id) {
-        return pedidoVentaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
+    public PedidoVentaDTO buscarPorId(Long id) {
+        return pedidoVentaMapper.toDto(pedidoVentaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id)));
     }
 
     public PedidoVenta actualizarEstado(Long id, Estado estado) {
