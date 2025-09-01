@@ -21,7 +21,7 @@ public class Promocion extends EntityApp {
     private double descuento;
 
     @OneToMany(mappedBy = "promocion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PromocionDetalle> detalle;
+    private List<PromocionDetalle> detalle = new java.util.ArrayList<>();
 
     @Transient
     public double getPrecioSinDescuento() {

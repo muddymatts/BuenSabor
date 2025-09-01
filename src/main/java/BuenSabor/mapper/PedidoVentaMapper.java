@@ -9,9 +9,6 @@ import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.SucursalEmpresa;
 import org.mapstruct.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Mapper(componentModel = "spring", uses = {PedidoVentaDetalleMapper.class})
 public interface PedidoVentaMapper {
 
@@ -31,7 +28,7 @@ public interface PedidoVentaMapper {
     @Mapping(source = "idPedido", target = "id")
     @Mapping(source = "estadoPedido", target = "estado", qualifiedByName = "mapEstado")
     @Mapping(source = "tipoEnvio", target = "tipoEnvio", qualifiedByName = "mapTipoEnvio")
-    @Mapping(source = "fechaCreacion", target = "fechaHoraPedido", qualifiedByName = "mapFechaHora")
+    @Mapping(source = "fechaCreacion", target = "fechaHoraPedido")
     @Mapping(source = "idSucursal", target = "sucursalEmpresa", qualifiedByName = "mapSucursal")
     @Mapping(source = "idCliente", target = "cliente", qualifiedByName = "mapCliente")
     @Mapping(source = "idFactura", target = "facturaVenta", qualifiedByName = "mapFactura")
@@ -74,11 +71,6 @@ public interface PedidoVentaMapper {
         return tipoEnvio != null ? TipoEnvio.valueOf(tipoEnvio) : null;
     }
 
-    @Named("mapFechaHora")
-    default LocalDateTime mapFechaHora(LocalDate fecha) {
-        // Convierte LocalDate a LocalDateTime con hora 00:00
-        return fecha != null ? fecha.atStartOfDay() : null;
-    }
 
     // ====== AfterMapping para mantener consistencia padre-hijo ======
     @AfterMapping
