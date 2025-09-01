@@ -2,9 +2,7 @@ package BuenSabor.controller;
 
 import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
-import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
-import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.PedidoVentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,22 +23,33 @@ public class PedidoVentaController {
     }
 
     @PostMapping
-    public ResponseEntity<PedidoVenta> crear(@RequestBody PedidoVenta pedido) {
-        PedidoVenta nuevoPedido = pedidoVentaService.crear(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
+    public ResponseEntity<ResponseDTO> crear(@RequestBody PedidoVenta pedido) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoVentaService.crear(pedido));
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoVenta>> listar() {
-        List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<?>> listar(@RequestParam(defaultValue = "false") boolean full,
+                                          @RequestParam(required = false) Long idCliente,
+                                          @RequestParam(required = false) Long idSucursal) {
+        if(full){
+            List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
+            return ResponseEntity.ok(pedidos);
+        } else {
+            if(idCliente != null && idSucursal != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,idSucursal));
+            } else if(idCliente != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,null));
+            } else if(idSucursal != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(null,idSucursal));
+            }
+            return ResponseEntity.ok(pedidoVentaService.getPedidosDTO());
+        }
     }
 
     @DeleteMapping("/{id}")
     public String bajaLogica(@PathVariable Long id) {
         String idPedido = pedidoVentaService.darDeBaja(id);
-        String mensaje = "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
-        return mensaje;
+        return "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
     }
 
     @GetMapping("/{id}")

@@ -1,14 +1,14 @@
 package BuenSabor.service;
 
-import BuenSabor.dto.promocion.PromocionDTO;
-import BuenSabor.dto.promocion.PromocionDetalleDTO;
+import BuenSabor.dto.pedido.PedidoVentaDTO;
+import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
+import BuenSabor.mapper.PedidoVentaMapper;
 import BuenSabor.model.ArticuloManufacturado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.model.PedidoVentaDetalle;
 import BuenSabor.repository.PedidoVentaRepository;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
-import BuenSabor.service.promocion.PromocionService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,30 +21,31 @@ import java.util.List;
 @Service
 public class PedidoVentaService {
 
-    private final PedidoVentaRepository repository;
+    private final PedidoVentaRepository pedidoVentaRepository;
     private final BajaLogicaService bajaLogicaService;
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final ArticuloInsumoService articuloInsumoService;
-    private final PromocionService promocionService;
+    private final PedidoVentaMapper pedidoVentaMapper;
 
     public PedidoVentaService(
             PedidoVentaRepository repository,
             BajaLogicaService bajaLogicaService,
             ArticuloManufacturadoService articuloManufacturadoService,
-            ArticuloInsumoService articuloInsumoService, PromocionService promocionService) {
-        this.repository = repository;
+            ArticuloInsumoService articuloInsumoService,
+            PedidoVentaMapper pedidoVentaMapper) {
+        this.pedidoVentaRepository = repository;
         this.bajaLogicaService = bajaLogicaService;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.articuloInsumoService = articuloInsumoService;
-        this.promocionService = promocionService;
+        this.pedidoVentaMapper = pedidoVentaMapper;
     }
 
     public List<PedidoVenta> listarTodas() {
-        return repository.findAll();
+        return pedidoVentaRepository.findAll();
     }
 
     @Transactional
-    public PedidoVenta crear(PedidoVenta pedido) {
+    public ResponseDTO crear(PedidoVenta pedido) {
 
         if(pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
         if(pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
@@ -66,7 +67,9 @@ public class PedidoVentaService {
 
         pedido.setCostoTotal(CalcularCostoTotal(pedido));
 
-        return repository.save(pedido);
+        PedidoVenta nuevoPedido = pedidoVentaRepository.save(pedido);
+
+        return new ResponseDTO("Pedido creado exitosamente", nuevoPedido.getId());
     }
 
     private BigDecimal CalcularCostoTotal(PedidoVenta pedido) {
@@ -78,6 +81,10 @@ public class PedidoVentaService {
             }
             if (detalle.getArticuloInsumo() != null) {
                 double costo = articuloInsumoService.findById(detalle.getArticuloInsumo().getId()).getPrecioCompra();
+                costoTotal += costo * detalle.getCantidad();
+            }
+            if(detalle.getPromocion() != null){
+                double costo = detalle.getPromocion().getPrecioCosto();
                 costoTotal += costo * detalle.getCantidad();
             }
         }
@@ -92,21 +99,14 @@ public class PedidoVentaService {
                 ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
                 demoraTotal += articulo.getTiempoEstimado() * (long)detallePedido.getCantidad();
             } else if (detallePedido.getPromocion() != null) {
-                PromocionDTO promocion = promocionService.buscarPorId(detallePedido.getPromocion().getId());
-                long demoraPromocion = 0;
-                for (PromocionDetalleDTO pd : promocion.getDetalle()){
-                    if (pd.getArticuloManufacturado() == null) continue;
-                    ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(pd.getArticuloManufacturado().getId());
-                    demoraPromocion += articulo.getTiempoEstimado() * (long)pd.getCantidad();
-                }
-                demoraTotal += demoraPromocion * (long)detallePedido.getCantidad();
+                demoraTotal += detallePedido.getPromocion().getDemoraTotal() * (long)detallePedido.getCantidad();
             }
         }
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
     }
 
     public String darDeBaja(Long id) {
-        PedidoVenta pedido = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado con id: " + id));
+        PedidoVenta pedido = pedidoVentaRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado con id: " + id));
 
         bajaLogicaService.darDeBaja(PedidoVenta.class, id);
 
@@ -114,14 +114,36 @@ public class PedidoVentaService {
     }
 
     public PedidoVenta buscarPorId(Long id) {
-        return repository.findById(id)
+        return pedidoVentaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
     }
 
     public PedidoVenta actualizarEstado(Long id, Estado estado) {
-        PedidoVenta pedido = repository.findById(id)
+        PedidoVenta pedido = pedidoVentaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
         pedido.setEstado(estado);
-        return repository.save(pedido);
+        return pedidoVentaRepository.save(pedido);
+    }
+
+    public List<PedidoVentaDTO> getPedidosDTO() {
+        return pedidoVentaRepository.findAll().stream()
+                .map(pedidoVentaMapper::toDto)
+                .toList();
+    }
+
+    public List<?> getPedidosFiltradosDTO(Long idCliente, Long idSucursal) {
+        List<PedidoVenta> lista;
+        if (idCliente != null && idSucursal != null) {
+            lista = pedidoVentaRepository.findByClienteIdAndSucursalEmpresaId(idCliente, idSucursal);
+        } else if (idCliente != null) {
+            lista = pedidoVentaRepository.findByClienteId(idCliente);
+        } else if (idSucursal != null) {
+            lista = pedidoVentaRepository.findBySucursalEmpresaId(idSucursal);
+        } else {
+            lista = pedidoVentaRepository.findAll();
+        }
+        return lista.stream()
+                .map(pedidoVentaMapper::toDto)
+                .toList();
     }
 }
