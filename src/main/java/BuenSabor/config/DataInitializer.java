@@ -45,10 +45,6 @@ public class DataInitializer {
 
     @Bean
     @Order(2)
-<<<<<<< HEAD
-
-=======
->>>>>>> 1267b9ebf18dd8899b2ecac6de70468cd65ead53
     CommandLineRunner initDomicilios() {
         return args -> this.initDomiciliosService.setupDomicilios();
     }
