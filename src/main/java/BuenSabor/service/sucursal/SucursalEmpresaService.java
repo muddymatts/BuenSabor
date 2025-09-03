@@ -69,7 +69,7 @@ public class SucursalEmpresaService extends BajaLogicaService {
         stock.forEach(item -> {
             ArticuloInsumo articulo = articuloInsumoRepository.getReferenceById(item.getIdInsumo());
 
-            item.setCategorias(articuloInsumoService.getCategogoriasAnidadas(articulo.getCategoriaArticuloInsumo(),item.getCategorias()));
+            item.setCategorias(articuloInsumoService.getCategoriasAnidadas(articulo.getCategoriaArticuloInsumo(),item.getCategorias()));
         });
         return stock;
     }
@@ -129,6 +129,7 @@ public class SucursalEmpresaService extends BajaLogicaService {
                     dto.setDenominacion(articulo.getDenominacion());
                     dto.setFechaBaja(articulo.getFechaBaja());
                     dto.setIngredientes(articulo.getIngredientes());
+                    dto.setPrecioVenta(articulo.getPrecioVenta());
                     dto.setListaImagenes(articulo.getListaImagenes());
                     dto.setCantidadDisponible(mapCantidadDisponible.getOrDefault(articulo.getId(), 0));
                     return dto;

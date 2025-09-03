@@ -117,4 +117,11 @@ public class PedidoVentaService {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
     }
+
+    public PedidoVenta actualizarEstado(Long id, Estado estado) {
+        PedidoVenta pedido = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
+        pedido.setEstado(estado);
+        return repository.save(pedido);
+    }
 }

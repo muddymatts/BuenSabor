@@ -60,10 +60,10 @@ public class ArticuloInsumoService extends BajaLogicaService {
         return repository.findById(id).orElse(null);
     }
 
-    public List<String> getCategogoriasAnidadas (CategoriaArticuloInsumo categoria, List<String> categoriasAnidadas){
+    public List<String> getCategoriasAnidadas(CategoriaArticuloInsumo categoria, List<String> categoriasAnidadas){
         if (categoria == null) return categoriasAnidadas;
 
-        getCategogoriasAnidadas(categoria.getCategoriaPadre(), categoriasAnidadas);
+        getCategoriasAnidadas(categoria.getCategoriaPadre(), categoriasAnidadas);
 
         categoriasAnidadas.add(categoria.getDenominacion());
 
@@ -73,11 +73,7 @@ public class ArticuloInsumoService extends BajaLogicaService {
     public List<ArticuloInsumoDTO> getInsumosDTO() {
         List<ArticuloInsumo> insumos = repository.findAll();
         return insumos.stream()
-                .map(insumo -> {
-                    ArticuloInsumoDTO insumoDTO =  mapperInsumo.toDto(insumo);
-                    insumoDTO.setCategorias(getCategogoriasAnidadas(insumo.getCategoriaArticuloInsumo(), insumoDTO.getCategorias()));
-                    return insumoDTO;
-                })
+                .map(mapperInsumo::toDto)
                 .toList();
     }
 }

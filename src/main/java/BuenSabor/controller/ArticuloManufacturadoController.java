@@ -41,13 +41,6 @@ public class ArticuloManufacturadoController {
         return ResponseEntity.ok().body(articuloManufacturadoService.getArticulosManufacturadoDTO());
     }
 
-    /*
-    @GetMapping("/listar")
-    public List<ArticuloManufacturado> listar() {
-        return articuloManufacturadoService.findByFechaBajaIsNull();
-    }
-  */
-
     @GetMapping("/listar")
     public List<ArticuloManufacturado> mostrarTodos() {
         return articuloManufacturadoService.findAll();
