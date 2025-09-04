@@ -118,6 +118,7 @@ public class PedidoVentaService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
     }
 
+    // TODO: falta que actualice la hora
     public PedidoVenta actualizarEstado(Long id, Estado estado) {
         PedidoVenta pedido = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
