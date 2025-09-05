@@ -13,6 +13,7 @@ import java.util.List;
 public class PedidoVentaDTO {
     private Long idPedido;
     private Long idSucursal;
+    private String nombreSucursal;
     private Long idCliente;
     private String estadoPedido;
     private String tipoEnvio;

@@ -70,6 +70,7 @@ public class PedidoVentaController {
         }
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
         if (estado == null) {

@@ -21,6 +21,7 @@ public interface PedidoVentaMapper {
     @Mapping(source = "estado", target = "estadoPedido")
     @Mapping(source = "tipoEnvio", target = "tipoEnvio")
     @Mapping(source = "fechaHoraPedido", target = "fechaCreacion")
+    @Mapping(source = "sucursalEmpresa.nombre", target = "nombreSucursal")
     PedidoVentaDTO toDto(PedidoVenta pedidoVenta);
 
 
