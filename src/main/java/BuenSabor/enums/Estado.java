@@ -6,5 +6,5 @@ public enum Estado {
     cancelado, // cancelado por el cliente
     rechazado, // rechazado por cocinero
     delivery, // en proceso de entrega
-    entregado // entregado al cliente por takeout o delivery
+    entregado // entregado al cliente por takeaway o delivery
 }

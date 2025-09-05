@@ -20,7 +20,7 @@ public class FacturaVenta extends EntityApp {
     @Enumerated(EnumType.STRING)
     private FormaPago formaPago;
 
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
     private BigDecimal descuento;
     private BigDecimal gastosEnvio;
     private BigDecimal totalVenta;

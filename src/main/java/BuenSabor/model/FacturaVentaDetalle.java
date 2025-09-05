@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class FacturaVentaDetalle extends EntityApp {
 
     private Integer cantidad;
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
 
     @ManyToOne
     @JoinColumn(name = "factura_venta_id")

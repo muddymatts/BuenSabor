@@ -12,7 +12,7 @@ public class PedidoVentaDetalleDTO {
     private String tipoItem;
     private Long itemId;
     private BigDecimal precioVenta;
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
     private String denominacion;
     private List<String> categorias = new ArrayList<>();
 }

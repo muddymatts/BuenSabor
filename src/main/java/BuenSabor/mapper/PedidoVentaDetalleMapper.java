@@ -17,7 +17,7 @@ public interface PedidoVentaDetalleMapper {
 
     // ====== DTO -> ENTITY ======
     @Mapping(source = "cantidad", target = "cantidad")
-    @Mapping(source = "subTotal", target = "subTotal")
+    @Mapping(source = "subtotal", target = "subtotal")
     @Mapping(source = "itemId", target = "articuloManufacturado", qualifiedByName = "mapArticuloManufacturado")
     @Mapping(source = "itemId", target = "articuloInsumo", qualifiedByName = "mapArticuloInsumo")
     @Mapping(source = "itemId", target = "promocion", qualifiedByName = "mapPromocion")
