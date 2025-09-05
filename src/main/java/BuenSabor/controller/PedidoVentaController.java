@@ -1,11 +1,10 @@
 package BuenSabor.controller;
 
-import BuenSabor.dto.pedidoVenta.PedidoVentaResumenDTO;
+import BuenSabor.dto.pedido.PedidoVentaDTO;
 import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
-import BuenSabor.mapper.PedidoVentaMapper;
 import BuenSabor.model.PedidoVenta;
-import BuenSabor.service.PedidoVentaService;
+import BuenSabor.service.pedido.PedidoVentaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,35 +18,50 @@ import java.util.stream.Stream;
 public class PedidoVentaController {
 
     private final PedidoVentaService pedidoVentaService;
-    private final PedidoVentaMapper pedidoVentaMapper;
 
-    public PedidoVentaController(PedidoVentaService pedidoVentaService, PedidoVentaMapper pedidoVentaMapper) {
+    public PedidoVentaController(PedidoVentaService pedidoVentaService) {
         this.pedidoVentaService = pedidoVentaService;
-        this.pedidoVentaMapper = pedidoVentaMapper;
     }
 
     @PostMapping
-    public ResponseEntity<PedidoVenta> crear(@RequestBody PedidoVenta pedido) {
-        PedidoVenta nuevoPedido = pedidoVentaService.crear(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
+    public ResponseEntity<ResponseDTO> crear(@RequestBody PedidoVentaDTO pedidoDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoVentaService.crear(pedidoDto));
     }
 
     @GetMapping
-    public ResponseEntity<List<PedidoVenta>> listar() {
-        List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
-        return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<?>> listar(@RequestParam(defaultValue = "false") boolean full,
+                                          @RequestParam(required = false) Long idCliente,
+                                          @RequestParam(required = false) Long idSucursal) {
+        if(full){
+            List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
+            return ResponseEntity.ok(pedidos);
+        } else {
+            if(idCliente != null && idSucursal != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,idSucursal));
+            } else if(idCliente != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,null));
+            } else if(idSucursal != null){
+                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(null,idSucursal));
+            }
+            return ResponseEntity.ok(pedidoVentaService.getPedidosDTO());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public String bajaLogica(@PathVariable Long id) {
-        String idPedido = pedidoVentaService.darDeBaja(id);
-        return "El pedido con id " + idPedido + " ha sido eliminado correctamente.";
+    public ResponseEntity<ResponseDTO> bajaLogica(@PathVariable Long id) {
+        pedidoVentaService.darDeBaja(PedidoVenta.class, id);
+        return ResponseEntity.ok(new ResponseDTO("Pedido dado de baja.", id));
     }
 
-    // trae todos los datos para admin
+    @PatchMapping("/{id}")
+    public ResponseEntity<ResponseDTO> reestablecer(@PathVariable Long id) {
+        pedidoVentaService.reestablecer(PedidoVenta.class, id);
+        return ResponseEntity.ok(new ResponseDTO("Pedido reestablecido.", id));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoVenta> buscarPorId(@PathVariable Long id) {
-        PedidoVenta busqueda = pedidoVentaService.buscarPorId(id);
+    public ResponseEntity<PedidoVentaDTO> buscarPorId(@PathVariable Long id) {
+        PedidoVentaDTO busqueda = pedidoVentaService.buscarPorId(id);
 
         if (busqueda != null) {
             return ResponseEntity.ok(busqueda);
@@ -56,19 +70,13 @@ public class PedidoVentaController {
         }
     }
 
-    // para seguimiento del pedido
-    @GetMapping("/{id}/resumen")
-    public ResponseEntity<PedidoVentaResumenDTO> buscarResumenPorId(@PathVariable Long id) {
-        PedidoVenta pedido = pedidoVentaService.buscarPorId(id);
-        return ResponseEntity.ok(pedidoVentaMapper.toResumenDTO(pedido));
-    }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
         if (estado == null) {
             throw new IllegalArgumentException("El estado no puede ser nulo.");
         } else if (Stream.of(Estado.values())
-                .anyMatch(e -> e.name().equals(estado.toLowerCase().trim()))) {
+                .anyMatch(e -> e.name().equals(estado.toLowerCase().trim()))){
             PedidoVenta pedido = pedidoVentaService.actualizarEstado(id, Estado.valueOf(estado.toLowerCase().trim()));
             return ResponseEntity.ok(new ResponseDTO("Pedido actualizado.", pedido.getId()));
         } else {

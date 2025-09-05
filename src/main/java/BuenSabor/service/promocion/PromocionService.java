@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,10 +63,7 @@ public class PromocionService {
     }
 
     public Iterable<PromocionDTO> findAll() {
-        List<Promocion> listado = promocionRepository.findAll();
-        List<PromocionDTO> listadoDTO = new ArrayList<>();
-        listado.forEach(promocion -> listadoDTO.add(promocionMapper.toDto(promocion)));
-        return listadoDTO;
+        return promocionRepository.findAll().stream().map(promocionMapper::toDto).toList();
     }
 
     public void eliminarPromocion(Long id) {
