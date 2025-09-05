@@ -12,6 +12,8 @@ import BuenSabor.service.ArticuloManufacturadoService;
 import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,8 +41,9 @@ public class PedidoVentaService extends BajaLogicaService {
         this.pedidoVentaMapper = pedidoVentaMapper;
     }
 
-    public List<PedidoVenta> listarTodas() {
-        return pedidoVentaRepository.findAll();
+    public Page<?> listarTodas(Pageable pageable) {
+        return pedidoVentaRepository.findAll(pageable)
+                .map(pedidoVentaMapper::toDto);
     }
 
     @Transactional
@@ -125,22 +128,20 @@ public class PedidoVentaService extends BajaLogicaService {
                 .toList();
     }
 
-    public List<?> getPedidosFiltradosDTO(Long idCliente, Long idSucursal) {
-        List<PedidoVenta> lista = filterPedidos(idCliente, idSucursal);
-        return lista.stream()
-                .map(pedidoVentaMapper::toDto)
-                .toList();
+    public Page<?> getPedidosFiltradosDTO(Long idCliente, Long idSucursal, Pageable pageable) {
+        Page<PedidoVenta> page = filterPedidos(idCliente, idSucursal, pageable);
+        return page.map(pedidoVentaMapper::toDto);
     }
 
-    private List<PedidoVenta> filterPedidos(Long idCliente, Long idSucursal) {
+    private Page<PedidoVenta> filterPedidos(Long idCliente, Long idSucursal, Pageable pageable) {
         if (idCliente != null && idSucursal != null) {
-            return pedidoVentaRepository.findByClienteIdAndSucursalEmpresaId(idCliente, idSucursal);
+            return pedidoVentaRepository.findByClienteIdAndSucursalEmpresaId(idCliente, idSucursal, pageable);
         } else if (idCliente != null) {
-            return pedidoVentaRepository.findByClienteId(idCliente);
+            return pedidoVentaRepository.findByClienteId(idCliente, pageable);
         } else if (idSucursal != null) {
-            return pedidoVentaRepository.findBySucursalEmpresaId(idSucursal);
+            return pedidoVentaRepository.findBySucursalEmpresaId(idSucursal, pageable);
         } else {
-            return pedidoVentaRepository.findAll();
+            return pedidoVentaRepository.findAll(pageable);
         }
     }
 }

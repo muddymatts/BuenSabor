@@ -5,12 +5,14 @@ import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
 import BuenSabor.model.PedidoVenta;
 import BuenSabor.service.pedido.PedidoVentaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
@@ -29,16 +31,21 @@ public class PedidoVentaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> listar(
+    public ResponseEntity<Page<?>> listar(
             @RequestParam(defaultValue = "false") boolean full,
             @RequestParam(required = false) Long idCliente,
-            @RequestParam(required = false) Long idSucursal) {
+            @RequestParam(required = false) Long idSucursal,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size) {
 
-        List<?> pedidos;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<?> pedidos;
+
         if (full) {
-            pedidos = pedidoVentaService.listarTodas();
+            pedidos = pedidoVentaService.listarTodas(pageable);
         } else {
-            pedidos = pedidoVentaService.getPedidosFiltradosDTO(idCliente, idSucursal);
+            pedidos = pedidoVentaService.getPedidosFiltradosDTO(idCliente, idSucursal, pageable);
         }
         return ResponseEntity.ok(pedidos);
     }

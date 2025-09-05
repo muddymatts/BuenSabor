@@ -1,17 +1,23 @@
 package BuenSabor.repository;
 
 import BuenSabor.model.PedidoVenta;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface PedidoVentaRepository extends JpaRepository<PedidoVenta, Long> {
 
-    List<PedidoVenta> findByClienteId(Long idCliente);
+    Page<PedidoVenta> findByClienteId(Long idCliente, Pageable pageable);
 
-    List<PedidoVenta> findBySucursalEmpresaId(Long idSucursal);
+    Page<PedidoVenta> findBySucursalEmpresaId(Long idSucursal, Pageable pageable);
 
-    List<PedidoVenta> findByClienteIdAndSucursalEmpresaId(Long idCliente, Long idSucursal);
+    Page<PedidoVenta> findByClienteIdAndSucursalEmpresaId(Long idCliente, Long idSucursal, Pageable pageable);
+
+    @Override
+    @NonNull
+    Page<PedidoVenta> findAll(@NonNull Pageable pageable);
 }
+
