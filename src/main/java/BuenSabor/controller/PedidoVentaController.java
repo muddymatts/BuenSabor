@@ -29,22 +29,18 @@ public class PedidoVentaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> listar(@RequestParam(defaultValue = "false") boolean full,
-                                          @RequestParam(required = false) Long idCliente,
-                                          @RequestParam(required = false) Long idSucursal) {
-        if(full){
-            List<PedidoVenta> pedidos = pedidoVentaService.listarTodas();
-            return ResponseEntity.ok(pedidos);
+    public ResponseEntity<List<?>> listar(
+            @RequestParam(defaultValue = "false") boolean full,
+            @RequestParam(required = false) Long idCliente,
+            @RequestParam(required = false) Long idSucursal) {
+
+        List<?> pedidos;
+        if (full) {
+            pedidos = pedidoVentaService.listarTodas();
         } else {
-            if(idCliente != null && idSucursal != null){
-                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,idSucursal));
-            } else if(idCliente != null){
-                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(idCliente,null));
-            } else if(idSucursal != null){
-                return ResponseEntity.ok(pedidoVentaService.getPedidosFiltradosDTO(null,idSucursal));
-            }
-            return ResponseEntity.ok(pedidoVentaService.getPedidosDTO());
+            pedidos = pedidoVentaService.getPedidosFiltradosDTO(idCliente, idSucursal);
         }
+        return ResponseEntity.ok(pedidos);
     }
 
     @DeleteMapping("/{id}")
@@ -70,13 +66,12 @@ public class PedidoVentaController {
         }
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
         if (estado == null) {
             throw new IllegalArgumentException("El estado no puede ser nulo.");
         } else if (Stream.of(Estado.values())
-                .anyMatch(e -> e.name().equals(estado.toLowerCase().trim()))){
+                .anyMatch(e -> e.name().equals(estado.toLowerCase().trim()))) {
             PedidoVenta pedido = pedidoVentaService.actualizarEstado(id, Estado.valueOf(estado.toLowerCase().trim()));
             return ResponseEntity.ok(new ResponseDTO("Pedido actualizado.", pedido.getId()));
         } else {

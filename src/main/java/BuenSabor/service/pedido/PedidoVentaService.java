@@ -48,12 +48,12 @@ public class PedidoVentaService extends BajaLogicaService {
 
         PedidoVenta pedido = pedidoVentaMapper.toEntity(pedidodto);
 
-        if(pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
-        if(pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
+        if (pedido.getCliente() == null) throw new RuntimeException("El pedido debe tener un cliente");
+        if (pedido.getSucursalEmpresa() == null) throw new RuntimeException("El pedido debe tener una sucursal");
 
         //Crear y cargar los detalles
-        if(!pedido.getDetalles().isEmpty()){
-            for(PedidoVentaDetalle detalle : pedido.getDetalles()){
+        if (!pedido.getDetalles().isEmpty()) {
+            for (PedidoVentaDetalle detalle : pedido.getDetalles()) {
                 detalle.setPedido(pedido);
             }
         } else throw new RuntimeException("El pedido debe tener al menos un detalle");
@@ -75,7 +75,7 @@ public class PedidoVentaService extends BajaLogicaService {
 
     private BigDecimal CalcularCostoTotal(PedidoVenta pedido) {
         double costoTotal = 0.0;
-        for(PedidoVentaDetalle detalle : pedido.getDetalles()) {
+        for (PedidoVentaDetalle detalle : pedido.getDetalles()) {
             if (detalle.getArticuloManufacturado() != null) {
                 double costo = articuloManufacturadoService.getArticuloManufacturado(detalle.getArticuloManufacturado().getId()).getPrecioCosto();
                 costoTotal += costo * detalle.getCantidad();
@@ -84,7 +84,7 @@ public class PedidoVentaService extends BajaLogicaService {
                 double costo = articuloInsumoService.findById(detalle.getArticuloInsumo().getId()).getPrecioCompra();
                 costoTotal += costo * detalle.getCantidad();
             }
-            if(detalle.getPromocion() != null){
+            if (detalle.getPromocion() != null) {
                 double costo = detalle.getPromocion().getPrecioCosto();
                 costoTotal += costo * detalle.getCantidad();
             }
@@ -92,16 +92,16 @@ public class PedidoVentaService extends BajaLogicaService {
         return BigDecimal.valueOf(costoTotal);
     }
 
-    private String CalcularDemoraTotal (PedidoVenta pedido) {
+    private String CalcularDemoraTotal(PedidoVenta pedido) {
         LocalDateTime horaFinalizacion = pedido.getFechaHoraPedido();
         long demoraTotal = 0;
-        for(PedidoVentaDetalle detallePedido : pedido.getDetalles()){
-            if(detallePedido.getArticuloManufacturado() != null){
+        for (PedidoVentaDetalle detallePedido : pedido.getDetalles()) {
+            if (detallePedido.getArticuloManufacturado() != null) {
                 ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
-                demoraTotal += articulo.getTiempoEstimado() * (long)detallePedido.getCantidad();
+                demoraTotal += articulo.getTiempoEstimado() * (long) detallePedido.getCantidad();
             } else if (detallePedido.getPromocion() != null) {
                 System.out.println("Demora de la promocion " + detallePedido.getPromocion().getDemoraTotal());
-                demoraTotal += detallePedido.getPromocion().getDemoraTotal() * (long)detallePedido.getCantidad();
+                demoraTotal += detallePedido.getPromocion().getDemoraTotal() * (long) detallePedido.getCantidad();
             }
         }
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
@@ -112,7 +112,6 @@ public class PedidoVentaService extends BajaLogicaService {
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id)));
     }
 
-    // TODO: falta que actualice la hora
     public PedidoVenta actualizarEstado(Long id, Estado estado) {
         PedidoVenta pedido = pedidoVentaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado con id: " + id));
@@ -127,18 +126,21 @@ public class PedidoVentaService extends BajaLogicaService {
     }
 
     public List<?> getPedidosFiltradosDTO(Long idCliente, Long idSucursal) {
-        List<PedidoVenta> lista;
-        if (idCliente != null && idSucursal != null) {
-            lista = pedidoVentaRepository.findByClienteIdAndSucursalEmpresaId(idCliente, idSucursal);
-        } else if (idCliente != null) {
-            lista = pedidoVentaRepository.findByClienteId(idCliente);
-        } else if (idSucursal != null) {
-            lista = pedidoVentaRepository.findBySucursalEmpresaId(idSucursal);
-        } else {
-            lista = pedidoVentaRepository.findAll();
-        }
+        List<PedidoVenta> lista = filterPedidos(idCliente, idSucursal);
         return lista.stream()
                 .map(pedidoVentaMapper::toDto)
                 .toList();
+    }
+
+    private List<PedidoVenta> filterPedidos(Long idCliente, Long idSucursal) {
+        if (idCliente != null && idSucursal != null) {
+            return pedidoVentaRepository.findByClienteIdAndSucursalEmpresaId(idCliente, idSucursal);
+        } else if (idCliente != null) {
+            return pedidoVentaRepository.findByClienteId(idCliente);
+        } else if (idSucursal != null) {
+            return pedidoVentaRepository.findBySucursalEmpresaId(idSucursal);
+        } else {
+            return pedidoVentaRepository.findAll();
+        }
     }
 }
