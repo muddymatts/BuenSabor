@@ -59,7 +59,7 @@ public class PromocionService {
     }
 
     public Promocion findById(Long id) {
-        return promocionRepository.findByIdAndFechaBajaIsNull(id);
+        return promocionRepository.findById(id).orElseThrow(() -> new RuntimeException("Promocion no encontrada"));
     }
 
     public Iterable<PromocionDTO> findAll() {
