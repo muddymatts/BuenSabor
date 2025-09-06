@@ -46,8 +46,8 @@ public class MercadoPagoService {
 
             PreferenceBackUrlsRequest backUrls =
                     PreferenceBackUrlsRequest.builder()
-                            .success("https://localhost:5173/estado-pedido")
-                            .pending("https://localhost:5173/estado-pedido")
+                            .success("https://localhost:5173/estado-pedido/{external_reference}")
+                            .pending("https://localhost:5173/estado-pedido/{external_reference}")
                             .failure("https://localhost:5173/productos")
                             .build();
 
