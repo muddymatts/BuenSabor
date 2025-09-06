@@ -3,10 +3,7 @@ package BuenSabor.mapper;
 import BuenSabor.dto.pedido.PedidoVentaDTO;
 import BuenSabor.enums.Estado;
 import BuenSabor.enums.TipoEnvio;
-import BuenSabor.model.Cliente;
-import BuenSabor.model.FacturaVenta;
-import BuenSabor.model.PedidoVenta;
-import BuenSabor.model.SucursalEmpresa;
+import BuenSabor.model.*;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = {PedidoVentaDetalleMapper.class})
@@ -79,6 +76,16 @@ public interface PedidoVentaMapper {
         if (entity.getDetalles() != null) {
             entity.getDetalles().forEach(detalle -> detalle.setPedido(entity));
         }
+    }
+
+    @AfterMapping
+    default void setDomicilio(PedidoVenta pedidoVenta, @MappingTarget PedidoVentaDTO dto) {
+        Domicilio domicilioCliente = pedidoVenta.getCliente().getDomicilio();
+        String direccion = domicilioCliente.getCalle() + " " +
+                domicilioCliente.getNumero() + " - " +
+                domicilioCliente.getLocalidad().getNombre() + ", " +
+                domicilioCliente.getLocalidad().getProvincia().getNombre();
+        dto.setDireccionEntrega(direccion);
     }
 }
 
