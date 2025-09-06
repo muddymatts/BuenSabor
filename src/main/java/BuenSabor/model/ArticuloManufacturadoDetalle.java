@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class ArticuloManufacturadoDetalle extends EntityApp {
 
-    private double cantidad;
+    private Integer cantidad;
 
     @ManyToOne
     @JoinColumn(name = "articulo_insumo_id")

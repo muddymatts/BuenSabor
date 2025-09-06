@@ -20,6 +20,7 @@ import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
 import BuenSabor.service.promocion.PromocionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -163,26 +164,8 @@ public class SucursalEmpresaService extends BajaLogicaService {
                 }).toList();
     }
 
-    public SucursalInsumoDTO addStock(Long id, Long idInsumo, Integer cantidad) {
-        // 1. Buscar la sucursal
-        SucursalEmpresa sucursal = repository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + id + "."));
-
-        // 2. Buscar el insumo
-        ArticuloInsumo insumo = articuloInsumoRepository.findById(idInsumo)
-                .orElseThrow(()-> new RuntimeException("Articulo no encontrado, id: " +idInsumo + "."));
-
-        // 3. Verificar si ya existe el stock para esa combinación
-        Optional<SucursalInsumo> existente = sucursalInsumoRepository.findBySucursalAndInsumo(sucursal, insumo);
-
-        SucursalInsumo sucursalInsumo;
-
-        if (existente.isPresent()) {
-            // Actualiza los valores existentes
-            sucursalInsumo = existente.get();
-        } else {
-            throw new RuntimeException("No existe el stock para la sucursal y el insumo especificados.");
-        }
+    public SucursalInsumoDTO addStock(Long idSucursal, Long idInsumo, Integer cantidad) {
+        SucursalInsumo sucursalInsumo = verificarExistencias(idSucursal, idInsumo);
 
         // 4. Setear los valores desde el DTO
         sucursalInsumo.setStockActual(sucursalInsumo.getStockActual() + cantidad);
@@ -191,6 +174,29 @@ public class SucursalEmpresaService extends BajaLogicaService {
         sucursalInsumoRepository.save(sucursalInsumo);
 
         return sucursalInsumoMapper.toDTO(sucursalInsumo);
+    }
+
+    @Transactional
+    public void removeStock(Long idSucursal, Long idInsumo, Integer cantidad) {
+        SucursalInsumo sucursalInsumo = verificarExistencias(idSucursal, idInsumo);
+        if(sucursalInsumo.getStockActual() < cantidad) throw new RuntimeException("No hay suficientes existencias del insumo "+ sucursalInsumo.getInsumo().getDenominacion() +" en la sucursal.");
+        sucursalInsumo.setStockActual(sucursalInsumo.getStockActual() - cantidad);
+        sucursalInsumoRepository.save(sucursalInsumo);
+        sucursalInsumoMapper.toDTO(sucursalInsumo);
+    }
+
+    protected SucursalInsumo verificarExistencias (Long idSucursal, Long idInsumo){
+        SucursalEmpresa sucursal = repository.findById(idSucursal)
+                .orElseThrow(()-> new RuntimeException("Sucursal no encontrada, id: " + idSucursal + "."));
+        ArticuloInsumo insumo = articuloInsumoRepository.findById(idInsumo)
+                .orElseThrow(()-> new RuntimeException("Articulo no encontrado, id: " +idInsumo + "."));
+        Optional<SucursalInsumo> existente = sucursalInsumoRepository.findBySucursalAndInsumo(sucursal, insumo);
+
+        if (existente.isPresent()) {
+            return existente.get();
+        } else {
+            throw new RuntimeException("No existe el stock para la sucursal y el insumo especificados.");
+        }
     }
 
     public List<SucursalEmpresa> findAll() {

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class PedidoVentaDetalle extends EntityApp {
 
-    private double cantidad;
+    private Integer cantidad;
     private double subtotal;
 
     @ManyToOne

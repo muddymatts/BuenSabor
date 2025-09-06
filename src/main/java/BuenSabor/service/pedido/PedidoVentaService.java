@@ -4,13 +4,13 @@ import BuenSabor.dto.pedido.PedidoVentaDTO;
 import BuenSabor.dto.response.ResponseDTO;
 import BuenSabor.enums.Estado;
 import BuenSabor.mapper.PedidoVentaMapper;
-import BuenSabor.model.ArticuloManufacturado;
-import BuenSabor.model.PedidoVenta;
-import BuenSabor.model.PedidoVentaDetalle;
+import BuenSabor.model.*;
 import BuenSabor.repository.PedidoVentaRepository;
 import BuenSabor.service.ArticuloManufacturadoService;
 import BuenSabor.service.BajaLogicaService;
 import BuenSabor.service.articuloInsumo.ArticuloInsumoService;
+import BuenSabor.service.promocion.PromocionService;
+import BuenSabor.service.sucursal.SucursalEmpresaService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,16 +29,21 @@ public class PedidoVentaService extends BajaLogicaService {
     private final ArticuloManufacturadoService articuloManufacturadoService;
     private final ArticuloInsumoService articuloInsumoService;
     private final PedidoVentaMapper pedidoVentaMapper;
+    private final SucursalEmpresaService sucursalEmpresaService;
+    private final PromocionService promocionService;
 
     public PedidoVentaService(
             PedidoVentaRepository repository,
             ArticuloManufacturadoService articuloManufacturadoService,
             ArticuloInsumoService articuloInsumoService,
-            PedidoVentaMapper pedidoVentaMapper) {
+            PedidoVentaMapper pedidoVentaMapper,
+            SucursalEmpresaService sucursalEmpresaService, PromocionService promocionService) {
         this.pedidoVentaRepository = repository;
         this.articuloManufacturadoService = articuloManufacturadoService;
         this.articuloInsumoService = articuloInsumoService;
         this.pedidoVentaMapper = pedidoVentaMapper;
+        this.sucursalEmpresaService = sucursalEmpresaService;
+        this.promocionService = promocionService;
     }
 
     public Page<?> listarTodas(Pageable pageable) {
@@ -59,6 +64,7 @@ public class PedidoVentaService extends BajaLogicaService {
             for (PedidoVentaDetalle detalle : pedido.getDetalles()) {
                 detalle.setPedido(pedido);
             }
+            if(!ReducirStok(pedido)) throw new RuntimeException("Hubo un problema de stock");
         } else throw new RuntimeException("El pedido debe tener al menos un detalle");
 
         //asigno hora y fecha local de pedido
@@ -74,6 +80,45 @@ public class PedidoVentaService extends BajaLogicaService {
         PedidoVenta nuevoPedido = pedidoVentaRepository.save(pedido);
 
         return new ResponseDTO("Pedido creado exitosamente", nuevoPedido.getId());
+    }
+
+    @Transactional
+    protected Boolean ReducirStok(PedidoVenta pedido){
+        for(PedidoVentaDetalle detalle : pedido.getDetalles()){
+            if(detalle.getArticuloManufacturado() != null){
+                ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detalle.getArticuloManufacturado().getId());
+                for(ArticuloManufacturadoDetalle detalleManufacturado : articulo.getDetalles()){
+                    sucursalEmpresaService.removeStock(
+                            pedido.getSucursalEmpresa().getId(),
+                            detalleManufacturado.getInsumo().getId(),
+                            detalleManufacturado.getCantidad()*detalle.getCantidad());
+                }
+            } else if(detalle.getArticuloInsumo() != null){
+                sucursalEmpresaService.removeStock(
+                        pedido.getSucursalEmpresa().getId(),
+                        detalle.getArticuloInsumo().getId(),
+                        detalle.getCantidad());
+            } else if(detalle.getPromocion() != null){
+                Promocion promocion = promocionService.findById(detalle.getPromocion().getId());
+                for(PromocionDetalle detallePromo : promocion.getDetalle()){
+                    if(detallePromo.getArticuloManufacturado() != null){
+                        ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePromo.getArticuloManufacturado().getId());
+                        for(ArticuloManufacturadoDetalle detalleManufacturado : articulo.getDetalles()){
+                            sucursalEmpresaService.removeStock(
+                                    pedido.getSucursalEmpresa().getId(),
+                                    detalleManufacturado.getInsumo().getId(),
+                                    detalleManufacturado.getCantidad() * detallePromo.getCantidad());
+                        }
+                    } else if (detallePromo.getArticuloInsumo() != null){
+                        sucursalEmpresaService.removeStock(
+                                pedido.getSucursalEmpresa().getId(),
+                                detallePromo.getArticuloInsumo().getId(),
+                                detallePromo.getCantidad());
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private BigDecimal CalcularCostoTotal(PedidoVenta pedido) {
