@@ -18,6 +18,7 @@ public class PedidoVentaDTO {
     private String estadoPedido;
     private String tipoEnvio;
     private Long idDireccionEntrega;
+    private String direccionEntrega;
     private LocalDateTime fechaCreacion;
     private LocalDate fechaBaja;
     private LocalDateTime horaEstimadaFinalizacion;
