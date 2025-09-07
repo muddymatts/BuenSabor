@@ -26,8 +26,8 @@ public class FacturaVentaSevice extends BajaLogicaService {
         this.pedidoVentaRepository = pedidoVentaRepository;
     }
 
-    public FacturaVenta getFactura (Long id) {
-        return facturaVentaRepository.findById(id).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
+    public FacturaVenta getFactura (Long idFactura) {
+        return facturaVentaRepository.findById(idFactura).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
 
 
