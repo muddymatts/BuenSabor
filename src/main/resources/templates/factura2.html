@@ -150,7 +150,7 @@
             </td>
             <td width="40%" class="bill-info" align="right">
                 <h2>FACTURA</h2>
-                <p><strong>Punto de Venta:</strong> <span th:text="${factura.pedidos.getFirst().sucursalEmpresa.nombre}"></span></p>
+                <span th:text="${factura.pedidos[0].sucursalEmpresa.nombre}"></span>
                 <p><strong>Comp. Nro:</strong> <span th:text="${factura.numeroComprobante}"></span></p>
                 <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.fechaFacturacion}"></span></p>
                 <p><strong>CUIT:</strong> 30-32569841-5</p>
@@ -182,7 +182,8 @@
         <tbody>
         <tr th:each="detalle : ${factura.detalles}">
             <td>
-                <span th:if="${detalle.articuloManufacturado != null}" th:text="${detalle.articuloManufacturado.denominacion}"></span>
+                <span th:if="${detalle.articuloManufacturado != null}"
+                      th:text="${detalle.articuloManufacturado.denominacion}"></span>
                 <span th:if="${detalle.articuloInsumo != null}" th:text="${detalle.articuloInsumo.denominacion}"></span>
             </td>
             <td><span th:text="${detalle.cantidad}"></span></td>
