@@ -148,8 +148,8 @@ public class PedidoVentaService extends BajaLogicaService {
                 ArticuloManufacturado articulo = articuloManufacturadoService.getArticuloManufacturado(detallePedido.getArticuloManufacturado().getId());
                 demoraTotal += articulo.getTiempoEstimado() * (long) detallePedido.getCantidad();
             } else if (detallePedido.getPromocion() != null) {
-                System.out.println("Demora de la promocion " + detallePedido.getPromocion().getDemoraTotal());
-                demoraTotal += detallePedido.getPromocion().getDemoraTotal() * (long) detallePedido.getCantidad();
+                Promocion promocion = promocionService.findById(detallePedido.getPromocion().getId());
+                demoraTotal += promocion.getDemoraTotal() * (long) detallePedido.getCantidad();
             }
         }
         return horaFinalizacion.plusMinutes(demoraTotal).toString();
