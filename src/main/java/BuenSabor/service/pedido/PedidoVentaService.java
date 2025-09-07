@@ -107,13 +107,13 @@ public class PedidoVentaService extends BajaLogicaService {
                             sucursalEmpresaService.removeStock(
                                     pedido.getSucursalEmpresa().getId(),
                                     detalleManufacturado.getInsumo().getId(),
-                                    detalleManufacturado.getCantidad() * detallePromo.getCantidad());
+                                    detalleManufacturado.getCantidad() * detallePromo.getCantidad() * detalle.getCantidad());
                         }
                     } else if (detallePromo.getArticuloInsumo() != null){
                         sucursalEmpresaService.removeStock(
                                 pedido.getSucursalEmpresa().getId(),
                                 detallePromo.getArticuloInsumo().getId(),
-                                detallePromo.getCantidad());
+                                detallePromo.getCantidad() * detalle.getCantidad());
                     }
                 }
             }

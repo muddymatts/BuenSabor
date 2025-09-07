@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Factura</title>
+    <style>
+        /* Reset y estilos generales */
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .bill-container {
+            width: 750px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Encabezado */
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .bill-emitter {
+            max-width: 55%;
+        }
+
+        .bill-emitter h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .bill-emitter p {
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #555;
+        }
+
+        .bill-type-box {
+            background: #1e90ff;
+            color: #fff;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        .bill-info {
+            max-width: 40%;
+            text-align: right;
+        }
+
+        .bill-info h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .bill-info p {
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #555;
+        }
+
+        /* Cliente y detalles */
+        .client-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .client-info p {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* Tabla de items */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .items-table th, .items-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .items-table th {
+            background: #1e90ff;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .items-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* Totales */
+        .totals {
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+
+        .totals p {
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .totals p strong {
+            margin-left: 5px;
+        }
+
+        /* CAE */
+        .cae-info {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="bill-container">
+
+    <!-- Encabezado -->
+    <div class="bill-header">
+        <div class="bill-emitter">
+            <div class="bill-type-box">C</div>
+            <h1>El Buen Sabor S.A.</h1>
+            <p><strong>Razón social:</strong> El Buen Sabor</p>
+            <p><strong>Domicilio Comercial:</strong> San Martin 1500 Ciudad, Mendoza</p>
+            <p><strong>Condición Frente al IVA:</strong> IVA Responsable inscripto</p>
+        </div>
+        <div class="bill-info">
+            <h2>FACTURA</h2>
+            <p><strong>Punto de Venta:</strong> <span th:text="${factura.pedidos.getFirst().sucursalEmpresa.nombre}"></span></p>
+            <p><strong>Comp. Nro:</strong> <span th:text="${factura.numeroComprobante}"></span></p>
+            <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.fechaFacturacion}"></span></p>
+            <p><strong>CUIT:</strong> 30-32569841-5</p>
+            <p><strong>Ingresos Brutos:</strong> 111/23</p>
+            <p><strong>Fecha de Inicio de Actividades:</strong> 12/02/2022</p>
+        </div>
+    </div>
+
+    <!-- Cliente -->
+    <div class="client-info">
+        <p><strong>Nro de cliente:</strong> <span th:text="${factura.cliente.id}"></span></p>
+        <p><strong>Apellido y Nombre / Razón social:</strong> <span th:text="${factura.cliente.apellido} + ' ' + ${factura.cliente.nombre}"></span></p>
+        <p><strong>Condición Frente al IVA:</strong> Consumidor final</p>
+        <p><strong>Modo de pago:</strong> <span th:text="${factura.formaPago.name()}"></span></p>
+    </div>
+
+    <!-- Tabla de items -->
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detalle : ${factura.detalles}">
+            <td>
+                <span th:if="${detalle.articuloManufacturado != null}" th:text="${detalle.articuloManufacturado.denominacion}"></span>
+                <span th:if="${detalle.articuloInsumo != null}" th:text="${detalle.articuloInsumo.denominacion}"></span>
+            </td>
+            <td><span th:text="${detalle.cantidad}"></span></td>
+            <td><span th:text="${detalle.subtotal}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Totales -->
+    <div class="totals">
+        <p><strong>Subtotal:</strong> <span th:text="${factura.subtotal}"></span></p>
+        <p><strong>Descuentos:</strong> <span th:text="${factura.descuento}"></span></p>
+        <p><strong>Gastos de Envio:</strong> <span th:text="${factura.gastosEnvio}"></span></p>
+        <p><strong>Importe total:</strong> <span th:text="${factura.totalVenta}"></span></p>
+    </div>
+
+    <!-- CAE -->
+    <div class="cae-info">
+        <p><strong>CAE Nº:</strong> 111545221564</p>
+        <p><strong>Fecha de Vto. de CAE:</strong> 25/07/2026</p>
+    </div>
+
+</div>
+</body>
+</html>
