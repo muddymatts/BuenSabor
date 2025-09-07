@@ -45,33 +45,33 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
     }
 
     @Override
-    public List<CantidadDisponibleDTO> getCantidadDisponible (Long SucursalId) {
-
-        String sql = "SELECT "+
-                "am.id,"+
-                "MIN( COALESCE( TRUNCATE(si.stock_actual / amd.cantidad, 0))) AS cantidad_disponible " +
+    public List<CantidadDisponibleDTO> getCantidadDisponible(Long sucursalId) {
+        String sql = "SELECT " +
+                "am.id, " +
+                "COALESCE(MIN(TRUNCATE(si.stock_actual / amd.cantidad, 0)), 0) AS cantidad_disponible " +
                 "FROM articulo_manufacturado am " +
                 "JOIN articulo_manufacturado_detalle amd " +
                 "ON amd.articulo_manufacturado_id = am.id " +
                 "LEFT JOIN sucursal_insumo si " +
                 "ON si.insumo_id = amd.articulo_insumo_id " +
-                "AND si.sucursal_id = " + SucursalId +
-                " GROUP BY am.id, am.denominacion";
+                "AND si.sucursal_id = :sucursalId " +
+                "GROUP BY am.id, am.denominacion";
 
-        List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
+        List<Object[]> results = entityManager
+                .createNativeQuery(sql)
+                .setParameter("sucursalId", sucursalId)
+                .getResultList();
+
         return results.stream()
-                .map(row -> {
-                    CantidadDisponibleDTO dto = new CantidadDisponibleDTO(
-                            ((Number)row[0]).longValue(),
-                            ((Number)row[1]).intValue()
-                    );
-                    return dto;
-                }).toList();
-
+                .map(row -> new CantidadDisponibleDTO(
+                        ((Number) row[0]).longValue(),
+                        ((Number) row[1]).intValue()
+                ))
+                .toList();
     }
 
     @Override
-    public List<CantidadDisponibleDTO> getCantidadDisponiblePromos (Long SucursalId) {
+    public List<CantidadDisponibleDTO> getCantidadDisponiblePromos(Long SucursalId) {
 
         String sql = """
                 SELECT 
@@ -96,8 +96,8 @@ public class SucursalEmpresaRepositoryImpl implements SucursalEmpresaRepositoryC
         return results.stream()
                 .map(row -> {
                     CantidadDisponibleDTO dto = new CantidadDisponibleDTO(
-                            ((Number)row[0]).longValue(),
-                            ((Number)row[1]).intValue()
+                            ((Number) row[0]).longValue(),
+                            ((Number) row[1]).intValue()
                     );
                     return dto;
                 }).toList();
