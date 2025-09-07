@@ -30,15 +30,15 @@ public class FacturaVentaController {
         return ResponseEntity.ok(new ResponseDTO("Pedido Facturado Correctamente", factura.getId()));
     }
 
-    @GetMapping("/{id}/pdf")
-    public ResponseEntity<byte[]> generarFacturaPdf(@PathVariable Long id) throws Exception {
-        FacturaVenta factura = facturaVentaService.getFactura(id);
+    @GetMapping("/descargar-pdf/{idFactura}")
+    public ResponseEntity<byte[]> generarFacturaPdf(@PathVariable Long idFactura) throws Exception {
+        FacturaVenta factura = facturaVentaService.getFactura(idFactura);
 
         byte[] pdfBytes = facturaPdfService.generarPdf(factura);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("inline", "factura_" + id + ".pdf");
+        headers.setContentDispositionFormData("inline", "factura_" + idFactura + ".pdf");
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
