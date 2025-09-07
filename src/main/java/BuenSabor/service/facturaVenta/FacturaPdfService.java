@@ -18,14 +18,12 @@ public class FacturaPdfService {
     }
 
     public byte[] generarPdf(FacturaVenta factura) throws Exception {
-        // 1. Renderizar HTML con Thymeleaf
         Context context = new Context();
 
         context.setVariable("factura", factura);
 
         String htmlContent = templateEngine.process("factura2", context);
 
-        // 2. Convertir HTML a PDF con Flying Saucer
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();
         renderer.setDocumentFromString(htmlContent);

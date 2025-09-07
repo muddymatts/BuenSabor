@@ -30,7 +30,7 @@ public class FacturaVentaController {
         return ResponseEntity.ok(new ResponseDTO("Pedido Facturado Correctamente", factura.getId()));
     }
 
-    @GetMapping("/{idFactura}/pdf")
+    @GetMapping("/descargar-pdf/{idFactura}")
     public ResponseEntity<byte[]> generarFacturaPdf(@PathVariable Long idFactura) throws Exception {
         FacturaVenta factura = facturaVentaService.getFactura(idFactura);
 
