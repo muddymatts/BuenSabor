@@ -56,14 +56,14 @@ public class Promocion extends EntityApp {
         return getPrecioSinDescuento() * (1 - descuento);
     }
 
-    @Transient
     public int getDemoraTotal() {
         if (detalle == null) return 0;
 
         return detalle.stream()
                 .filter(pd -> pd.getArticuloManufacturado() != null)
                 .mapToInt(pd -> pd.getCantidad() * pd.getArticuloManufacturado().getTiempoEstimado())
-                .sum();
+                .max()
+                .orElse(0);
     }
 
 }
