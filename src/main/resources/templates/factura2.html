@@ -4,7 +4,11 @@
     <meta charset="UTF-8"></meta>
     <title>Factura</title>
     <style>
-        /* Reset y estilos generales */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
         * {
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,33 +19,30 @@
 
         body {
             background: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
         }
 
         .bill-container {
-            width: 750px;
+            width: 100%;
+            max-width: 750px;
+            margin: auto;
             background: #ffffff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
         }
 
-        /* Encabezado */
+        /* Encabezado con tabla */
         .bill-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 25px;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
-        .bill-emitter {
-            max-width: 55%;
+        .bill-header td {
+            vertical-align: top;
+            padding: 5px;
         }
 
         .bill-emitter h1 {
-            font-size: 24px;
+            font-size: 20px;
             color: #333;
             margin-bottom: 5px;
         }
@@ -55,39 +56,32 @@
         .bill-type-box {
             background: #1e90ff;
             color: #fff;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 36px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 28px;
             font-weight: bold;
-            border-radius: 10px;
-        }
-
-        .bill-info {
-            max-width: 40%;
-            text-align: right;
+            margin-bottom: 10px;
         }
 
         .bill-info h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            margin-bottom: 8px;
             color: #333;
         }
 
         .bill-info p {
             font-size: 12px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             color: #555;
         }
 
-        /* Cliente y detalles */
+        /* Cliente */
         .client-info {
             background: #f0f0f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 12px;
+            margin-bottom: 15px;
         }
 
         .client-info p {
@@ -100,44 +94,39 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .items-table th, .items-table td {
-            padding: 10px;
-            text-align: left;
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 12px;
         }
 
         .items-table th {
             background: #1e90ff;
             color: #fff;
-            font-weight: normal;
-        }
-
-        .items-table tr:nth-child(even) {
-            background: #f9f9f9;
+            text-align: left;
         }
 
         /* Totales */
         .totals {
-            display: flex;
-            justify-content: flex-end;
-            flex-direction: column;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        .totals p {
-            font-size: 13px;
-            margin-bottom: 5px;
-            color: #333;
+        .totals td {
+            padding: 4px 8px;
+            font-size: 12px;
         }
 
-        .totals p strong {
-            margin-left: 5px;
+        .totals td:first-child {
+            text-align: right;
         }
 
         /* CAE */
         .cae-info {
-            margin-top: 20px;
+            margin-top: 15px;
             text-align: right;
             font-size: 12px;
             color: #555;
@@ -148,34 +137,40 @@
 <div class="bill-container">
 
     <!-- Encabezado -->
-    <div class="bill-header">
-        <div class="bill-emitter">
-            <div class="bill-type-box">C</div>
-            <h1>El Buen Sabor S.A.</h1>
-            <p><strong>Razón social:</strong> El Buen Sabor</p>
-            <p><strong>Domicilio Comercial:</strong> San Martin 1500 Ciudad, Mendoza</p>
-            <p><strong>Condición Frente al IVA:</strong> IVA Responsable inscripto</p>
-        </div>
-        <div class="bill-info">
-            <h2>FACTURA</h2>
-            <p><strong>Punto de Venta:</strong> <span th:text="${factura.pedidos.getFirst().sucursalEmpresa.nombre}"></span></p>
-            <p><strong>Comp. Nro:</strong> <span th:text="${factura.numeroComprobante}"></span></p>
-            <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.fechaFacturacion}"></span></p>
-            <p><strong>CUIT:</strong> 30-32569841-5</p>
-            <p><strong>Ingresos Brutos:</strong> 111/23</p>
-            <p><strong>Fecha de Inicio de Actividades:</strong> 12/02/2022</p>
-        </div>
-    </div>
+    <table class="bill-header">
+        <tr>
+            <td width="60%">
+                <div class="bill-type-box">C</div>
+                <div class="bill-emitter">
+                    <h1>El Buen Sabor S.A.</h1>
+                    <p><strong>Razón social:</strong> El Buen Sabor</p>
+                    <p><strong>Domicilio Comercial:</strong> San Martin 1500 Ciudad, Mendoza</p>
+                    <p><strong>Condición Frente al IVA:</strong> IVA Responsable inscripto</p>
+                </div>
+            </td>
+            <td width="40%" class="bill-info" align="right">
+                <h2>FACTURA</h2>
+                <p><strong>Punto de Venta:</strong> <span th:text="${factura.pedidos.getFirst().sucursalEmpresa.nombre}"></span></p>
+                <p><strong>Comp. Nro:</strong> <span th:text="${factura.numeroComprobante}"></span></p>
+                <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.fechaFacturacion}"></span></p>
+                <p><strong>CUIT:</strong> 30-32569841-5</p>
+                <p><strong>Ingresos Brutos:</strong> 111/23</p>
+                <p><strong>Inicio de Actividades:</strong> 12/02/2022</p>
+            </td>
+        </tr>
+    </table>
 
     <!-- Cliente -->
     <div class="client-info">
         <p><strong>Nro de cliente:</strong> <span th:text="${factura.cliente.id}"></span></p>
-        <p><strong>Apellido y Nombre / Razón social:</strong> <span th:text="${factura.cliente.apellido} + ' ' + ${factura.cliente.nombre}"></span></p>
+        <p><strong>Apellido y Nombre / Razón social:</strong>
+            <span th:text="${factura.cliente.apellido} + ' ' + ${factura.cliente.nombre}"></span>
+        </p>
         <p><strong>Condición Frente al IVA:</strong> Consumidor final</p>
         <p><strong>Modo de pago:</strong> <span th:text="${factura.formaPago.name()}"></span></p>
     </div>
 
-    <!-- Tabla de items -->
+    <!-- Items -->
     <table class="items-table">
         <thead>
         <tr>
@@ -197,12 +192,24 @@
     </table>
 
     <!-- Totales -->
-    <div class="totals">
-        <p><strong>Subtotal:</strong> <span th:text="${factura.subtotal}"></span></p>
-        <p><strong>Descuentos:</strong> <span th:text="${factura.descuento}"></span></p>
-        <p><strong>Gastos de Envio:</strong> <span th:text="${factura.gastosEnvio}"></span></p>
-        <p><strong>Importe total:</strong> <span th:text="${factura.totalVenta}"></span></p>
-    </div>
+    <table class="totals">
+        <tr>
+            <td><strong>Subtotal:</strong></td>
+            <td><span th:text=" '$' + ${factura.subtotal}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Descuentos:</strong></td>
+            <td><span th:text=" '$ -' + ${factura.descuento}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Gastos de Envio:</strong></td>
+            <td><span th:text=" '$' + ${factura.gastosEnvio}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Importe total:</strong></td>
+            <td><span th:text=" '$' + ${factura.totalVenta}"></span></td>
+        </tr>
+    </table>
 
     <!-- CAE -->
     <div class="cae-info">
