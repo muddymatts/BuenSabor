@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/empleados")
@@ -40,14 +42,32 @@ public class EmpleadoController {
     }
 
     @PatchMapping("/{id}/baja")
-    public ResponseEntity<Void> darDeBajaEmpleado(@PathVariable Long id) {
-        empleadoService.darDeBajaEmpleado(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Map<String, Object>> darDeBajaEmpleado(@PathVariable Long id) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            empleadoService.darDeBajaEmpleado(id);
+            respuesta.put("status", HttpStatus.OK.value());
+            respuesta.put("message", "Empleado dado de baja exitosamente.");
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
+            respuesta.put("status", HttpStatus.BAD_REQUEST.value());
+            respuesta.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarEmpleado(@PathVariable Long id) {
-        empleadoService.eliminarEmpleado(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Map<String, Object>> eliminarEmpleado(@PathVariable Long id) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            empleadoService.eliminarEmpleado(id);
+            respuesta.put("status", HttpStatus.OK.value());
+            respuesta.put("message", "Empleado eliminado exitosamente.");
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
+            respuesta.put("status", HttpStatus.NOT_FOUND.value());
+            respuesta.put("message", "Error: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+        }
     }
 }

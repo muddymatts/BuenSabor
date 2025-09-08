@@ -104,6 +104,10 @@ public class EmpleadoService {
         Usuario usuario = usuarioRepository.findByEmpleado(empleado)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
+        if (!usuario.isEstaActivo()) {
+            throw new RuntimeException("El empleado ya está dado de baja.");
+        }
+
         usuario.setEstaActivo(false);
         usuarioRepository.save(usuario);
     }
