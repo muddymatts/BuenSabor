@@ -5,6 +5,7 @@ import BuenSabor.dto.usuario.UsuarioDTO;
 import BuenSabor.mapper.UsuarioDTOMapper;
 import BuenSabor.model.Usuario;
 import BuenSabor.service.usuario.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,19 +41,24 @@ public class AuthService {
 
     public ResponseEntity<?> authenticateUser(AuthRequest request) {
         try {
+            Optional<Usuario> optionalUsuario = usuarioService.findByUsername(request.username());
+
+            if (optionalUsuario.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos.");
+            }
+
+            Usuario usuario = optionalUsuario.get();
+
+            if (!usuario.isEstaActivo()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario inactivo.");
+            }
+
             authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.username(), request.password()));
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
             Map<String, Object> tokenData = jwtService.generateTokenWithExpiration(userDetails);
 
-            Optional<Usuario> optionalUsuario = usuarioService.findByUsername(request.username());
-
-            if (optionalUsuario.isEmpty()) {
-                return ResponseEntity.status(404).body("Usuario no encontrado");
-            }
-
-            Usuario usuario = optionalUsuario.get();
             UsuarioDTO usuarioDTO = usuarioMapper.toUsuarioDTO(usuario);
 
             Map<String, Object> response = new HashMap<>();
@@ -63,10 +69,11 @@ public class AuthService {
             response.put("user", usuarioDTO);
 
             return ResponseEntity.ok(response);
+
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Usuario o contraseña incorrectos.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos.");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Ha ocurrido un error inesperado.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ha ocurrido un error inesperado.");
         }
     }
 
