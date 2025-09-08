@@ -16,6 +16,7 @@ public class UsuarioDTOMapper {
         if (usuario.getEmpleado() != null) {
             Empleado empleado = usuario.getEmpleado();
             empleadoDTO = new UsuarioDTO.EmpleadoDTO(
+                    empleado.getId(),
                     empleado.getNombre(),
                     empleado.getApellido(),
                     empleado.getEmail(),
