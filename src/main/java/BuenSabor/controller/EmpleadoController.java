@@ -56,6 +56,21 @@ public class EmpleadoController {
         }
     }
 
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<Map<String, Object>> activarEmpleado(@PathVariable Long id) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            empleadoService.activarEmpleado(id);
+            respuesta.put("status", HttpStatus.OK.value());
+            respuesta.put("message", "Empleado activado exitosamente.");
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
+            respuesta.put("status", HttpStatus.BAD_REQUEST.value());
+            respuesta.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> eliminarEmpleado(@PathVariable Long id) {
         Map<String, Object> respuesta = new HashMap<>();

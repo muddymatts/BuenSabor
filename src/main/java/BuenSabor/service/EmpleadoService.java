@@ -113,6 +113,22 @@ public class EmpleadoService {
     }
 
     @Transactional
+    public void activarEmpleado(Long empleadoId) {
+        Empleado empleado = empleadoRepository.findById(empleadoId)
+                .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
+
+        Usuario usuario = usuarioRepository.findByEmpleado(empleado)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (usuario.isEstaActivo()) {
+            throw new RuntimeException("El empleado ya está activo.");
+        }
+
+        usuario.setEstaActivo(true);
+        usuarioRepository.save(usuario);
+    }
+
+    @Transactional
     public void eliminarEmpleado(Long empleadoId) {
         Empleado empleado = empleadoRepository.findById(empleadoId)
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado"));
