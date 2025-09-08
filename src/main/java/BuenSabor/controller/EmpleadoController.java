@@ -20,9 +20,9 @@ public class EmpleadoController {
 
     private final EmpleadoService empleadoService;
 
-    @GetMapping
-    public ResponseEntity<List<EmpleadoDTO>> listarEmpleados() {
-        List<EmpleadoDTO> empleados = empleadoService.listarEmpleadosConUsuarios();
+    @GetMapping("/{id}")
+    public ResponseEntity<List<EmpleadoDTO>> listarEmpleados(@PathVariable Long id) {
+        List<EmpleadoDTO> empleados = empleadoService.listarEmpleadosConUsuariosExcepto(id);
         return ResponseEntity.ok(empleados);
     }
 

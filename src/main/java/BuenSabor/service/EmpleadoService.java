@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,12 +24,20 @@ public class EmpleadoService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<EmpleadoDTO> listarEmpleadosConUsuarios() {
-        List<Empleado> empleados = empleadoRepository.findAll();
+    public List<EmpleadoDTO> listarEmpleadosConUsuariosExcepto(Long idEmpleadoExcluido) {
+        List<Empleado> empleados = empleadoRepository.findAll()
+                .stream()
+                .filter(e -> !e.getId().equals(idEmpleadoExcluido))
+                .toList();
+
+        List<Usuario> usuarios = usuarioRepository.findByEmpleadoIn(empleados);
+
+        Map<Long, Usuario> usuariosMap = usuarios.stream()
+                .collect(Collectors.toMap(u -> u.getEmpleado().getId(), u -> u));
 
         return empleados.stream()
                 .map(empleado -> {
-                    Usuario usuario = usuarioRepository.findByEmpleado(empleado).orElse(null);
+                    Usuario usuario = usuariosMap.get(empleado.getId());
 
                     return new EmpleadoDTO(
                             empleado.getId(),
