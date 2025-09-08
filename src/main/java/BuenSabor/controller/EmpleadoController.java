@@ -27,18 +27,37 @@ public class EmpleadoController {
     }
 
     @PostMapping
-    public ResponseEntity<Empleado> crearEmpleado(@RequestBody EmpleadoRequestDTO empleadoRequest) {
-        Empleado nuevoEmpleado = empleadoService.crearEmpleado(empleadoRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEmpleado);
+    public ResponseEntity<Map<String, Object>> crearEmpleado(@RequestBody EmpleadoRequestDTO empleadoRequest) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            Empleado nuevoEmpleado = empleadoService.crearEmpleado(empleadoRequest);
+            respuesta.put("status", HttpStatus.CREATED.value());
+            respuesta.put("message", "Empleado creado exitosamente.");
+            respuesta.put("empleado", nuevoEmpleado); // Incluye información del nuevo empleado si es necesario
+            return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+        } catch (RuntimeException e) {
+            respuesta.put("status", HttpStatus.BAD_REQUEST.value());
+            respuesta.put("message", "Error al crear el empleado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Empleado> editarEmpleado(
+    public ResponseEntity<Map<String, Object>> editarEmpleado(
             @PathVariable Long id,
             @RequestBody EmpleadoRequestDTO empleadoRequest) {
-        empleadoRequest.setId(id);
-        Empleado empleadoEditado = empleadoService.editarEmpleado(empleadoRequest);
-        return ResponseEntity.ok(empleadoEditado);
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            empleadoRequest.setId(id);
+            empleadoService.editarEmpleado(empleadoRequest);
+            respuesta.put("status", HttpStatus.OK.value());
+            respuesta.put("message", "Empleado editado exitosamente.");
+            return ResponseEntity.ok(respuesta);
+        } catch (RuntimeException e) {
+            respuesta.put("status", HttpStatus.BAD_REQUEST.value());
+            respuesta.put("message", "Error al editar el empleado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+        }
     }
 
     @PatchMapping("/{id}/baja")
