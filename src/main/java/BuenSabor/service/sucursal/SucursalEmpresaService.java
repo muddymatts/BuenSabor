@@ -132,6 +132,7 @@ public class SucursalEmpresaService extends BajaLogicaService {
                     dto.setIngredientes(articulo.getIngredientes());
                     dto.setPrecioVenta(articulo.getPrecioVenta());
                     dto.setListaImagenes(articulo.getListaImagenes());
+                    dto.setNombreCategoria(articulo.getNombreCategoria());
                     dto.setCantidadDisponible(mapCantidadDisponible.getOrDefault(articulo.getId(), 0));
                     return dto;
                 }).toList();
