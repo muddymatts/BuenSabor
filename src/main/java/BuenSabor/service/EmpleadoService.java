@@ -72,9 +72,11 @@ public class EmpleadoService {
 
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.getUsername());
-        usuario.setPassword(passwordEncoder.encode(dto.getPassword() != null
+        String rawPassword = (dto.getPassword() != null && !dto.getPassword().isBlank())
                 ? dto.getPassword()
-                : dto.getUsername() + "123")); // password por defecto con usuario + "123"
+                : dto.getUsername() + "123"; // password por defecto con usuario + "123"
+
+        usuario.setPassword(passwordEncoder.encode(rawPassword));
         usuario.setEmpleado(empleado);
         usuario.setEstaActivo(true);
 
