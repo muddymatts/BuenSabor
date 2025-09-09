@@ -30,11 +30,14 @@ public class EmpleadoController {
     public ResponseEntity<Map<String, Object>> crearEmpleado(@RequestBody EmpleadoRequestDTO empleadoRequest) {
         Map<String, Object> respuesta = new HashMap<>();
         try {
-            Empleado nuevoEmpleado = empleadoService.crearEmpleado(empleadoRequest);
+            empleadoService.crearEmpleado(empleadoRequest);
             respuesta.put("status", HttpStatus.CREATED.value());
             respuesta.put("message", "Empleado creado exitosamente.");
-            respuesta.put("empleado", nuevoEmpleado); // Incluye información del nuevo empleado si es necesario
             return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+        } catch (IllegalArgumentException e) {
+            respuesta.put("status", HttpStatus.CONFLICT.value());
+            respuesta.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(respuesta);
         } catch (RuntimeException e) {
             respuesta.put("status", HttpStatus.BAD_REQUEST.value());
             respuesta.put("message", "Error al crear el empleado: " + e.getMessage());

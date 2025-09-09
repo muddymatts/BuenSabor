@@ -54,8 +54,12 @@ public class EmpleadoService {
     }
 
     @Transactional
-    public Empleado crearEmpleado(EmpleadoRequestDTO dto) {
+    public void crearEmpleado(EmpleadoRequestDTO dto) {
         validarRol(dto.getRol());
+
+        usuarioRepository.findByUsername(dto.getUsername()).ifPresent((existingUser) -> {
+            throw new IllegalArgumentException("El nombre de usuario ya existe: " + dto.getUsername());
+        });
 
         Empleado empleado = new Empleado();
         empleado.setNombre(dto.getNombre());
@@ -76,11 +80,10 @@ public class EmpleadoService {
 
         usuarioRepository.save(usuario);
 
-        return empleado;
     }
 
     @Transactional
-    public Empleado editarEmpleado(EmpleadoRequestDTO dto) {
+    public void editarEmpleado(EmpleadoRequestDTO dto) {
         validarRol(dto.getRol());
 
         Empleado empleado = empleadoRepository.findById(dto.getId())
@@ -102,7 +105,6 @@ public class EmpleadoService {
             usuarioRepository.save(usuario);
         }
 
-        return empleado;
     }
 
     @Transactional
