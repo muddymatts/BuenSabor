@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class FacturaVentaDetalle extends EntityApp {
 
     private Integer cantidad;
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
 
     @ManyToOne
     @JoinColumn(name = "factura_venta_id")
@@ -27,4 +27,13 @@ public class FacturaVentaDetalle extends EntityApp {
     @ManyToOne
     @JoinColumn(name = "articulo_insumo_id")
     private ArticuloInsumo articuloInsumo;
+
+    public String getNombreProducto() {
+        if (this.articuloManufacturado != null) {
+            return this.articuloManufacturado.getDenominacion();
+        } else if (this.articuloInsumo != null) {
+            return this.articuloInsumo.getDenominacion();
+        }
+        return "Producto desconocido";
+    }
 }

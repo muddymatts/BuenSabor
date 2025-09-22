@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -14,13 +14,13 @@ import java.util.List;
 @Setter
 public class FacturaVenta extends EntityApp {
 
-    private Date fechaFacturacion;
+    private LocalDate fechaFacturacion;
     private String numeroComprobante;
 
     @Enumerated(EnumType.STRING)
     private FormaPago formaPago;
 
-    private BigDecimal subTotal;
+    private BigDecimal subtotal;
     private BigDecimal descuento;
     private BigDecimal gastosEnvio;
     private BigDecimal totalVenta;

@@ -21,6 +21,7 @@ public interface ArticuloInsumoMapper {
        if(articuloInsumo.getUnidadMedida() != null){
            dto.setNombreUnidadMedida(articuloInsumo.getUnidadMedida().getDenominacion());
        }
+       dto.setCategorias(articuloInsumo.getCategoriaArticuloInsumo().getCategoriasAnidadas());
     }
 
     ArticuloInsumo toEntity(ArticuloInsumoDTO dto);

@@ -15,25 +15,23 @@ public interface PromocionMapper {
 
     @AfterMapping
     default void setValoresCalculados(Promocion promocion, @MappingTarget PromocionDTO dto) {
+        //carga lista de imagenes
         if(promocion.getDetalle() != null){
-            double precioVenta = 0;
             for (PromocionDetalle pd : promocion.getDetalle()) {
                 if(pd.getArticuloInsumo() != null){
                     if(pd.getArticuloInsumo().getImagenInsumo() != null){
                         dto.getImagenes().add(pd.getArticuloInsumo().getImagenInsumo().getDenominacion());
                     }
-                    precioVenta += pd.getCantidad()* pd.getArticuloInsumo().getPrecioVenta();
                 } else if(pd.getArticuloManufacturado() != null){
                     if(pd.getArticuloManufacturado().getImagenes() != null){
                         for (ImagenManufacturado imagen : pd.getArticuloManufacturado().getImagenes()){
                             dto.getImagenes().add(imagen.getDenominacion());
                         }
                     }
-                    precioVenta += pd.getCantidad() * pd.getArticuloManufacturado().getPrecioVenta();
                 }
             }
-            dto.setPrecioSinDescuento(precioVenta);
-            dto.setPrecioVenta(precioVenta*(1-promocion.getDescuento()));
+            dto.setPrecioSinDescuento(promocion.getPrecioSinDescuento());
+            dto.setPrecioVenta(promocion.getPrecioVenta());
         }
     }
 

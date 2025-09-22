@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Factura</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .bill-container {
+            width: 100%;
+            max-width: 750px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        /* Encabezado con tabla */
+        .bill-header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .bill-header td {
+            vertical-align: top;
+            padding: 5px;
+        }
+
+        .bill-emitter h1 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .bill-emitter p {
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #555;
+        }
+
+        .bill-type-box {
+            background: #1e90ff;
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .bill-info h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .bill-info p {
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #555;
+        }
+
+        /* Cliente */
+        .client-info {
+            background: #f0f0f0;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .client-info p {
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* Tabla de items */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .items-table th, .items-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .items-table th {
+            background: #1e90ff;
+            color: #fff;
+            text-align: left;
+        }
+
+        /* Totales */
+        .totals {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .totals td {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .totals td:first-child {
+            text-align: right;
+        }
+
+        /* CAE */
+        .cae-info {
+            margin-top: 15px;
+            text-align: right;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+<div class="bill-container">
+
+    <!-- Encabezado -->
+    <table class="bill-header">
+        <tr>
+            <td width="60%">
+                <div class="bill-type-box">C</div>
+                <div class="bill-emitter">
+                    <h1>El Buen Sabor S.A.</h1>
+                    <p><strong>Razón social:</strong> El Buen Sabor</p>
+                    <p><strong>Domicilio Comercial:</strong> San Martin 1500 Ciudad, Mendoza</p>
+                    <p><strong>Condición Frente al IVA:</strong> IVA Responsable inscripto</p>
+                </div>
+            </td>
+            <td width="40%" class="bill-info" align="right">
+                <h2>FACTURA</h2>
+                <span th:text="${factura.pedidos[0].sucursalEmpresa.nombre}"></span>
+                <p><strong>Comp. Nro:</strong> <span th:text="${factura.numeroComprobante}"></span></p>
+                <p><strong>Fecha de Emisión:</strong> <span th:text="${factura.fechaFacturacion}"></span></p>
+                <p><strong>CUIT:</strong> 30-32569841-5</p>
+                <p><strong>Ingresos Brutos:</strong> 111/23</p>
+                <p><strong>Inicio de Actividades:</strong> 12/02/2022</p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Cliente -->
+    <div class="client-info">
+        <p><strong>Nro de cliente:</strong> <span th:text="${factura.cliente.id}"></span></p>
+        <p><strong>Apellido y Nombre / Razón social:</strong>
+            <span th:text="${factura.cliente.apellido} + ' ' + ${factura.cliente.nombre}"></span>
+        </p>
+        <p><strong>Condición Frente al IVA:</strong> Consumidor final</p>
+        <p><strong>Modo de pago:</strong> <span th:text="${factura.formaPago.name()}"></span></p>
+    </div>
+
+    <!-- Items -->
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detalle : ${factura.detalles}">
+            <td>
+                <span th:if="${detalle.articuloManufacturado != null}"
+                      th:text="${detalle.articuloManufacturado.denominacion}"></span>
+                <span th:if="${detalle.articuloInsumo != null}" th:text="${detalle.articuloInsumo.denominacion}"></span>
+            </td>
+            <td><span th:text="${detalle.cantidad}"></span></td>
+            <td><span th:text="${detalle.subtotal}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Totales -->
+    <table class="totals">
+        <tr>
+            <td><strong>Subtotal:</strong></td>
+            <td><span th:text=" '$' + ${factura.subtotal}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Descuentos:</strong></td>
+            <td><span th:text=" '$ -' + ${factura.descuento}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Gastos de Envio:</strong></td>
+            <td><span th:text=" '$' + ${factura.gastosEnvio}"></span></td>
+        </tr>
+        <tr>
+            <td><strong>Importe total:</strong></td>
+            <td><span th:text=" '$' + ${factura.totalVenta}"></span></td>
+        </tr>
+    </table>
+
+    <!-- CAE -->
+    <div class="cae-info">
+        <p><strong>CAE Nº:</strong> 111545221564</p>
+        <p><strong>Fecha de Vto. de CAE:</strong> 25/07/2026</p>
+    </div>
+
+</div>
+</body>
+</html>

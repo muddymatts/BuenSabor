@@ -23,6 +23,7 @@ public class UsuarioDTO {
     @Data
     @AllArgsConstructor
     public static class EmpleadoDTO {
+        private Long id;
         private String nombre;
         private String apellido;
         private String email;

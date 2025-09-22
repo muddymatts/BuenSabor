@@ -12,8 +12,8 @@ import lombok.Setter;
 @Setter
 public class PedidoVentaDetalle extends EntityApp {
 
-    private double cantidad;
-    private double subTotal;
+    private Integer cantidad;
+    private double subtotal;
 
     @ManyToOne
     @JoinColumn(name = "pedido_venta_id")
